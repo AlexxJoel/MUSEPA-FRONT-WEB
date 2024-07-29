@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import HomeView from '../views/HomeView.vue'
+import publicRoute from "./public-router";
 
 Vue.use(VueRouter)
 
@@ -9,17 +9,25 @@ const router = new VueRouter({
   base: import.meta.env.BASE_URL,
   routes: [
     {
-      path: '/',
-      name: 'home',
-      component: HomeView
+      path: "/",
+      redirect: "/musepa",
     },
     {
-      path: '/about',
-      name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
-      component: () => import('../views/AboutView.vue')
+      path: "/",
+      component: { render: (c) => c("router-view") },
+      children: [
+        {
+          path: "/login",
+          props: true,
+          name: "login",
+          component: () => import("../modules/auth/views/LoginView.vue"),
+          meta: {
+            title: "Iniciar sesión",
+            requireAuth: false,
+          },
+        },
+        ...publicRoute,
+      ]
     }
   ]
 })
