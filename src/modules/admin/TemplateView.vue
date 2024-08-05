@@ -10,7 +10,7 @@
     name: "TemplateView",
     components: {
       Navbar: defineAsyncComponent(() =>
-        import("../components/Navbar.vue")
+        import("./components/Navbar.vue")
       ),
     },
   });

@@ -11,7 +11,7 @@ const router = new VueRouter({
   routes: [
     {
       path: "/",
-      redirect: { name: "events" },
+      redirect: { name: "landing" },
     },
     {
       path: "/",
