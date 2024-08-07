@@ -114,7 +114,7 @@
                 Iniciar sesión
               </b-button>
               <div class="text-center mt-2 mb-0">
-                <b-link>¿Olvidaste tu contraseña?</b-link>
+                <b-link :to="{ name: 'create-account' }">Crear cuenta</b-link>
               </div>
             </b-col>
           </div>
@@ -130,7 +130,7 @@ import { useVuelidate } from "@vuelidate/core";
 import { required, helpers } from "@vuelidate/validators";
 
 export default Vue.extend({
-  name: "login",
+  name: "LoginView",
   setup() {
     return {
       v$: useVuelidate(),

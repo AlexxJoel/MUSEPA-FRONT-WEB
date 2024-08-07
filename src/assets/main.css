@@ -4,3 +4,13 @@
     font-size: 42px;
     
 }
+
+.create-account-title {
+    font-size: 42px;
+    font-weight: 600;
+    color: #1B588B;
+    margin-bottom: 20px;
+}
+.bg-color{
+    background-color: #1B588B !important;
+}
