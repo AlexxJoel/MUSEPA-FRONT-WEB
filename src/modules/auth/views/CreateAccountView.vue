@@ -406,7 +406,7 @@ export default Vue.extend({
 <style scoped>
 .background-image {
   position: relative;
-  background-image: url("/src/assets/image/museum-mac.jpg");
+  background-image: url("/src/assets/image/museum-mac-2.jpg");
   background-size: cover;
   background-position: center;
   min-height: 100vh;
