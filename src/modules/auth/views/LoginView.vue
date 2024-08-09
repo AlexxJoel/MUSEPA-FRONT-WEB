@@ -5,7 +5,7 @@
         <div class="col-7 p-0 h-100">
           <b-img
             style="object-fit: cover; height: 100%; width: 100%"
-            src="/src/assets/image/museum-mac.jpg"
+            src="/src/assets/image/museum-mac-2.jpg"
             fluid
             alt="Museum"
           ></b-img>
