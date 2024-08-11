@@ -6,9 +6,20 @@
         <!-- Card -->
 
         <b-card class="card">
-          <h2>Crear Evento</h2>
 
-          <b-form>
+          <div class="d-flex justify-content-between">
+            <h2>Información del evento</h2>
+            <b-button variant="outline-secondary" @click="isEditing = !isEditing">
+              <b-icon v-if="!isEditing" icon="lock-fill" class="mr-2"></b-icon>
+              <b-icon v-else icon="unlock-fill" class="mr-2"></b-icon>
+              Editar
+            </b-button>
+
+
+
+          </div>
+
+          <b-form ref="form">
             <b-row>
               <b-col cols="6">
                 <b-form-group label="Nombre del evento:*" label-for="name">
@@ -24,13 +35,13 @@
 
             <b-row>
               <b-col cols="6">
-                <b-form-group label="Fecha de incio:*" label-for="startDate">
+                <b-form-group label="Fecha de incio:*" label-for="startDate" ref="startDate">
                   <b-form-datepicker id="startDate" v-model="event.startDate" class="mb-2"
                     label-no-date-selected="Seleccione una fecha" label-help=""></b-form-datepicker>
                 </b-form-group>
               </b-col>
               <b-col cols="6">
-                <b-form-group label="Fecha de fin:*" label-for="endDate">
+                <b-form-group label="Fecha de fin:*" label-for="endDate" ref="endDate">
                   <b-form-datepicker id="endDate" v-model="event.endDate" class="mb-2"
                     label-no-date-selected="Seleccione una fecha" label-help=""></b-form-datepicker>
                 </b-form-group>
@@ -64,14 +75,14 @@
           </template>
         </SectionDivider>
 
-        <b-alert show variant="info">
-            <p class="m-0">Los campos marcados con <b>*</b> son obligatorios.</p>
-          </b-alert>
+        <b-alert show variant="info" ref="alert-info-input">
+          <p class="m-0">Los campos marcados con <b>*</b> son obligatorios.</p>
+        </b-alert>
 
 
-       <vue-dropzone ref="dropZoneImg" id="dropZoneImg" :options="dropZone.options" :use-custom-slot="dropZone.useCustomSlot"
-          :include-styling="dropZone.includeStyling"
-          @vdropzone-file-added="validateFile" >
+        <vue-dropzone ref="dropZoneImg" id="dropZoneImg" :options="dropZone.options"
+          :use-custom-slot="dropZone.useCustomSlot" :include-styling="dropZone.includeStyling"
+          @vdropzone-file-added="validateFile" @vdropzone-removed-file="handleRemoveFile" >
           <slot>
             <div class="drag-area">
               <div class="icon">
@@ -80,11 +91,12 @@
               {{ dropZone.labels.drop }}
             </div>
           </slot>
-        </vue-dropzone> 
+        </vue-dropzone>
 
 
-        <small class="text-muted">Solo se permiten archivos de imagen y un máximo de 4MB, asi como un máximo de 3 imagenes.</small>
- 
+        <small class="text-muted" ref="help_text_img">Solo se permiten archivos de imagen y un máximo de 4MB, asi como un máximo de 3
+          imagenes.</small>
+
       </b-col>
     </b-row>
   </div>
@@ -106,6 +118,11 @@ export default Vue.extend({
   },
   data() {
     return {
+      // status component
+      isEditing: false,
+
+
+
       dropzoneOptions: {
         url: 'https://httpbin.org/post',
         thumbnailWidth: 150,
@@ -175,6 +192,13 @@ export default Vue.extend({
   },
   mounted() {
     this.getListEvents();
+    this.handleDisableStatusInput();
+    this.addFile();
+  },
+  watch: {
+    isEditing() {
+      this.handleDisableStatusInput();
+    },
   },
   methods: {
     async getListEvents() {
@@ -204,10 +228,59 @@ export default Vue.extend({
         alert('Este archivo ya ha sido subido.');
         return;
       }
-      
+
       // Agregar el archivo a la lista de subidos
       console.log(file)
       this.event.pictures.push(file);
+    },
+    handleRemoveFile(file) {
+      console.log('remove');
+      this.event.pictures = this.event.pictures.filter((p) => p.name !== file.name);
+    },
+    addFile() {
+      this.$refs.dropZoneImg.manuallyAddFile({ name: 'file' + this.event.pictures.length, size: 1 }, 'https://musepa-bucket.s3.us-east-2.amazonaws.com/images/0e392eb4-43eb-470c-b31b-25c1807e33b5.jpg');
+    },
+
+    handleDisableStatusInput() {
+      // get form
+      const form = this.$refs.form;
+
+
+      // get all inputs
+      const inputs = form.querySelectorAll('input, select, textarea, button');
+      const alertInfo = this.$refs['alert-info-input'];
+      const dropZone = this.$refs.dropZoneImg.$el;
+      const helpTextImg = this.$refs.help_text_img;
+
+
+
+      if (this.isEditing) {
+        inputs.forEach((input) => {
+          input.removeAttribute('disabled');
+        });
+        alertInfo.$el.style.display = 'block'
+        helpTextImg.style.display = 'block'
+        dropZone.classList.remove('disabled-dropzone');
+
+      } else {
+        inputs.forEach((input) => {
+          input.setAttribute('disabled', 'disabled');
+        });
+        alertInfo.$el.style.display = 'none'
+        helpTextImg.style.display = 'none'
+        dropZone.classList.add('disabled-dropzone');
+
+      }
+
+      console.log(inputs[inputs.length - 1]);
+
+      // d-none
+      if (this.isEditing) {
+        inputs[inputs.length - 1].classList.remove('d-none');
+      } else {
+        inputs[inputs.length - 1].classList.add('d-none');
+      }
+
     },
 
     formatDate
@@ -256,5 +329,14 @@ h1 {
 .drag-area .icon {
   font-size: 50px;
   color: #333;
+}
+
+.disabled-dropzone {
+
+  pointer-events: none;
+  /* Desactiva clics y arrastres */
+  opacity: 0.7;
+  /* Hace que parezca deshabilitado */
+
 }
 </style>

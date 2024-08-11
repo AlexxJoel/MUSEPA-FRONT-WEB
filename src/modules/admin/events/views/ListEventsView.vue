@@ -3,8 +3,6 @@ hkjfhf<template>
     <!-- add iamge  -->
 
 
-    <!-- https://images.unsplash.com/photo-1566731372839-859e7cead0ef?w=400&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTR8fGV2ZW50c3xlbnwwfHwwfHx8MA%3D%3D -->
-
     <section>
       <div
         style="background-image: url('https://images.unsplash.com/photo-1487958449943-2429e8be8625?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'); height: 25vh; background-size: cover; background-position: center;"
@@ -17,7 +15,7 @@ hkjfhf<template>
     <section>
       <div class="d-flex justify-content-between px-5 mt-3">
         <b-form-group class="w-50">
-          <b-form-input placeholder="Buscar obra"/>
+          <b-form-input placeholder="Buscar obra..." type="search"></b-form-input>
         </b-form-group>
         <div>
           <b-button variant="primary" :to="{ name: 'event-save' }">Agregar evento
@@ -65,7 +63,8 @@ hkjfhf<template>
 
                     <!-- button left see more icon -->
                     <div>
-                      <b-button variant="outline-secondary" class="mt-3 btn-block" size="sm">
+                      <b-button :to="{ name: 'event-detail', params: { id: event.id } }"
+                      variant="outline-secondary" class="mt-3 btn-block" size="sm">
                         Ver más
                         <b-icon icon="box-arrow-up-right" class="mr-2"></b-icon>
                       </b-button>
@@ -77,6 +76,14 @@ hkjfhf<template>
             </b-card>
           </b-col>
         </b-row>
+      </div>
+    </section>
+
+    <section>
+      <div class="overflow-auto px-5 mt-2">
+       <div class="text-center">
+        <b-pagination v-model="currentPage" :total-rows="rows" align="center"></b-pagination>
+       </div>
       </div>
     </section>
   </div>

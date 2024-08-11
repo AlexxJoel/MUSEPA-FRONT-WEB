@@ -14,7 +14,7 @@
     <section>
       <div class="d-flex justify-content-between px-5 mt-3">
         <b-form-group class="w-50">
-          <b-form-input placeholder="Buscar obra" v-model="search" @input="searchWorks" />
+          <b-form-input placeholder="Buscar obra..." v-model="search" @input="searchWorks" />
         </b-form-group>
         <div>
           <b-button variant="primary" @click="goToAddWork">Agregar obra
@@ -76,6 +76,15 @@
             </b-card>
           </b-col>
         </b-row>
+      </div>
+    </section>
+
+
+    <section>
+      <div class="overflow-auto px-5 mt-2">
+       <div class="text-center">
+        <b-pagination v-model="currentPage" :total-rows="rows" align="center"></b-pagination>
+       </div>
       </div>
     </section>
   </div>

@@ -2,9 +2,17 @@ export default [
   {
     path: "/musepa/admin",
     component: () => import("../modules/admin/TemplateView.vue"),
-    redirect: { name: "admin-events" },
+    redirect: { name: "admin-home" },
     name: "admin",
     children: [
+      {
+        path: "dashboard",	
+        name: "admin-home",
+        component: () => import("../modules/admin/home/views/HomeAdminView.vue"),	
+        meta: {
+          requireAuth: false,
+        },
+      },
       {
         path: "events",
         name: "admin-events",
@@ -31,6 +39,16 @@ export default [
               title: "Crear Evento",
               requireAuth: false,
             },
+          },
+          {
+            path: "detail/:id",
+            name: "event-detail",
+            component: () => import("../modules/admin/events/views/DetailsEventView.vue"),
+            meta: {
+              title: "Detalle del Evento",
+              requireAuth: false,
+            },
+            
           }
         ],
       },
