@@ -5,7 +5,7 @@
         <div class="col-7 p-0 h-100">
           <b-img
             style="object-fit: cover; height: 100%; width: 100%"
-            src="/src/assets/image/museum-mac.jpg"
+            src="/src/assets/image/museum-mac-2.jpg"
             fluid
             alt="Museum"
           ></b-img>
@@ -114,7 +114,7 @@
                 Iniciar sesión
               </b-button>
               <div class="text-center mt-2 mb-0">
-                <b-link>¿Olvidaste tu contraseña?</b-link>
+                <b-link :to="{ name: 'create-account' }">Crear cuenta</b-link>
               </div>
             </b-col>
           </div>
@@ -130,7 +130,7 @@ import { useVuelidate } from "@vuelidate/core";
 import { required, helpers } from "@vuelidate/validators";
 
 export default Vue.extend({
-  name: "login",
+  name: "LoginView",
   setup() {
     return {
       v$: useVuelidate(),

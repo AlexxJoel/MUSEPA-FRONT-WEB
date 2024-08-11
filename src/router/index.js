@@ -27,6 +27,16 @@ const router = new VueRouter({
             requireAuth: false,
           },
         },
+        {
+          path: "/create-account",
+          props: true,
+          name: "create-account",
+          component: () => import("../modules/auth/views/CreateAccountView.vue"),
+          meta: {
+            title: "Iniciar sesión",
+            requireAuth: false,
+          },
+        },
         ...publicRoute,
         ...adminRouter,
       ]
