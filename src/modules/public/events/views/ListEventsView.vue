@@ -17,11 +17,7 @@ hkjfhf<template>
         <b-form-group class="w-50">
           <b-form-input placeholder="Buscar evento..." type="search"></b-form-input>
         </b-form-group>
-        <div>
-          <b-button variant="primary" :to="{ name: 'event-save' }">Agregar evento
-          <b-icon icon="plus" class="ml-2"></b-icon>
-          </b-button>
-        </div>
+      
     
       </div>
     </section>
@@ -63,7 +59,7 @@ hkjfhf<template>
 
                     <!-- button left see more icon -->
                     <div>
-                      <b-button :to="{ name: 'event-detail', params: { id: event.id } }"
+                      <b-button :to="{ name: 'public-event-detail', params: { id: event.id } }"
                       variant="outline-secondary" class="mt-3 btn-block" size="sm">
                         Ver más
                         <b-icon icon="box-arrow-up-right" class="mr-2"></b-icon>

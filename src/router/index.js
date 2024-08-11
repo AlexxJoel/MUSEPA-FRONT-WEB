@@ -11,7 +11,7 @@ const router = new VueRouter({
   routes: [
     {
       path: "/",
-      redirect: { name: "landing" },
+      redirect: { name: "public-musepa" },
     },
     {
       path: "/",
