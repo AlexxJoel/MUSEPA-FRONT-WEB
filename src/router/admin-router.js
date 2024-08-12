@@ -91,6 +91,24 @@ export default [
           }
         ],
       },
+      {
+        path: "profile",
+        name: "admin-profile",
+        component: () => import("../modules/admin/profile/views/ProfileAdminVIew.vue"),
+        meta: {
+          title: "Perfil",
+          requireAuth: false,
+        }
+      },
+      {
+        path: "edit-profile",
+        name: "admin-edit-profile",
+        component: () => import("../modules/admin/profile/views/EditProfileView.vue"),
+        meta: {
+          title: "Editar Perfil",
+          requireAuth: false,
+        }
+      },
     ]
   }
 ]
