@@ -75,8 +75,8 @@ export default {
       },
       noProfile: {
         links: [
-          { name: "Registrarse", route: "public-register", icon: "box-arrow-up-right" },
-          { name: "Iniciar sesión", route: "public-login", icon: "box-arrow-in-right" },
+          { name: "Registrarse", route: "create-account", icon: "box-arrow-up-right" },
+          { name: "Iniciar sesión", route: "login", icon: "box-arrow-in-right" },
         ],
       },
 

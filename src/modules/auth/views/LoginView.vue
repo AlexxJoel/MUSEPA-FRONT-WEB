@@ -1,5 +1,6 @@
 <template>
   <div>
+    <loading-custom :isLoading="isLoading" />
     <div class="vh-100">
       <div class="row w-100 h-100">
         <div class="col-7 p-0 h-100">
@@ -109,6 +110,7 @@
                 class="custom-button"
                 type="submit"
                 :disabled="v$.signin.$invalid"
+                @click="sigin"
                 variant="primary"
               >
                 Iniciar sesión
@@ -128,9 +130,16 @@
 import Vue from "vue";
 import { useVuelidate } from "@vuelidate/core";
 import { required, helpers } from "@vuelidate/validators";
+import { jwtDecode } from "jwt-decode";
+import SweetAlertCustom from "../../../kernel/SweetAlertCustom";
+import authController from "../services/controller/auth.controller";
+import { ERoles } from "../../../kernel/types";
 
 export default Vue.extend({
   name: "LoginView",
+  components: {
+    LoadingCustom: () => import("../../../views/components/LoadingCustom.vue"),
+  },
   setup() {
     return {
       v$: useVuelidate(),
@@ -143,11 +152,52 @@ export default Vue.extend({
         username: "",
         password: "",
       },
+      isLoading: false,
     };
   },
   methods: {
     showPassword() {
       this.showPasswordState = !this.showPasswordState;
+    },
+    async sigin() {
+      try {
+        if (this.v$.signin.$invalid) {
+          SweetAlertCustom.invalidForm();
+        } else {
+          this.isLoading = true;
+          if (this.signin.email != "" && this.signin.password != "") {
+            this.isLoading = true;
+            const response = await authController.login(this.signin);
+            if (response.data === null) {
+              this.$emit("reloadFromLogin");
+            }
+            if (!response.error) {
+              localStorage.setItem("token", response.id_token);
+              localStorage.setItem("refreshToken", response.refresh_token);
+              localStorage.setItem("accessToken", response.access_token);
+              if (await this.checkNextRedirect())
+                SweetAlertCustom.welcomeMessage();
+            }
+          }
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async checkNextRedirect() {
+      if (localStorage.token) {
+        console.log("decoded token", jwtDecode(localStorage.token));
+        const decodedToken = jwtDecode(localStorage.token);
+        if (decodedToken["cognito:groups"][0] === ERoles.MANAGER) {
+          await this.$router.replace({ name: "admin" });
+          return true;
+        } else if (decodedToken["cognito:groups"][0] === ERoles.VISITOR) {
+          await this.$router.replace("/visitor");
+          return true;
+        }
+      }
     },
   },
   validations() {
