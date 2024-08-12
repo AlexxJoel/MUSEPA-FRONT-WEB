@@ -19,6 +19,8 @@ Vue.use(IconsPlugin)
 // Vue-sweetalert2
 Vue.use(VueSweetalert2);
 
+
+
 new Vue({
   router,
   render: (h) => h(App)

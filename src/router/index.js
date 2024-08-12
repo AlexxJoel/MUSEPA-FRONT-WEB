@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import publicRoute from "./public-router";
+import adminRouter from './admin-router';
 
 Vue.use(VueRouter)
 
@@ -10,7 +11,7 @@ const router = new VueRouter({
   routes: [
     {
       path: "/",
-      redirect: "/musepa",
+      redirect: { name: "public-musepa" },
     },
     {
       path: "/",
@@ -37,6 +38,7 @@ const router = new VueRouter({
           },
         },
         ...publicRoute,
+        ...adminRouter,
       ]
     }
   ]

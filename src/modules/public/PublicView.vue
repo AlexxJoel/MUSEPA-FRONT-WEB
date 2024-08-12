@@ -10,7 +10,7 @@
     name: "PublicView",
     components: {
       Navbar: defineAsyncComponent(() =>
-        import("../modules/public/components/Navbar.vue")
+        import("./components/Navbar.vue")
       ),
     },
   });
