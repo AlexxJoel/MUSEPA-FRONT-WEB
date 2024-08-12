@@ -6,9 +6,9 @@ export default [
     name: "admin",
     children: [
       {
-        path: "dashboard",	
+        path: "dashboard",
         name: "admin-home",
-        component: () => import("../modules/admin/home/views/HomeAdminView.vue"),	
+        component: () => import("../modules/admin/home/views/HomeAdminView.vue"),
         meta: {
           requireAuth: false,
         },
@@ -48,7 +48,7 @@ export default [
               title: "Detalle del Evento",
               requireAuth: false,
             },
-            
+
           }
         ],
       },
@@ -70,6 +70,25 @@ export default [
               requireAuth: false,
             },
           },
+          {
+            path: "save",
+            name: "work-save",
+            component: () => import("../modules/admin/works/views/SaveWorkView.vue"),
+            meta: {
+              title: "Crear Obra",
+              requireAuth: false,
+            },
+          },
+          {
+            path: "detail/:id",
+            name: "work-detail",
+            component: () => import("../modules/admin/works/views/DetailsWorkView.vue"),
+            meta: {
+              title: "Detalle del Evento",
+              requireAuth: false,
+            },
+
+          }
         ],
       },
     ]

@@ -117,7 +117,6 @@
 </template>
 <script>
 import Vue from "vue";
-import eventsController from "../services/controller/events.controller";
 import { formatDate } from '../../../../kernel/moment';
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'

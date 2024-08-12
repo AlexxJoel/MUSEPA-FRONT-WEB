@@ -14,14 +14,24 @@
     <section>
       <div class="d-flex justify-content-between px-5 mt-3">
         <b-form-group class="w-50">
-          <b-form-input placeholder="Buscar obra..." v-model="search" @input="searchWorks" />
+
+          <!-- Search and icon right -->
+          <b-input-group>
+            <b-form-input placeholder="Buscar obra..." v-model="search" @input="searchEvent" />
+            <b-input-group-append>
+              <b-button variant="outline-secondary">
+                <b-icon icon="search"></b-icon>
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
+
         </b-form-group>
         <div>
-          <b-button variant="primary" @click="goToAddWork">Agregar obra
-          <b-icon icon="plus" class="ml-2"></b-icon>
+          <b-button variant="" :to="{ name: 'work-save' }">Agregar evento &nbsp;
+            <b-icon icon="plus-square"></b-icon>
           </b-button>
         </div>
-    
+
       </div>
     </section>
 
@@ -32,6 +42,16 @@
         <b-row>
           <b-col cols="12" md="4" v-for="work in listWorks" :key="work.id" class="mb-4">
             <b-card no-body class="overflow-hidden h-100">
+
+              <!-- delete  -->
+
+              <div>
+                <b-button @click="deleteWork(work.id)" variant="outline-danger" class="btn-delete-event" size="sm">
+                  <b-icon icon="trash"></b-icon>
+                </b-button>
+              </div>
+
+
               <b-row no-gutters class="h-100">
                 <b-col lg="6">
                   <b-card-img
@@ -82,9 +102,9 @@
 
     <section>
       <div class="overflow-auto px-5 mt-2">
-       <div class="text-center">
-        <b-pagination v-model="currentPage" :total-rows="rows" align="center"></b-pagination>
-       </div>
+        <div class="text-center">
+          <b-pagination v-model="currentPage" :total-rows="rows" align="center"></b-pagination>
+        </div>
       </div>
     </section>
   </div>
@@ -96,6 +116,7 @@
 import Vue, { defineAsyncComponent } from "vue";
 import worksController from "../services/controller/works.controller";
 import { formatDate } from '../../../../kernel/moment';
+import SweetAlertCustom from '../../../../kernel/SweetAlertCustom';
 
 export default Vue.extend({
   name: "ListWorksView",
@@ -125,6 +146,14 @@ export default Vue.extend({
         this.isLoading = false;
       }
     },
+    async deleteWork(id) {
+
+      const resp = await SweetAlertCustom.questionMessage('Esta acción no se puede deshacer', ' ¿Estás seguro de eliminar el evento?');
+      if (!resp.isConfirmed) return;
+
+      SweetAlertCustom.successMessage()
+      console.log('delete event', id);
+    },
     formatDate
   },
 });
@@ -147,5 +176,12 @@ h1 {
   text-align: center;
   margin-top: 10rem;
   font-size: 3rem;
+}
+
+.btn-delete-event {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
 }
 </style>
