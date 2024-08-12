@@ -1,8 +1,11 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import {jwtDecode} from "jwt-decode";
 import publicRoute from "./public-router";
+import { ERoles } from '../kernel/types';
 
-Vue.use(VueRouter)
+Vue.use(VueRouter);
+const DEFAULT_TITLE = "MUSEPA";
 
 const router = new VueRouter({
   mode: 'history',
@@ -40,6 +43,54 @@ const router = new VueRouter({
       ]
     }
   ]
-})
+});
+
+router.beforeEach((to, from, next) => {
+  if (localStorage.token) {
+    const rl = jwtDecode(localStorage.token);
+    const roles = rl["cognito:groups"];
+    const role = roles[0];
+    if (
+      (role === ERoles.MANAGER &&
+        to.matched.some((route) => route.path === "/musepa")) ||
+      (role === ERoles.MANAGER &&
+        to.matched.some((route) => route.path === "/landing")) ||
+      (role === ERoles.MANAGER &&
+        to.matched.some((route) => route.path === "/login"))
+    )
+      next("/manager");
+    if (
+      (role === ERoles.VISITOR &&
+        to.matched.some((route) => route.path === "/musepa")) ||
+      (role === ERoles.VISITOR &&
+        to.matched.some((route) => route.path === "/landing")) ||
+      (role === ERoles.VISITOR &&
+        to.matched.some((route) => route.path === "/login"))
+    )
+      next("/visitor");
+    if (role && to.matched.some((route) => route.meta.requireAuth)) {
+      const allowedRoles = to.meta.role;
+      if (allowedRoles.includes(role)) {
+        next();
+        return;
+      }
+      next("/login");
+      return;
+    }
+    next();
+    return;
+  }
+  if (!to.matched.some((noAuth) => noAuth.meta.requireAuth)) {
+    next();
+    return;
+  }
+  next("/login");
+});
+
+router.afterEach((to, from) => {
+  Vue.nextTick(() => {
+    document.title = to.meta?.title || DEFAULT_TITLE;
+  });
+});
 
 export default router

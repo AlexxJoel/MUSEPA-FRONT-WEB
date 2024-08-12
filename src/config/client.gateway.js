@@ -3,10 +3,37 @@ import router from "../router";
 import Vue from "vue";
 import SweetAlertCustom from "@/kernel/SweetAlertCustom";
 
+const baseUrls = {
+  visitors: import.meta.env.VITE_APP_BASE_URL_VISITORS,
+  museums: import.meta.env.VITE_APP_BASE_URL_MUSEUMS,
+  works: import.meta.env.VITE_APP_BASE_URL_WORKS,
+  events: import.meta.env.VITE_APP_BASE_URL_EVENTS,
+  auth: import.meta.env.VITE_APP_BASE_URL_AUTH,
+  managers: import.meta.env.VITE_APP_BASE_URL_MANAGERS,
+};
+
 // Interceptor que manda el token en todas las peticiones
 AxiosClient.interceptors.request.use(
   function (config) {
     const auth_token = localStorage.token;
+
+    // Asigna el baseURL en función del endpoint
+    if (config.url.includes("/visitors")) {
+      config.baseURL = baseUrls.visitors;
+    } else if (config.url.includes("/museums")) {
+      config.baseURL = baseUrls.museums;
+    } else if (config.url.includes("/works")) {
+      config.baseURL = baseUrls.works;
+    } else if (config.url.includes("/events")) {
+      config.baseURL = baseUrls.events;
+    } else if (config.url.includes("/auth")) {
+      config.baseURL = baseUrls.auth;
+    } else if (config.url.includes("/managers")) {
+      config.baseURL = baseUrls.managers;
+    } else {
+      config.baseURL = import.meta.env.VITE_APP_BASE_URL_AUTH; // baseURL por defecto
+    }
+
     if (
       auth_token &&
       (!config.url.includes("auth") || !config.url.includes("open"))
@@ -31,12 +58,14 @@ AxiosClient.interceptors.response.use(
     }
   },
   async (error) => {
+    console.log("error", error);
     if (!error.response) {
       await SweetAlertCustom.ErrorServer();
       return Promise.reject(error);
     }
 
     const { status } = error.response;
+    console.log("status", status);
     switch (status) {
       case 400:
       case "BAD_REQUEST":
@@ -66,124 +95,35 @@ AxiosClient.interceptors.response.use(
           "warning"
         );
         break;
+      case 'duplicate key value violates unique constraint "users_email_key"\nDETAIL:  Key (email)=(maycon@gmail.com) already exists.\n':
+        Vue.swal("Error", "El correo ya se encuentra registrado", "warning");
+        break;
     }
     return Promise.reject(error.response);
   }
 );
 
 function handle400Error(error) {
-  const { message } = error.response.data;
+  console.log("error 400", error);
+  const message = error.response.data.error;
   let titleAlert = "";
   let messageAlert = "";
+  console.log("message", message);
 
   switch (message.trim()) {
     // AUTH
-    case "USER_IS_BLOCKED":
+    case "Incorrect username or password.":
       titleAlert = "Credenciales incorrectas";
       messageAlert = "Usuario y/o contraseña erróneos";
       break;
-    case "USER_IS_INACTIVE":
-      titleAlert = "La cuenta se encuentra desactivada";
-      messageAlert = "Contacta al administrador para que active la cuenta";
+    case "Password attempts exceeded":
+      titleAlert = "Intentos de contraseña excedidos";
+      messageAlert = "Has excedido el número de intentos de contraseña";
       break;
-    // CRUD operations
-    case "MISSING_FIELDS":
-      titleAlert = "Campos faltantes";
-      messageAlert = "Por favor completa todos los campos";
-      break;
-    case "RECORD_NOT_REGISTERED":
-      titleAlert = "Registro no guardado";
-      messageAlert = "El registro no ha sido guardado";
-      break;
-    case "RECORD_NOT_UPDATED":
-      titleAlert = "Registro no actualizado";
-      messageAlert = "El registro no ha sido actualizado";
-      break;
-    case "RECORD_NOT_DELETED":
-      titleAlert = "Registro no eliminado";
-      messageAlert = "El registro no ha sido eliminado";
-      break;
-    case "RECORD_HAS_DEPENDENCIES":
-      titleAlert = "Registro con dependencias";
-      messageAlert = "El registro no puede ser eliminado, tiene dependencias";
-      break;
-    case "INVALID_FIELDS":
-      titleAlert = "Campos inválidos";
-      messageAlert = "Por favor verifica los campos";
-      break;
-    case "DUPLICATED_RECORD":
-      titleAlert = "Registro duplicado";
-      messageAlert = "El registro ya existe";
-      break;
-    case "REVIEW_REQUEST":
-      titleAlert = "Solicitud de revisión";
-      messageAlert = "Solicitud de revisión";
-      break;
-    case "The curp is already registered":
-      titleAlert = "Registro duplicado";
-      messageAlert = "Esta CURP ya existe";
-      break;
-    case "DUPLICATED_AREA":
-      titleAlert = "Registro duplicado";
-      messageAlert = "Esta área ya existe";
-      break;
-    case "DUPLICATED_DOCTOR":
-      titleAlert = "Registro duplicado";
-      messageAlert = "Información en uso";
-      break;
-    // APPOINTMENTS
-    case "NO_RESCHEDULES_REMAINING":
-      titleAlert = "Sin reagendas disponibles";
-      messageAlert = "Ya has usado tu oportunidad de reagendar en esat cita";
-      break;
-    case "DUPLICATED_PATIENT":
-      titleAlert = "Registro duplicado";
-      messageAlert = "Información en uso";
-      break;
-    case "DUPLICATED_USER":
-      titleAlert = "Registro duplicado";
-      messageAlert = "Información en uso";
-      break;
-    case "NO_AVAILABILITY":
-      titleAlert = "Sin disponibilidad";
-      messageAlert = "No hay disponibilidad en esa fecha";
-      break;
-    case "AREA_HAS_DEPENDENCIES":
-      titleAlert = "Área con dependencias";
-      messageAlert = "El área está siendo utilizada";
-      break;
-    case "AREA_IS_INACTIVE":
-      titleAlert = "Área inactiva";
-      messageAlert = "El área está inactiva";
-      break;
-    case "DUPLICATED_SPECIALITY":
-      titleAlert = "Registro duplicado";
-      messageAlert = "Esta área ya existe";
-      break;
-    case "SPECIALITY_HAS_DEPENDENCIES":
-      titleAlert = "Especialidad con dependencias";
-      messageAlert = "La especialidad está siendo utilizada";
-      break;
-    case "SPECIALITY_IS_INACTIVE":
-      titleAlert = "Especialidad inactiva";
-      messageAlert = "La espacialidad está inactiva";
-      break;
-    case "USER_HAS_DEPENDENCIES":
-      titleAlert = "Usuario con dependencias";
-      messageAlert = "El usuario está siendo utilizado";
-      break;
-    case "INCORRECT_CURRENT_PASSWORD":
-      titleAlert = "Contraseña incorrecta";
-      messageAlert = "Contreaseña incorrecta";
-      break;
-    case "PASSWORD_ARE_THE_SAME":
-      titleAlert = "Coincidencia de contraseña";
-      messageAlert =
-        "La nueva contraseña no puede ser la misma que ya has utilizado";
-      break;
-    case "DUPLICATED_PATIENT":
-      titleAlert = "Registro duplicado";
-      messageAlert = "Este paciente ya existe";
+    // Create account
+    case "Invalid or missing 'username'":
+      titleAlert = "Usuario inválido";
+      messageAlert = "El usuario es inválido o está vacío";
       break;
   }
   if (message !== "Review request")
