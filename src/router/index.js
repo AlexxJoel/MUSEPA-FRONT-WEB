@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import {jwtDecode} from "jwt-decode";
 import publicRoute from "./public-router";
 import { ERoles } from '../kernel/types';
+import adminRouter from './admin-router';
 
 Vue.use(VueRouter);
 const DEFAULT_TITLE = "MUSEPA";
@@ -13,7 +14,7 @@ const router = new VueRouter({
   routes: [
     {
       path: "/",
-      redirect: "/musepa",
+      redirect: { name: "public-musepa" },
     },
     {
       path: "/",
@@ -40,6 +41,7 @@ const router = new VueRouter({
           },
         },
         ...publicRoute,
+        ...adminRouter,
       ]
     }
   ]

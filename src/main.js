@@ -25,6 +25,8 @@ Vue.use(VueSweetalert2);
 Vue.component('loading-overlay', Loading);
 
 
+
+
 new Vue({
   router,
   render: (h) => h(App)

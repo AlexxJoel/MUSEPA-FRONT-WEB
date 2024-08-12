@@ -191,7 +191,7 @@ export default Vue.extend({
         console.log("decoded token", jwtDecode(localStorage.token));
         const decodedToken = jwtDecode(localStorage.token);
         if (decodedToken["cognito:groups"][0] === ERoles.MANAGER) {
-          await this.$router.replace("/manager");
+          await this.$router.replace({ name: "admin" });
           return true;
         } else if (decodedToken["cognito:groups"][0] === ERoles.VISITOR) {
           await this.$router.replace("/visitor");
