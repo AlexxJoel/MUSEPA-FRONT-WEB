@@ -1,13 +1,12 @@
 <template>
     <div class="landing-page">
-      <header class="header">
+<!--       <header class="header">
         <div class="logo-container">
-          <img src="@/assets/image/Logo.png" alt="Musepa Logo" class="logo" />
-          <span class="logo-text"><strong>Musepa</strong></span>
+
         </div>
-      </header>
+      </header> -->
   
-      <section class="welcome">
+      <section class="welcome mt-5">
         <div class="welcome-text">
           <h1><strong>¡Bienvenido a MUSEPA!</strong></h1>
           <p class="highlight-text"><strong>Te interesa visitar museos</strong></p>
