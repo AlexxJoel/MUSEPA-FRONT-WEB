@@ -43,7 +43,16 @@ const router = new VueRouter({
         ...publicRoute,
         ...adminRouter,
       ]
-    }
+    },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "not-found",
+      component: () => import("../views/NotFound404.vue"),
+      meta: {
+        title: "Página no encontrada",
+        requireAuth: false,
+      },
+    },
   ]
 });
 
