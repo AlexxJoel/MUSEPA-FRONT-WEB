@@ -1,16 +1,17 @@
 /* TODO  implement axios */
 
+import axios from "../../../../../config/client.gateway";
 import { works } from './data';
 
 
 export default {
   async getWorks() {
     try {
-      const response = await Promise.resolve({ data: {data:works} });
+      const response = await axios.doGet("/works");
       return response.data.data;
     }
     catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   },
   async saveEvent(event) {

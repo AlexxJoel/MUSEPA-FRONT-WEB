@@ -26,6 +26,7 @@ hkjfhf
           <b-form-input
             placeholder="Buscar evento..."
             type="search"
+            v-model="searchTerm"
           ></b-form-input>
         </b-form-group>
       </div>
@@ -38,7 +39,7 @@ hkjfhf
           <b-col
             cols="12"
             md="4"
-            v-for="event in listEvents"
+            v-for="event in paginatedEvents"
             :key="event.id"
             class="mb-4"
           >
@@ -46,7 +47,7 @@ hkjfhf
               <b-row no-gutters class="h-100">
                 <b-col lg="6">
                   <b-card-img
-                    src="https://images.unsplash.com/photo-1486893002286-04c6a8a8de6f?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D"
+                    :src="event.pictures[0]"
                     alt="Image"
                     class="rounded-0"
                     style="height: 100%; object-fit: cover"
@@ -99,7 +100,7 @@ hkjfhf
         <div class="text-center">
           <b-pagination
             v-model="currentPage"
-            :total-rows="listEvents.length"
+            :total-rows="filteredEvents.length"
             :per-page="perPage"
             align="center"
           ></b-pagination>
@@ -124,13 +125,30 @@ export default Vue.extend({
       isLoading: false,
       listEvents: [],
       currentPage: 1,
-      perPage: 9
+      perPage: 6,
+      searchTerm: "",
     };
   },
   mounted() {
     this.getListEvents();
   },
+  computed: {
+    filteredEvents() {
+      if (this.searchTerm) {
+        return this.listEvents.filter((item) =>
+          item.name.toLowerCase().includes(this.searchTerm.toLowerCase())
+        );
+      }
+      return this.listEvents;
+    },
+    paginatedEvents() {
+      const start = (this.currentPage - 1) * this.perPage;
+      const end = start + this.perPage;
+      return this.filteredEvents.slice(start, end);
+    },
+  },
   methods: {
+    formatDate,
     async getListEvents() {
       try {
         this.isLoading = true;
@@ -143,7 +161,6 @@ export default Vue.extend({
         this.isLoading = false;
       }
     },
-    formatDate,
   },
 });
 </script>
