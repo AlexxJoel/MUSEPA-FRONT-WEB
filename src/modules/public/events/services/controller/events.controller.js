@@ -1,15 +1,15 @@
-import ApiEvents from '../service/events.gateway';
+import ApiEvents from "../service/events.gateway";
 
 export default {
-  async getEvents(){
+  async getEvents() {
     try {
       const data = await ApiEvents.getEvents();
       return data;
     } catch (error) {
-      return Promise.reject(error);
+      return error;
     }
-  }, 
-  async saveEvent(event){
+  },
+  async saveEvent(event) {
     try {
       const data = await ApiEvents.saveEvent(event);
       return data;
@@ -17,7 +17,7 @@ export default {
       return Promise.reject(error);
     }
   },
-  async deleteEvent(eventId){
+  async deleteEvent(eventId) {
     try {
       const data = await ApiEvents.deleteEvent(eventId);
       return data;
@@ -25,7 +25,7 @@ export default {
       return Promise.reject(error);
     }
   },
-  async findEventById(eventId){
+  async findEventById(eventId) {
     try {
       const data = await ApiEvents.findEventById(eventId);
       return data;
@@ -33,12 +33,12 @@ export default {
       return Promise.reject(error);
     }
   },
-  async updateEvent(event){
+  async updateEvent(event) {
     try {
       const data = await ApiEvents.updateEvent(event);
       return data;
     } catch (error) {
       return Promise.reject(error);
     }
-  }
+  },
 };
