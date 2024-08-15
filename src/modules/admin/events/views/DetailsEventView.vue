@@ -18,7 +18,7 @@
         <b-card class="card">
 
           <div class="d-flex justify-content-between ">
-            <h2>Información del evento</h2>
+          <h2>Información del evento</h2>
             <b-button variant="outline-secondary" @click="isEditing = !isEditing" class="m-0">
               <b-icon v-if="!isEditing" icon="lock-fill" class="mr-2"></b-icon>
               <b-icon v-else icon="unlock-fill" class="mr-2"></b-icon>

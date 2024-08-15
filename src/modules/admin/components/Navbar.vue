@@ -60,6 +60,8 @@ data() {
         { name: "Inicio", route: "admin-home", icon: "house-fill" },
         { name: "Eventos", route: "admin-events", icon: "calendar-fill" },
         { name: "Obras", route: "admin-works", icon: "grid-fill" },
+        { name: "Usuarios", route: "admin-users", icon: "people-fill" },
+        
         
       ],
       profile: {
