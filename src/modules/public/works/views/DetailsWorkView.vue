@@ -1,12 +1,11 @@
 <template>
   <div>
+    <loading-custom :isLoading="isLoading" />
     <b-row class="px-5 pt-3 m-0">
       <b-col cols="6">
-
         <!-- Card -->
 
         <div class="p-4">
-
           <div class="d-flex justify-content-between mb-2">
             <h2>Información de la obra</h2>
           </div>
@@ -14,36 +13,64 @@
           <b-form ref="form">
             <b-row class="pb-3">
               <b-col cols="6">
-                <b-form-group label="Nombre de la obra" label-for="name" label-class="font-italic" label-size="sm">
-                  <p class="font-weight-bold h5">{{ work.name }}</p>
+                <b-form-group
+                  label="Titulo de la obra"
+                  label-for="title"
+                  label-class="font-italic"
+                  label-size="sm"
+                >
+                  <p class="font-weight-bold h5">{{ work.title }}</p>
                 </b-form-group>
               </b-col>
               <b-col cols="6">
-                <b-form-group label="Categoria" label-for="category" label-class="font-italic" label-size="sm">
-                  <p class="font-weight-bold h5">{{ listCategories.find((c) => c.value === work.category).text }}</p>
+                <b-form-group
+                  label="Técnica"
+                  label-for="category"
+                  label-class="font-italic"
+                  label-size="sm"
+                >
+                  <p class="font-weight-bold h5">{{ work.technique }}</p>
                 </b-form-group>
               </b-col>
             </b-row>
 
             <b-row>
               <b-col cols="6">
-                <b-form-group label="Fecha de inicio" label-for="startDate" ref="startDate" label-class="font-italic"
-                  label-size="sm">
-                  <p class="font-weight-bold h5">{{ formatDate(work.startDate) }}</p>
+                <b-form-group
+                  label="Fecha de creación"
+                  label-for="start_date"
+                  ref="start_date"
+                  label-class="font-italic"
+                  label-size="sm"
+                >
+                  <p class="font-weight-bold h5">
+                    {{ formatDate(work.creation_date) }}
+                  </p>
                 </b-form-group>
               </b-col>
               <b-col cols="6">
-                <b-form-group label="Fecha de fin" label-for="endDate" ref="endDate" label-class="font-italic"
-                  label-size="sm">
-                  <p class="font-weight-bold h5">{{ formatDate(work.endDate) }}</p>
+                <b-form-group
+                  label="Artistas"
+                  label-for="artists"
+                  ref="artists"
+                  label-class="font-italic"
+                  label-size="sm"
+                >
+                  <p class="font-weight-bold h5">
+                    {{ work.artists ? work.artists.join(", ") : "" }}
+                  </p>
                 </b-form-group>
               </b-col>
             </b-row>
 
-
             <b-row class="pb-3">
               <b-col cols="12">
-                <b-form-group label="Descripción" label-for="description" label-class="font-italic" label-size="sm">
+                <b-form-group
+                  label="Descripción"
+                  label-for="description"
+                  label-class="font-italic"
+                  label-size="sm"
+                >
                   <p class="font-weight-bold h5">{{ work.description }}</p>
                 </b-form-group>
               </b-col>
@@ -54,65 +81,72 @@
                 Guardar obra
               </b-button>
             </div>
-
           </b-form>
         </div>
       </b-col>
       <b-col cols="6">
-
         <SectionDivider>
-          <template v-slot:title>
-            Imagenes
-          </template>
+          <template v-slot:title> Imagenes </template>
         </SectionDivider>
 
         <section class="p-4">
-          <VueSlickCarousel ref="c1" :asNavFor="$refs.c2"  v-bind="settingsCarousel">
-            <div
-              class="d-flex justify-content-center align-items-center"
-            ><img src="https://picsum.photos/300/300" /></div>
+          <VueSlickCarousel
+            ref="c1"
+            :asNavFor="$refs.c2"
+            v-bind="settingsCarousel"
+          >
+            <div class="d-flex justify-content-center align-items-center">
+              <img src="https://picsum.photos/300/300" />
+            </div>
 
-            <div><img src="https://picsum.photos/300/300" /></div>
+            <div class="d-flex justify-content-center align-items-center">
+              <img src="https://picsum.photos/300/300" />
+            </div>
 
-            <div><img src="https://picsum.photos/300/300" /></div>
+            <div class="d-flex justify-content-center align-items-center">
+              <img src="https://picsum.photos/300/300" />
+            </div>
           </VueSlickCarousel>
         </section>
 
         <section>
+          <VueSlickCarousel
+            ref="c2"
+            :asNavFor="$refs.c1"
+            :slidesToShow="2"
+            :dots="true"
+            v-bind="settingsCarousel"
+          >
+            <div v-for="(image, index) in work.pictures" :key="index">
+              <img :src="image" height="100" />
+            </div>
+            <div v-if="work.pictures.length === 0"></div>
 
-          <VueSlickCarousel ref="c2" :asNavFor="$refs.c1" :slidesToShow="2" 
-          :dots="true" 
-            v-bind="settingsCarousel">
-            <div><img src="https://picsum.photos/300/300"  height="100"/></div>
-            <div><img src="https://picsum.photos/300/300" height="100" /></div>
-            <div><img src="https://picsum.photos/300/300" height="100" /></div>
-
-
+            <!-- <div><img src="https://picsum.photos/300/300" height="100" /></div> -->
+            <!-- <div><img src="https://picsum.photos/300/300" height="100" /></div>
+            <div><img src="https://picsum.photos/300/300" height="100" /></div> -->
           </VueSlickCarousel>
-
         </section>
-
       </b-col>
     </b-row>
   </div>
 </template>
 <script>
 import Vue from "vue";
-import worksController from '../services/controller/works.controller';
-import { formatDate } from '../../../../kernel/moment';
-import VueSlickCarousel from 'vue-slick-carousel'
-import 'vue-slick-carousel/dist/vue-slick-carousel.css'
+import worksController from "../services/controller/works.controller";
+import { formatDate } from "../../../../kernel/moment";
+import VueSlickCarousel from "vue-slick-carousel";
+import "vue-slick-carousel/dist/vue-slick-carousel.css";
 // optional style for arrows & dots
-import 'vue-slick-carousel/dist/vue-slick-carousel-theme.css'
-
-
-
+import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
 
 export default Vue.extend({
   name: "SaveEventView",
   components: {
     VueSlickCarousel,
-    SectionDivider: () => import('@/components/SectionDivider.vue')
+    SectionDivider: () => import("@/components/SectionDivider.vue"),
+    LoadingCustom: () =>
+      import("../../../../views/components/LoadingCustom.vue"),
   },
   data() {
     return {
@@ -145,24 +179,20 @@ export default Vue.extend({
         { value: 4, text: "Fiesta" },
       ],
       work: {
-        name: 'Amanecer en el bosque',
-        category: 2,
-        description: 'Esta obra es una representación de la naturaleza en su estado más puro.',
-        startDate: '2021-10-10',
-        endDate: '2021-10-11',
-        pictures: [
-          'https://musepa-bucket.s3.us-east-2.amazonaws.com/images/0e392eb4-43eb-470c-b31b-25c1807e33b5.jpg',
-          'https://musepa-bucket.s3.us-east-2.amazonaws.com/images/0e392eb4-43eb-470c-b31b-25c1807e33b5.jpg',
-          'https://musepa-bucket.s3.us-east-2.amazonaws.com/images/0e392eb4-43eb-470c-b31b-25c1807e33b5.jpg',
-        ]
+        name: "",
+        category: 0,
+        description: "",
+        startDate: "",
+        endDate: "",
+        pictures: [],
       },
-
     };
   },
   mounted() {
-    this.addFile();
+    this.findWorkById();
   },
   methods: {
+    formatDate,
     async getListEvents() {
       try {
         this.isLoading = true;
@@ -174,11 +204,23 @@ export default Vue.extend({
         this.isLoading = false;
       }
     },
-    formatDate
+    async findWorkById() {
+      try {
+        this.isLoading = true;
+        const response = await worksController.findWorkById(
+          this.$route.params.id
+        );
+        console.log(response);
+        this.work = response;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
   },
 });
 </script>
-
 
 <style>
 .wallpaper {
@@ -198,9 +240,8 @@ h1 {
   font-size: 3rem;
 }
 
-
 .card {
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
 }
 
 .drag-area {
@@ -223,14 +264,11 @@ h1 {
 }
 
 .disabled-dropzone {
-
   pointer-events: none;
   /* Desactiva clics y arrastres */
   opacity: 0.7;
   /* Hace que parezca deshabilitado */
-
 }
-
 
 .slick-prev::before,
 .slick-next::before {
@@ -246,5 +284,4 @@ h1 {
   /* Flechas redondeadas */
   padding: 10px;
 }
-
 </style>
