@@ -24,10 +24,7 @@
         <b-form-group class="w-50">
           <!-- Search and icon right -->
           <b-input-group>
-            <b-form-input
-              placeholder="Buscar obra..."
-              v-model="searchTerm"
-            />
+            <b-form-input placeholder="Buscar obra..." v-model="searchTerm" />
             <b-input-group-append>
               <b-button variant="outline-secondary">
                 <b-icon icon="search"></b-icon>
@@ -199,14 +196,23 @@ export default Vue.extend({
       }
     },
     async deleteWork(id) {
-      const resp = await SweetAlertCustom.questionMessage(
-        "Esta acción no se puede deshacer",
-        " ¿Estás seguro de eliminar el evento?"
-      );
-      if (!resp.isConfirmed) return;
-
-      SweetAlertCustom.successMessage();
-      console.log("delete event", id);
+      try {
+        SweetAlertCustom.questionMessage().then(async (result) => {
+          if (result.isConfirmed) {
+            this.isLoading = true;
+            const response = await worksController.deleteWork(id);
+            console.log("response", response);
+            if (response.message === "Work deleted successfully") {
+              SweetAlertCustom.successMessage();
+              await this.getListWorks();
+            }
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
     },
   },
 });

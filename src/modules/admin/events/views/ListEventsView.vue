@@ -180,15 +180,23 @@ export default Vue.extend({
       }
     },
     async deleteEvent(id) {
-      const resp = await SweetAlertCustom.questionMessage(
-        "Esta acción no se puede deshacer",
-        " ¿Estás seguro de eliminar el evento?"
-      );
-      if (!resp.isConfirmed) return;
-
-      SweetAlertCustom.successMessage();
-
-      console.log("delete event", id);
+      try {
+        SweetAlertCustom.questionMessage().then(async (result) => {
+          if (result.isConfirmed) {
+            this.isLoading = true;
+            const response = await eventsController.deleteEvent(id);
+            console.log("response", response);
+            if (response.message === "Event deleted successfully") {
+              SweetAlertCustom.successMessage();
+              await this.getListEvents();
+            }
+          }
+        });
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
     },
     formatDate,
   },
