@@ -6,7 +6,7 @@ export default {
       const data = await ApiEvents.getEvents();
       return data;
     } catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   }, 
   async saveEvent(event){

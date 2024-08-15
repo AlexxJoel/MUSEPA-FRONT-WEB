@@ -1,16 +1,17 @@
 /* TODO  implement axios */
 
 import { events } from './data';
+import axios from '../../../../../config/client.gateway';
 
 
 export default {
   async getEvents() {
     try {
-      const response = await Promise.resolve({ data: {data:events} });
+      const response = await axios.doGet('/events');
       return response.data.data;
     }
     catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   },
   async saveEvent(event) {
