@@ -81,6 +81,7 @@ router.beforeEach((to, from, next) => {
       next("/visitor");
     if (role && to.matched.some((route) => route.meta.requireAuth)) {
       const allowedRoles = to.meta.role;
+      console.log(allowedRoles);
       if (allowedRoles.includes(role)) {
         next();
         return;

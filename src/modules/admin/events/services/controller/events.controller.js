@@ -14,7 +14,7 @@ export default {
       const data = await ApiEvents.saveEvent(event);
       return data;
     } catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   },
   async deleteEvent(eventId){
