@@ -17,12 +17,12 @@ export default {
       return errror;
     }
   },
-  async deleteEvent(eventId) {
+  async deleteWork(workId) {
     try {
-      const data = await ApiWorks.deleteEvent(eventId);
+      const data = await ApiWorks.deleteWork(workId);
       return data;
     } catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   },
   async findEventById(eventId) {

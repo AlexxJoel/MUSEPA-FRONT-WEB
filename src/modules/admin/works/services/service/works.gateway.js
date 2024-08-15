@@ -31,14 +31,13 @@ export default {
     }
   },
 
-  async deleteEvent(eventId) {
+  async deleteWork(workId) {
     try {
-      const response = Promise.resolve({
-        data: { data: works.filter((event) => event.id !== eventId) },
-      });
-      return response.data.data;
+      const response = await axios.doDelete(`/works/${workId}`);
+      console.log("works gateway",response);
+      return response.data;
     } catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   },
 

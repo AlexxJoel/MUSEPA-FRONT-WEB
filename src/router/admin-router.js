@@ -69,7 +69,8 @@ export default [
             component: () => import("../modules/admin/works/views/ListWorksView.vue"),
             meta: {
               title: "Lista de Obras",
-              requireAuth: false,
+              requireAuth: true,
+              role: rolesAllowed,
             },
           },
           {

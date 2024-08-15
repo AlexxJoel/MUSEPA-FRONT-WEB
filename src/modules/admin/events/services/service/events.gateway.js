@@ -32,12 +32,10 @@ export default {
 
   async deleteEvent(eventId) {
     try {
-      const response = Promise.resolve({
-        data: { data: events.filter((event) => event.id !== eventId) },
-      });
-      return response.data.data;
+      const response = await axios.doDelete(`/events/${eventId}`);
+      return response.data;
     } catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   },
 
