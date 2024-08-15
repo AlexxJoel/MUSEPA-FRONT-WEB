@@ -34,9 +34,7 @@ AxiosClient.interceptors.request.use(
       config.baseURL = import.meta.env.VITE_APP_BASE_URL_AUTH; // baseURL por defecto
     }
 
-    if (
-      auth_token &&
-      (!config.url.includes("auth") || !config.url.includes("open"))
+    if (auth_token && (!config.url.includes("auth") || !config.url.includes("open"))
     ) {
       config.headers.Authorization = `Bearer ${auth_token}`;
     }
@@ -58,8 +56,15 @@ AxiosClient.interceptors.response.use(
     }
   },
   async (error) => {
-    console.log("error", error);
-    if (!error.response) {
+    console.log("error interceptor response", error);
+
+    if (!error.response || !error.response.status) {
+
+      const loadingOverlay = document.querySelector('.vld-overlay.is-active.custom-loading-font.is-full-page');
+      if (loadingOverlay) {
+        loadingOverlay.classList.remove('is-active');
+      }	
+
       await SweetAlertCustom.ErrorServer();
       return Promise.reject(error);
     }

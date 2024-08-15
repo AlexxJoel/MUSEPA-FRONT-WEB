@@ -123,6 +123,46 @@ export default [
           role: rolesAllowed,
         },
       },
-    ],
-  },
-];
+      {
+        path: "users",
+        name: "admin-users",
+        component: () => import("../modules/admin/users/views/UsersView.vue"),
+        redirect: { name: "users-list" },
+        meta: {
+          requireAuth: false,
+        },
+        children: [
+          {
+            path: "list",
+            name: "users-list",
+            component: () => import("../modules/admin/users/views/ListUsersView.vue"),
+            meta: {
+              title: "Usuarios",
+              requireAuth: false,
+            },
+          },
+          {
+            path: "save",
+            name: "user-save",
+            component: () => import("../modules/admin/users/views/SaveUserView.vue"),
+            meta: {
+              title: "Crear Usuario",
+              requireAuth: true,
+              role: rolesAllowed,
+            },
+          },
+          {
+            path: "detail/:id",
+            name: "user-detail",
+            component: () => import("../modules/admin/users/views/DetailsUserView.vue"),
+            meta: {
+              title: "Detalle del usuario",
+              requireAuth: false,
+            },
+
+          }
+        ],
+      },
+    ]
+  }
+]
