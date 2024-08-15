@@ -37,7 +37,7 @@
         </b-form-group>
         <div>
           <b-button variant="" :to="{ name: 'work-save' }"
-            >Agregar evento &nbsp;
+            >Agregar obra &nbsp;
             <b-icon icon="plus-square"></b-icon>
           </b-button>
         </div>

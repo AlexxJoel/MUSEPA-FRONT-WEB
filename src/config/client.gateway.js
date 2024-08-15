@@ -141,34 +141,19 @@ function handle400Error(error) {
 }
 
 function handle401Error(error) {
-  const { message } = error.response.data;
+  console.log("error res 401", error);
+  const message = error.response.data.message;
+  console.log("message 401", message);
 
   let titleAlert = "";
   let messageAlert = "";
 
   switch (message.trim()) {
     // AUTH
-    case "CREDENTIALS_MISMATCH":
-      titleAlert = "Credenciales incorrectas";
-      messageAlert = "Usuario y/o contraseña erróneos";
-      break;
-    case "EXPIRED_SESSION":
-      Vue.swal(
-        "Sesión expirada",
-        "Por seguridad tu sesión se ha cerrado, vuelve a iniciar sesión",
-        "warning"
-      ).then((result) => {
-        router.push("/");
-      });
+    case "The incoming token has expired":
+      titleAlert = "Sesión expirada";
+      messageAlert = "La sesión ha expirado";
       localStorage.clear();
-      break;
-    case "USER_IS_INACTIVE":
-      titleAlert = "Usuario inactivo";
-      messageAlert = "EL usuario se encuentra deshabilitado";
-      break;
-    case "USER_IS_BLOCKED":
-      titleAlert = "Usuario bloqueado";
-      messageAlert = "EL usuario está bloqueado";
       break;
   }
   if (message !== "EXPIRED_SESSION")

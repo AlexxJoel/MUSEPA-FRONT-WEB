@@ -1,3 +1,4 @@
+const rolesAllowed = ["manager"];
 export default [
   {
     path: "/musepa/admin",
@@ -37,7 +38,8 @@ export default [
             component: () => import("../modules/admin/events/views/SaveEventView.vue"),
             meta: {
               title: "Crear Evento",
-              requireAuth: false,
+              requireAuth: true,
+              role: rolesAllowed,
             },
           },
           {
@@ -76,7 +78,8 @@ export default [
             component: () => import("../modules/admin/works/views/SaveWorkView.vue"),
             meta: {
               title: "Crear Obra",
-              requireAuth: false,
+              requireAuth: true,
+              role: rolesAllowed,
             },
           },
           {

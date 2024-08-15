@@ -1,8 +1,9 @@
 <template>
   <div>
+    <loading-custom :isLoading="isLoading" />
+
     <b-row class="px-5 pt-3 m-0">
       <b-col cols="6">
-
         <!-- Card -->
 
         <b-card class="card">
@@ -12,12 +13,38 @@
             <b-row>
               <b-col cols="6">
                 <b-form-group label="Nombre del evento:*" label-for="name">
-                  <b-form-input id="name" v-model="event.name" required placeholder="Nombre del evento"></b-form-input>
+                  <b-form-input
+                    id="name"
+                    v-model.trim="v$.event.name.$model"
+                    :state="v$.event.name.$dirty ? !v$.event.name.$error : null"
+                    @blur="v$.event.name.$touch()"
+                    required
+                    placeholder="Nombre del evento"
+                  ></b-form-input>
+                  <b-form-invalid-feedback
+                    v-for="error in v$.event.name.$errors"
+                    :key="error.$uid"
+                    >{{ error.$message }}</b-form-invalid-feedback
+                  >
                 </b-form-group>
               </b-col>
               <b-col cols="6">
                 <b-form-group label="Categoria:*" label-for="category">
-                  <b-form-select v-model="event.category" :options="listCategories"></b-form-select>
+                  <b-form-select
+                    v-model="v$.event.category.$model"
+                    :state="
+                      v$.event.category.$dirty
+                        ? !v$.event.category.$error
+                        : null
+                    "
+                    @blur="v$.event.category.$touch()"
+                    :options="listCategories"
+                  ></b-form-select>
+                  <b-form-invalid-feedback
+                    v-for="error in v$.event.category.$errors"
+                    :key="error.$uid"
+                    >{{ error.$message }}</b-form-invalid-feedback
+                  >
                 </b-form-group>
               </b-col>
             </b-row>
@@ -25,53 +52,99 @@
             <b-row>
               <b-col cols="6">
                 <b-form-group label="Fecha de incio:*" label-for="startDate">
-                  <b-form-datepicker id="startDate" v-model="event.startDate" class="mb-2"
-                    label-no-date-selected="Seleccione una fecha" label-help=""></b-form-datepicker>
+                  <b-form-datepicker
+                    id="startDate"
+                    v-model="v$.event.startDate.$model"
+                    :state="
+                      v$.event.startDate.$dirty
+                        ? !v$.event.startDate.$error
+                        : null
+                    "
+                    @blur="v$.event.startDate.$touch()"
+                    @hide="v$.event.startDate.$touch()"
+                    class="mb-2"
+                    label-no-date-selected="Seleccione una fecha"
+                    label-help=""
+                  ></b-form-datepicker>
+                  <b-form-invalid-feedback
+                    v-for="error in v$.event.startDate.$errors"
+                    :key="error.$uid"
+                    >{{ error.$message }}</b-form-invalid-feedback
+                  >
                 </b-form-group>
               </b-col>
               <b-col cols="6">
                 <b-form-group label="Fecha de fin:*" label-for="endDate">
-                  <b-form-datepicker id="endDate" v-model="event.endDate" class="mb-2"
-                    label-no-date-selected="Seleccione una fecha" label-help=""></b-form-datepicker>
+                  <b-form-datepicker
+                    id="endDate"
+                    v-model="v$.event.endDate.$model"
+                    :state="
+                      v$.event.endDate.$dirty ? !v$.event.endDate.$error : null
+                    "
+                    @blur="v$.event.endDate.$touch()"
+                    @hide="v$.event.endDate.$touch()"
+                    class="mb-2"
+                    label-no-date-selected="Seleccione una fecha"
+                    label-help=""
+                  ></b-form-datepicker>
+                  <b-form-invalid-feedback
+                    v-for="error in v$.event.endDate.$errors"
+                    :key="error.$uid"
+                    >{{ error.$message }}</b-form-invalid-feedback
+                  >
                 </b-form-group>
               </b-col>
             </b-row>
 
-
             <b-row>
               <b-col cols="12">
                 <b-form-group label="Descripción:*" label-for="description">
-                  <b-form-input id="description" v-model="event.description" required
-                    placeholder="Descripción del evento"></b-form-input>
+                  <b-form-input
+                    id="description"
+                    v-model="v$.event.description.$model"
+                    :state="
+                      v$.event.description.$dirty
+                        ? !v$.event.description.$error
+                        : null
+                    "
+                    @blur="v$.event.description.$touch()"
+                    required
+                    placeholder="Descripción del evento"
+                  ></b-form-input>
+                  <b-form-invalid-feedback
+                    v-for="error in v$.event.description.$errors"
+                    :key="error.$uid"
+                    >{{ error.$message }}</b-form-invalid-feedback
+                  >
                 </b-form-group>
               </b-col>
             </b-row>
 
             <div>
-              <b-button variant="outline-secondary" block>
+              <b-button variant="outline-secondary" block @click="saveEvent">
                 Guardar evento
               </b-button>
             </div>
-
           </b-form>
         </b-card>
       </b-col>
       <b-col cols="6">
-
         <SectionDivider>
-          <template v-slot:title>
-            Imagenes
-          </template>
+          <template v-slot:title> Imagenes </template>
         </SectionDivider>
 
         <b-alert show variant="info">
-            <p class="m-0">Los campos marcados con <b>*</b> son obligatorios.</p>
-          </b-alert>
+          <p class="m-0">Los campos marcados con <b>*</b> son obligatorios.</p>
+        </b-alert>
 
-
-       <vue-dropzone ref="dropZoneImg" id="dropZoneImg" :options="dropZone.options" :use-custom-slot="dropZone.useCustomSlot"
+        <vue-dropzone
+          ref="dropZoneImg"
+          id="dropZoneImg"
+          :options="dropZone.options"
+          :use-custom-slot="dropZone.useCustomSlot"
           :include-styling="dropZone.includeStyling"
-          @vdropzone-file-added="validateFile" >
+          @vdropzone-file-added="validateFile"
+        >
           <slot>
             <div class="drag-area">
               <div class="icon">
@@ -80,40 +153,49 @@
               {{ dropZone.labels.drop }}
             </div>
           </slot>
-        </vue-dropzone> 
+        </vue-dropzone>
 
-
-        <small class="text-muted">Solo se permiten archivos de imagen y un máximo de 4MB, asi como un máximo de 3 imagenes.</small>
- 
+        <small class="text-muted"
+          >Solo se permiten archivos de imagen y un máximo de 4MB, asi como un
+          máximo de 3 imagenes.</small
+        >
       </b-col>
     </b-row>
   </div>
 </template>
 <script>
 import Vue from "vue";
+import { useVuelidate } from "@vuelidate/core";
+import { required, helpers } from "@vuelidate/validators";
 import eventsController from "../services/controller/events.controller";
-import { formatDate } from '../../../../kernel/moment';
-import vue2Dropzone from 'vue2-dropzone'
-import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-
-
+import { formatDate } from "../../../../kernel/moment";
+import vue2Dropzone from "vue2-dropzone";
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
+import SweetAlertCustom from "../../../../kernel/SweetAlertCustom";
 
 export default Vue.extend({
   name: "SaveEventView",
   components: {
     vueDropzone: vue2Dropzone,
-    SectionDivider: () => import('@/components/SectionDivider.vue')
+    SectionDivider: () => import("@/components/SectionDivider.vue"),
+    LoadingCustom: () =>
+      import("../../../../views/components/LoadingCustom.vue"),
+  },
+  setup() {
+    return {
+      v$: useVuelidate(),
+    };
   },
   data() {
     return {
       dropzoneOptions: {
-        url: 'https://httpbin.org/post',
+        url: "https://httpbin.org/post",
         thumbnailWidth: 150,
         maxFilesize: 0.5,
         headers: { "My-Awesome-Header": "header value" },
-        acceptedFiles: 'image/*',
+        acceptedFiles: "image/*",
         addRemoveLinks: true,
-        dictDefaultMessage: 'Arrastra tus imágenes aquí o haz clic para subir'
+        dictDefaultMessage: "Arrastra tus imágenes aquí o haz clic para subir",
       },
       dropZone: {
         useCustomSlot: true,
@@ -157,10 +239,9 @@ export default Vue.extend({
 
       listCategories: [
         { value: null, text: "Seleccione una categoria" },
-        { value: "1", text: "Concierto" },
-        { value: "2", text: "Obra de teatro" },
-        { value: "3", text: "Conferencia" },
-        { value: "4", text: "Fiesta" },
+        { value: "Exposición", text: "Exposición" },
+        { value: "Taller", text: "Taller" },
+        { value: "Conferencia", text: "Conferencia" },
       ],
       event: {
         name: null,
@@ -170,13 +251,44 @@ export default Vue.extend({
         endDate: null,
         pictures: [],
       },
-
+      errorMessages: {
+        required: "Campo obligatorio",
+      },
     };
   },
   mounted() {
     this.getListEvents();
   },
   methods: {
+    async saveEvent() {
+      try {
+        if (this.v$.event.$invalid) {
+          SweetAlertCustom.invalidForm();
+          return;
+        }
+
+        this.isLoading = true;
+        const response = await eventsController.saveEvent(this.event);
+        console.log(response);
+        if (response.message === "Event created successfully") {
+          this.v$.event.$reset();
+          this.event = {
+            name: null,
+            category: null,
+            description: null,
+            startDate: null,
+            endDate: null,
+            pictures: [],
+          };
+          SweetAlertCustom.successMessage();
+          await this.$router.replace({ name: "events-list" });
+        }
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
     async getListEvents() {
       try {
         this.isLoading = true;
@@ -189,32 +301,50 @@ export default Vue.extend({
       }
     },
     validateFile(file) {
-
       // validate if there are 3 files
       if (this.event.pictures.length >= 3) {
         this.$refs.dropZoneImg.removeFile(file);
-        alert('Solo se permiten un máximo de 3 imagenes.');
+        alert("Solo se permiten un máximo de 3 imagenes.");
         return;
       }
-
 
       // Verificar si el archivo ya ha sido subido
       if (this.event.pictures.find((p) => p.name === file.name)) {
         this.$refs.dropZoneImg.removeFile(file);
-        alert('Este archivo ya ha sido subido.');
+        alert("Este archivo ya ha sido subido.");
         return;
       }
-      
+
       // Agregar el archivo a la lista de subidos
-      console.log(file)
+      console.log(file);
       this.event.pictures.push(file);
     },
 
-    formatDate
+    formatDate,
+  },
+  validations() {
+    return {
+      event: {
+        name: {
+          required: helpers.withMessage(this.errorMessages.required, required),
+        },
+        category: {
+          required: helpers.withMessage(this.errorMessages.required, required),
+        },
+        description: {
+          required: helpers.withMessage(this.errorMessages.required, required),
+        },
+        startDate: {
+          required: helpers.withMessage(this.errorMessages.required, required),
+        },
+        endDate: {
+          required: helpers.withMessage(this.errorMessages.required, required),
+        },
+      },
+    };
   },
 });
 </script>
-
 
 <style scoped>
 .wallpaper {
@@ -234,9 +364,8 @@ h1 {
   font-size: 3rem;
 }
 
-
 .card {
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
 }
 
 .drag-area {

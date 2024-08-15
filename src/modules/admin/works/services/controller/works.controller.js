@@ -1,23 +1,23 @@
-import ApiWorks from '../service/works.gateway';
+import ApiWorks from "../service/works.gateway";
 
 export default {
-  async getWorks(){
+  async getWorks() {
     try {
       const data = await ApiWorks.getWorks();
       return data;
     } catch (error) {
       return error;
     }
-  }, 
-  async saveEvent(event){
+  },
+  async saveWork(event) {
     try {
-      const data = await ApiWorks.saveEvent(event);
+      const data = await ApiWorks.saveWork(event);
       return data;
     } catch (error) {
-      return Promise.reject(error);
+      return errror;
     }
   },
-  async deleteEvent(eventId){
+  async deleteEvent(eventId) {
     try {
       const data = await ApiWorks.deleteEvent(eventId);
       return data;
@@ -25,7 +25,7 @@ export default {
       return Promise.reject(error);
     }
   },
-  async findEventById(eventId){
+  async findEventById(eventId) {
     try {
       const data = await ApiWorks.findEventById(eventId);
       return data;
@@ -33,12 +33,12 @@ export default {
       return Promise.reject(error);
     }
   },
-  async updateEvent(event){
+  async updateEvent(event) {
     try {
       const data = await ApiWorks.updateEvent(event);
       return data;
     } catch (error) {
       return Promise.reject(error);
     }
-  }
+  },
 };
