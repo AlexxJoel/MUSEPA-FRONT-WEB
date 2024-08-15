@@ -125,6 +125,10 @@ function handle400Error(error) {
       titleAlert = "Usuario inválido";
       messageAlert = "El usuario es inválido o está vacío";
       break;
+    case "User does not exist.":
+      titleAlert = "Usuario no existe";
+      messageAlert = "El usuario no existe";
+      break;
   }
   if (message !== "Review request")
     Vue.swal({

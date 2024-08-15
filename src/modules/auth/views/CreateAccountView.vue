@@ -23,11 +23,11 @@
         <!-- Lado derecho de la pantalla -->
         <div class="col-lg-6 mb-5 mb-lg-0 position-relative">
           <b-card
-            class="h-100 overflow-auto px-3 py-3 px-md-4 rounded-lg"
+            class=" overflow-auto px-3 py-3 px-md-4 rounded-lg"
             :style="{ backgroundColor: 'rgba(255, 255, 255, .7)' }"
           >
             <div class="h-100 p-2 pb-5">
-              <form class="h-100">
+              <form class="">
                 <!-- 2 column grid layout with text inputs for the first and last names -->
                 <div class="row">
                   <!-- Nombre -->
