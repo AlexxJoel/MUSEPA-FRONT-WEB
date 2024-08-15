@@ -1,96 +1,155 @@
 <template>
   <div>
+    <loading-custom :isLoading="isLoading" />
 
     <b-row class="px-5 pt-3 m-0">
       <b-col>
-        <b-alert show :variant="isEditing ? 'warning' : 'info'" dismissible fade>
-          <p class="m-0" v-if="!isEditing">Esta vista es solo de lectura, si deseas editar haz clic en el boton de editar.</p>
-          <p class="m-0" v-else>Esta vista es de edición, si deseas guardar los cambios haz clic en el boton de guardar.</p>
+        <b-alert
+          show
+          :variant="isEditing ? 'warning' : 'info'"
+          dismissible
+          fade
+        >
+          <p class="m-0" v-if="!isEditing">
+            Esta vista es solo de lectura, si deseas editar haz clic en el boton
+            de editar.
+          </p>
+          <p class="m-0" v-else>
+            Esta vista es de edición, si deseas guardar los cambios haz clic en
+            el boton de guardar.
+          </p>
         </b-alert>
       </b-col>
     </b-row>
 
     <b-row class="px-5 pt-3 m-0">
       <b-col cols="6">
-
         <!-- Card -->
 
         <b-card class="card">
-
-          <div class="d-flex justify-content-between ">
-            <h2>Información del evento</h2>
-            <b-button variant="outline-secondary" @click="isEditing = !isEditing" class="m-0">
+          <div class="d-flex justify-content-between">
+            <h2>Información de la obra</h2>
+            <b-button
+              variant="outline-secondary"
+              @click="isEditing = !isEditing"
+              class="m-0"
+            >
               <b-icon v-if="!isEditing" icon="lock-fill" class="mr-2"></b-icon>
               <b-icon v-else icon="unlock-fill" class="mr-2"></b-icon>
               Editar
             </b-button>
           </div>
 
-
           <b-form ref="form">
             <b-row>
               <b-col cols="6">
-                <b-form-group label="Nombre del evento:*" label-for="name">
-                  <b-form-input id="name" v-model="event.name" required placeholder="Nombre del evento"></b-form-input>
+                <b-form-group label="Titulo de la obra:*" label-for="title">
+                  <b-form-input
+                    id="title"
+                    v-model="v$.work.title.$model"
+                    :state="v$.work.title.$dirty ? !v$.work.title.$error : null"
+                    @blur="v$.work.title.$touch()"
+                    required
+                    placeholder="Nombre de la Obra"
+                  ></b-form-input>
                 </b-form-group>
               </b-col>
               <b-col cols="6">
-                <b-form-group label="Categoria:*" label-for="category">
-                  <b-form-select v-model="event.category" :options="listCategories"></b-form-select>
+                <b-form-group label="Técnica:*" label-for="technique">
+                  <b-form-input
+                    id="technique"
+                    v-model="v$.work.technique.$model"
+                    :state="
+                      v$.work.technique.$dirty
+                        ? !v$.work.technique.$error
+                        : null
+                    "
+                    @blur="v$.work.technique.$touch()"
+                    required
+                    placeholder="Técnica"
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col cols="6">
+                <b-form-group label="Artistas:*" label-for="artists">
+                  <b-form-input
+                    id="artists"
+                    v-model="v$.work.artists.$model"
+                    :state="
+                      v$.work.artists.$dirty ? !v$.work.artists.$error : null
+                    "
+                    @blur="v$.work.artists.$touch()"
+                    required
+                    placeholder="Artistas separados por comas"
+                  ></b-form-input>
+                </b-form-group>
+              </b-col>
+              <b-col cols="6">
+                <b-form-group
+                  label="Fecha de creación:*"
+                  label-for="creationDate"
+                >
+                  <b-form-datepicker
+                    id="creationDate"
+                    v-model="v$.work.creationDate.$model"
+                    :state="
+                      v$.work.creationDate.$dirty
+                        ? !v$.work.creationDate.$error
+                        : null
+                    "
+                    @blur="v$.work.creationDate.$touch()"
+                    class="mb-2"
+                    label-no-date-selected="Seleccione una fecha"
+                    label-help=""
+                  ></b-form-datepicker>
                 </b-form-group>
               </b-col>
             </b-row>
-
-            <b-row>
-              <b-col cols="6">
-                <b-form-group label="Fecha de incio:*" label-for="startDate" ref="startDate">
-                  <b-form-datepicker id="startDate" v-model="event.startDate" class="mb-2"
-                    label-no-date-selected="Seleccione una fecha" label-help=""></b-form-datepicker>
-                </b-form-group>
-              </b-col>
-              <b-col cols="6">
-                <b-form-group label="Fecha de fin:*" label-for="endDate" ref="endDate">
-                  <b-form-datepicker id="endDate" v-model="event.endDate" class="mb-2"
-                    label-no-date-selected="Seleccione una fecha" label-help=""></b-form-datepicker>
-                </b-form-group>
-              </b-col>
-            </b-row>
-
 
             <b-row>
               <b-col cols="12">
                 <b-form-group label="Descripción:*" label-for="description">
-                  <b-form-input id="description" v-model="event.description" required
-                    placeholder="Descripción del evento"></b-form-input>
+                  <b-form-input
+                    id="description"
+                    v-model="v$.work.description.$model"
+                    :state="
+                      v$.work.description.$dirty
+                        ? !v$.work.description.$error
+                        : null
+                    "
+                    @blur="v$.work.description.$touch()"
+                    required
+                    placeholder="Descripción de la obra"
+                  ></b-form-input>
                 </b-form-group>
               </b-col>
             </b-row>
-
             <div>
               <b-button variant="outline-secondary" block>
                 Guardar evento
               </b-button>
             </div>
-
           </b-form>
         </b-card>
       </b-col>
       <b-col cols="6">
-
         <SectionDivider>
-          <template v-slot:title>
-            Imagenes
-          </template>
+          <template v-slot:title> Imagenes </template>
         </SectionDivider>
 
         <b-alert show variant="info" ref="alert-info-input">
           <p class="m-0">Los campos marcados con <b>*</b> son obligatorios.</p>
         </b-alert>
 
-
-        <vue-dropzone ref="dropZoneImg" id="dropZoneImg" :options="dropZone.options"
-          :use-custom-slot="dropZone.useCustomSlot" :include-styling="dropZone.includeStyling"
-          @vdropzone-file-added="validateFile" @vdropzone-removed-file="handleRemoveFile">
+        <vue-dropzone
+          ref="dropZoneImg"
+          id="dropZoneImg"
+          :options="dropZone.options"
+          :use-custom-slot="dropZone.useCustomSlot"
+          :include-styling="dropZone.includeStyling"
+          @vdropzone-file-added="validateFile"
+          @vdropzone-removed-file="handleRemoveFile"
+        >
           <slot>
             <div class="drag-area">
               <div class="icon">
@@ -101,49 +160,49 @@
           </slot>
         </vue-dropzone>
 
-
-        <small class="text-muted" ref="help_text_img">Solo se permiten archivos de imagen y un máximo de 4MB, asi como
-          un máximo
-          de 3
-          imagenes.</small>
-
-
-
-
-
+        <small class="text-muted" ref="help_text_img"
+          >Solo se permiten archivos de imagen y un máximo de 4MB, asi como un
+          máximo de 3 imagenes.</small
+        >
       </b-col>
     </b-row>
   </div>
 </template>
 <script>
 import Vue from "vue";
-import { formatDate } from '../../../../kernel/moment';
-import vue2Dropzone from 'vue2-dropzone'
-import 'vue2-dropzone/dist/vue2Dropzone.min.css'
-
-
+import { useVuelidate } from "@vuelidate/core";
+import { required, helpers } from "@vuelidate/validators";
+import { formatDate } from "../../../../kernel/moment";
+import vue2Dropzone from "vue2-dropzone";
+import "vue2-dropzone/dist/vue2Dropzone.min.css";
+import worksController from "../services/controller/works.controller";
 
 export default Vue.extend({
   name: "SaveEventView",
   components: {
     vueDropzone: vue2Dropzone,
-    SectionDivider: () => import('@/components/SectionDivider.vue')
+    SectionDivider: () => import("@/components/SectionDivider.vue"),
+    LoadingCustom: () =>
+      import("../../../../views/components/LoadingCustom.vue"),
+  },
+  setup() {
+    return {
+      v$: useVuelidate(),
+    };
   },
   data() {
     return {
       // status component
       isEditing: false,
 
-
-
       dropzoneOptions: {
-        url: 'https://httpbin.org/post',
+        url: "https://httpbin.org/post",
         thumbnailWidth: 150,
         maxFilesize: 0.5,
         headers: { "My-Awesome-Header": "header value" },
-        acceptedFiles: 'image/*',
+        acceptedFiles: "image/*",
         addRemoveLinks: true,
-        dictDefaultMessage: 'Arrastra tus imágenes aquí o haz clic para subir'
+        dictDefaultMessage: "Arrastra tus imágenes aquí o haz clic para subir",
       },
       dropZone: {
         useCustomSlot: true,
@@ -200,13 +259,24 @@ export default Vue.extend({
         endDate: null,
         pictures: [],
       },
-
+      work: {
+        title: null,
+        description: null,
+        creationDate: null,
+        technique: null,
+        artists: null,
+        pictures: [],
+      },
+      errorMessages: {
+        required: "Este campo es obligatorio",
+      },
     };
   },
   mounted() {
     this.getListEvents();
     this.handleDisableStatusInput();
     this.addFile();
+    this.findWorkById();
   },
   watch: {
     isEditing() {
@@ -214,10 +284,11 @@ export default Vue.extend({
     },
   },
   methods: {
+    formatDate,
     async getListEvents() {
       try {
         this.isLoading = true;
-        const response = await eventsController.getEvents();
+        const response = await worksController.getWorks();
         this.listEvents = response;
       } catch (error) {
         console.error(error);
@@ -226,81 +297,116 @@ export default Vue.extend({
       }
     },
     validateFile(file) {
-
       // validate if there are 3 files
       if (this.event.pictures.length >= 3) {
         this.$refs.dropZoneImg.removeFile(file);
-        alert('Solo se permiten un máximo de 3 imagenes.');
+        alert("Solo se permiten un máximo de 3 imagenes.");
         return;
       }
-
 
       // Verificar si el archivo ya ha sido subido
       if (this.event.pictures.find((p) => p.name === file.name)) {
         this.$refs.dropZoneImg.removeFile(file);
-        alert('Este archivo ya ha sido subido.');
+        alert("Este archivo ya ha sido subido.");
         return;
       }
 
       // Agregar el archivo a la lista de subidos
-      console.log(file)
+      console.log(file);
       this.event.pictures.push(file);
     },
     handleRemoveFile(file) {
-      console.log('remove');
-      this.event.pictures = this.event.pictures.filter((p) => p.name !== file.name);
+      console.log("remove");
+      this.event.pictures = this.event.pictures.filter(
+        (p) => p.name !== file.name
+      );
     },
     addFile() {
-      this.$refs.dropZoneImg.manuallyAddFile({ name: 'file' + this.event.pictures.length, size: 1 }, 'https://musepa-bucket.s3.us-east-2.amazonaws.com/images/0e392eb4-43eb-470c-b31b-25c1807e33b5.jpg');
+      this.work.pictures.forEach(file => {
+        this.$refs.dropZoneImg.manuallyAddFile(
+          { name: "file" + this.file, size: 1 },
+          file
+        );
+      })
+      // this.$refs.dropZoneImg.manuallyAddFile(
+      //   { name: "file" + this.work.pictures.length, size: 1 },
+      //   "https://musepa-bucket.s3.us-east-2.amazonaws.com/images/0e392eb4-43eb-470c-b31b-25c1807e33b5.jpg"
+      // );
     },
 
     handleDisableStatusInput() {
       // get form
       const form = this.$refs.form;
 
-
       // get all inputs
-      const inputs = form.querySelectorAll('input, select, textarea, button');
-      const alertInfo = this.$refs['alert-info-input'];
+      const inputs = form.querySelectorAll("input, select, textarea, button");
+      const alertInfo = this.$refs["alert-info-input"];
       const dropZone = this.$refs.dropZoneImg.$el;
       const helpTextImg = this.$refs.help_text_img;
 
-
-
       if (this.isEditing) {
         inputs.forEach((input) => {
-          input.removeAttribute('disabled');
+          input.removeAttribute("disabled");
         });
-        alertInfo.$el.style.display = 'block'
-        helpTextImg.style.display = 'block'
-        dropZone.classList.remove('disabled-dropzone');
-
+        alertInfo.$el.style.display = "block";
+        helpTextImg.style.display = "block";
+        dropZone.classList.remove("disabled-dropzone");
       } else {
         inputs.forEach((input) => {
-          input.setAttribute('disabled', 'disabled');
+          input.setAttribute("disabled", "disabled");
         });
-        alertInfo.$el.style.display = 'none'
-        helpTextImg.style.display = 'none'
-        dropZone.classList.add('disabled-dropzone');
-
+        alertInfo.$el.style.display = "none";
+        helpTextImg.style.display = "none";
+        dropZone.classList.add("disabled-dropzone");
       }
 
       console.log(inputs[inputs.length - 1]);
 
       // d-none
       if (this.isEditing) {
-        inputs[inputs.length - 1].classList.remove('d-none');
+        inputs[inputs.length - 1].classList.remove("d-none");
       } else {
-        inputs[inputs.length - 1].classList.add('d-none');
+        inputs[inputs.length - 1].classList.add("d-none");
       }
-
     },
-
-    formatDate
+    async findWorkById() {
+      try {
+        this.isLoading = true;
+        const response = await worksController.findWorkById(
+          this.$route.params.id
+        );
+        console.log("aqui obj", response);
+        this.work = response;
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+  },
+  validations() {
+    return {
+      work: {
+        title: {
+          required: helpers.withMessage(this.errorMessages.required, required),
+        },
+        description: {
+          required: helpers.withMessage(this.errorMessages.required, required),
+        },
+        creationDate: {
+          required: helpers.withMessage(this.errorMessages.required, required),
+        },
+        technique: {
+          required: helpers.withMessage(this.errorMessages.required, required),
+        },
+        artists: {
+          required: helpers.withMessage(this.errorMessages.required, required),
+        },
+      },
+    };
   },
 });
 </script>
-
 
 <style scoped>
 .wallpaper {
@@ -320,9 +426,8 @@ h1 {
   font-size: 3rem;
 }
 
-
 .card {
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
 }
 
 .drag-area {
@@ -345,11 +450,9 @@ h1 {
 }
 
 .disabled-dropzone {
-
   pointer-events: none;
   /* Desactiva clics y arrastres */
   opacity: 0.7;
   /* Hace que parezca deshabilitado */
-
 }
 </style>

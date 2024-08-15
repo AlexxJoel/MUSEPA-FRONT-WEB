@@ -25,9 +25,9 @@ export default {
       return Promise.reject(error);
     }
   },
-  async findWorkById(eventId){
+  async findWorkById(workId){
     try {
-      const data = await ApiWorks.findWorkById(eventId);
+      const data = await ApiWorks.findWorkById(workId);
       return data;
     } catch (error) {
       return error;

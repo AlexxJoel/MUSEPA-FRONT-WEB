@@ -110,6 +110,7 @@
                     <!-- button left see more icon -->
                     <div>
                       <b-button
+                      :to="{ name: 'work-detail', params: { id: work.id } }"
                         variant="outline-secondary"
                         class="mt-3 btn-block"
                         size="sm"
@@ -201,7 +202,6 @@ export default Vue.extend({
           if (result.isConfirmed) {
             this.isLoading = true;
             const response = await worksController.deleteWork(id);
-            console.log("response", response);
             if (response.message === "Work deleted successfully") {
               SweetAlertCustom.successMessage();
               await this.getListWorks();

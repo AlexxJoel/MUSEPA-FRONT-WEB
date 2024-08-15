@@ -185,7 +185,6 @@ export default Vue.extend({
           if (result.isConfirmed) {
             this.isLoading = true;
             const response = await eventsController.deleteEvent(id);
-            console.log("response", response);
             if (response.message === "Event deleted successfully") {
               SweetAlertCustom.successMessage();
               await this.getListEvents();
