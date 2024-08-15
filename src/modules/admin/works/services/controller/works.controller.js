@@ -25,12 +25,12 @@ export default {
       return error;
     }
   },
-  async findEventById(eventId) {
+  async findWorkById(workId) {
     try {
-      const data = await ApiWorks.findEventById(eventId);
+      const data = await ApiWorks.findWorkById(workId);
       return data;
     } catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   },
   async updateEvent(event) {

@@ -34,21 +34,25 @@ export default {
   async deleteWork(workId) {
     try {
       const response = await axios.doDelete(`/works/${workId}`);
-      console.log("works gateway",response);
       return response.data;
     } catch (error) {
       return error;
     }
   },
 
-  async findEventById(eventId) {
+  async findWorkById(workId) {
     try {
-      const response = Promise.resolve({
-        data: { data: works.find((event) => event.id === eventId) },
-      });
-      return response.data.data;
+      const response = await axios.doGet(`/works/${workId}`);
+      console.log(response);
+      const data = response.data.data;
+      const newData = {
+        ...data,
+        artists: data.artists.join(","),
+        creationDate: data.creation_date,
+      }
+      return newData;
     } catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   },
 

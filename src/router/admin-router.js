@@ -9,7 +9,8 @@ export default [
       {
         path: "dashboard",
         name: "admin-home",
-        component: () => import("../modules/admin/home/views/HomeAdminView.vue"),
+        component: () =>
+          import("../modules/admin/home/views/HomeAdminView.vue"),
         meta: {
           requireAuth: false,
         },
@@ -26,7 +27,8 @@ export default [
           {
             path: "list",
             name: "events-list",
-            component: () => import("../modules/admin/events/views/ListEventsView.vue"),
+            component: () =>
+              import("../modules/admin/events/views/ListEventsView.vue"),
             meta: {
               title: "Eventos",
               requireAuth: false,
@@ -35,7 +37,8 @@ export default [
           {
             path: "save",
             name: "event-save",
-            component: () => import("../modules/admin/events/views/SaveEventView.vue"),
+            component: () =>
+              import("../modules/admin/events/views/SaveEventView.vue"),
             meta: {
               title: "Crear Evento",
               requireAuth: true,
@@ -45,13 +48,13 @@ export default [
           {
             path: "detail/:id",
             name: "event-detail",
-            component: () => import("../modules/admin/events/views/DetailsEventView.vue"),
+            component: () =>
+              import("../modules/admin/events/views/DetailsEventView.vue"),
             meta: {
               title: "Detalle del Evento",
               requireAuth: false,
             },
-
-          }
+          },
         ],
       },
       {
@@ -66,7 +69,8 @@ export default [
           {
             path: "list",
             name: "works-list",
-            component: () => import("../modules/admin/works/views/ListWorksView.vue"),
+            component: () =>
+              import("../modules/admin/works/views/ListWorksView.vue"),
             meta: {
               title: "Lista de Obras",
               requireAuth: true,
@@ -76,7 +80,8 @@ export default [
           {
             path: "save",
             name: "work-save",
-            component: () => import("../modules/admin/works/views/SaveWorkView.vue"),
+            component: () =>
+              import("../modules/admin/works/views/SaveWorkView.vue"),
             meta: {
               title: "Crear Obra",
               requireAuth: true,
@@ -86,33 +91,38 @@ export default [
           {
             path: "detail/:id",
             name: "work-detail",
-            component: () => import("../modules/admin/works/views/DetailsWorkView.vue"),
+            component: () =>
+              import("../modules/admin/works/views/DetailsWorkView.vue"),
             meta: {
               title: "Detalle del Evento",
-              requireAuth: false,
+              requireAuth: true,
+              role: rolesAllowed,
             },
-
-          }
+          },
         ],
       },
       {
         path: "profile",
         name: "admin-profile",
-        component: () => import("../modules/admin/profile/views/ProfileAdminVIew.vue"),
+        component: () =>
+          import("../modules/admin/profile/views/ProfileAdminVIew.vue"),
         meta: {
           title: "Perfil",
           requireAuth: false,
-        }
+          role: rolesAllowed,
+        },
       },
       {
         path: "edit-profile",
         name: "admin-edit-profile",
-        component: () => import("../modules/admin/profile/views/EditProfileView.vue"),
+        component: () =>
+          import("../modules/admin/profile/views/EditProfileView.vue"),
         meta: {
           title: "Editar Perfil",
-          requireAuth: false,
-        }
+          requireAuth: true,
+          role: rolesAllowed,
+        },
       },
-    ]
-  }
-]
+    ],
+  },
+];
