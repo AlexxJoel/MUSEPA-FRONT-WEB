@@ -9,7 +9,7 @@ export default {
       return error;
     }
   }, 
-  async saveEvent(event){
+  async saveWors(event){
     try {
       const data = await ApiWorks.saveEvent(event);
       return data;
@@ -17,7 +17,7 @@ export default {
       return Promise.reject(error);
     }
   },
-  async deleteEvent(eventId){
+  async deleteWork(eventId){
     try {
       const data = await ApiWorks.deleteEvent(eventId);
       return data;
@@ -25,15 +25,15 @@ export default {
       return Promise.reject(error);
     }
   },
-  async findEventById(eventId){
+  async findWorkById(eventId){
     try {
-      const data = await ApiWorks.findEventById(eventId);
+      const data = await ApiWorks.findWorkById(eventId);
       return data;
     } catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   },
-  async updateEvent(event){
+  async updateWork(event){
     try {
       const data = await ApiWorks.updateEvent(event);
       return data;
