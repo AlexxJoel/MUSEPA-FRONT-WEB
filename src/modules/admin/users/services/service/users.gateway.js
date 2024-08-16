@@ -1,29 +1,29 @@
 /* TODO  implement axios */
 
-import { events } from "./data";
 import axios from "../../../../../config/client.gateway";
 
 export default {
-  async getEvents() {
+  async getUsers() {
     try {
-      const response = await axios.doGet("/events");
+      const response = await axios.doGet("/visitors");
       return response.data.data;
     } catch (error) {
-      return error;
+      throw error;
     }
   },
-  async saveEvent(event) {
+  async saveUser(user) {
     try {
       const newPayload = {
-        name: event.name,
-        description: event.description,
-        start_date: event.startDate,
-        end_date: event.endDate,
-        category: event.category,
-        pictures: event.pictures.map((picture) => picture.dataURL),
-        id_museum: "1",
+        title: user.title,
+        description: user.description,
+        creation_date: user.creationDate,
+        technique: user.technique,
+        artists: user.artists.split(","),
+        id_museum: 1,
+        pictures: user.pictures.map((picture) => picture.dataURL),
       };
-      const response = await axios.doPost("/events", newPayload);
+      const response = await axios.doPost("/visitors", newPayload);
+
       return response.data;
     } catch (error) {
       return error;
@@ -32,17 +32,19 @@ export default {
 
   async deleteEvent(eventId) {
     try {
-      const response = await axios.doDelete(`/events/${eventId}`);
-      return response.data;
+      const response = Promise.resolve({
+        data: { data: users.filter((event) => event.id !== eventId) },
+      });
+      return response.data.data;
     } catch (error) {
-      return error;
+      return Promise.reject(error);
     }
   },
 
   async findEventById(eventId) {
     try {
       const response = Promise.resolve({
-        data: { data: events.find((event) => event.id === eventId) },
+        data: { data: users.find((event) => event.id === eventId) },
       });
       return response.data.data;
     } catch (error) {

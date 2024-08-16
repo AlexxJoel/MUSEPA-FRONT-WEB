@@ -1,3 +1,5 @@
+import { props } from "vue2-dropzone";
+
 export default [
     {
         path: "/musepa",
@@ -36,6 +38,7 @@ export default [
                     path: "detail/:id",
                     name: "public-event-detail",
                     component: () => import("../modules/public/events/views/DetailsEventView.vue"),
+                    props: true,
                     meta: {
                       title: "Detalle del Evento",
                       requireAuth: false,

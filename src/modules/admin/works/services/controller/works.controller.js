@@ -1,44 +1,44 @@
-import ApiWorks from '../service/works.gateway';
+import ApiWorks from "../service/works.gateway";
 
 export default {
-  async getWorks(){
+  async getWorks() {
     try {
       const data = await ApiWorks.getWorks();
       return data;
     } catch (error) {
-      return Promise.reject(error);
-    }
-  }, 
-  async saveEvent(event){
-    try {
-      const data = await ApiWorks.saveEvent(event);
-      return data;
-    } catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   },
-  async deleteEvent(eventId){
+  async saveWork(event) {
     try {
-      const data = await ApiWorks.deleteEvent(eventId);
+      const data = await ApiWorks.saveWork(event);
       return data;
     } catch (error) {
-      return Promise.reject(error);
+      return errror;
     }
   },
-  async findEventById(eventId){
+  async deleteWork(workId) {
     try {
-      const data = await ApiWorks.findEventById(eventId);
+      const data = await ApiWorks.deleteWork(workId);
       return data;
     } catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   },
-  async updateEvent(event){
+  async findWorkById(workId) {
+    try {
+      const data = await ApiWorks.findWorkById(workId);
+      return data;
+    } catch (error) {
+      return error;
+    }
+  },
+  async updateEvent(event) {
     try {
       const data = await ApiWorks.updateEvent(event);
       return data;
     } catch (error) {
       return Promise.reject(error);
     }
-  }
+  },
 };

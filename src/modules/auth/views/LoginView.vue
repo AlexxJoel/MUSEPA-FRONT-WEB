@@ -171,7 +171,9 @@ export default Vue.extend({
             if (response.data === null) {
               this.$emit("reloadFromLogin");
             }
-            if (!response.error) {
+            console.log("response para error", response.status);
+            if (!response.status) {
+              console.log("entro", response);
               localStorage.setItem("token", response.id_token);
               localStorage.setItem("refreshToken", response.refresh_token);
               localStorage.setItem("accessToken", response.access_token);

@@ -1,17 +1,17 @@
-import ApiEvents from "../service/events.gateway";
+import ApiUsers from "../service/users.gateway";
 
 export default {
-  async getEvents() {
+  async getUsers() {
     try {
-      const data = await ApiEvents.getEvents();
+      const data = await ApiUsers.getUsers();
       return data;
     } catch (error) {
-      return error;
+      throw error;
     }
   },
-  async saveEvent(event) {
+  async saveUser(event) {
     try {
-      const data = await ApiEvents.saveEvent(event);
+      const data = await ApiUsers.saveUser(event);
       return data;
     } catch (error) {
       return error;
@@ -19,7 +19,7 @@ export default {
   },
   async deleteEvent(eventId) {
     try {
-      const data = await ApiEvents.deleteEvent(eventId);
+      const data = await ApiUsers.deleteEvent(eventId);
       return data;
     } catch (error) {
       return Promise.reject(error);
@@ -27,15 +27,15 @@ export default {
   },
   async findEventById(eventId) {
     try {
-      const data = await ApiEvents.findEventById(eventId);
+      const data = await ApiUsers.findEventById(eventId);
       return data;
     } catch (error) {
-      return error;
+      return Promise.reject(error);
     }
   },
   async updateEvent(event) {
     try {
-      const data = await ApiEvents.updateEvent(event);
+      const data = await ApiUsers.updateEvent(event);
       return data;
     } catch (error) {
       return Promise.reject(error);

@@ -34,9 +34,7 @@ AxiosClient.interceptors.request.use(
       config.baseURL = import.meta.env.VITE_APP_BASE_URL_AUTH; // baseURL por defecto
     }
 
-    if (
-      auth_token &&
-      (!config.url.includes("auth") || !config.url.includes("open"))
+    if (auth_token && (!config.url.includes("auth") || !config.url.includes("open"))
     ) {
       config.headers.Authorization = `Bearer ${auth_token}`;
     }
@@ -58,8 +56,15 @@ AxiosClient.interceptors.response.use(
     }
   },
   async (error) => {
-    console.log("error", error);
-    if (!error.response) {
+    console.log("error interceptor response", error);
+
+    if (!error.response || !error.response.status) {
+
+      const loadingOverlay = document.querySelector('.vld-overlay.is-active.custom-loading-font.is-full-page');
+      if (loadingOverlay) {
+        loadingOverlay.classList.remove('is-active');
+      }	
+
       await SweetAlertCustom.ErrorServer();
       return Promise.reject(error);
     }
@@ -125,6 +130,10 @@ function handle400Error(error) {
       titleAlert = "Usuario inválido";
       messageAlert = "El usuario es inválido o está vacío";
       break;
+    case "User does not exist.":
+      titleAlert = "Usuario no existe";
+      messageAlert = "El usuario no existe";
+      break;
   }
   if (message !== "Review request")
     Vue.swal({
@@ -137,34 +146,19 @@ function handle400Error(error) {
 }
 
 function handle401Error(error) {
-  const { message } = error.response.data;
+  console.log("error res 401", error);
+  const message = error.response.data.message;
+  console.log("message 401", message);
 
   let titleAlert = "";
   let messageAlert = "";
 
   switch (message.trim()) {
     // AUTH
-    case "CREDENTIALS_MISMATCH":
-      titleAlert = "Credenciales incorrectas";
-      messageAlert = "Usuario y/o contraseña erróneos";
-      break;
-    case "EXPIRED_SESSION":
-      Vue.swal(
-        "Sesión expirada",
-        "Por seguridad tu sesión se ha cerrado, vuelve a iniciar sesión",
-        "warning"
-      ).then((result) => {
-        router.push("/");
-      });
+    case "The incoming token has expired":
+      titleAlert = "Sesión expirada";
+      messageAlert = "La sesión ha expirado";
       localStorage.clear();
-      break;
-    case "USER_IS_INACTIVE":
-      titleAlert = "Usuario inactivo";
-      messageAlert = "EL usuario se encuentra deshabilitado";
-      break;
-    case "USER_IS_BLOCKED":
-      titleAlert = "Usuario bloqueado";
-      messageAlert = "EL usuario está bloqueado";
       break;
   }
   if (message !== "EXPIRED_SESSION")

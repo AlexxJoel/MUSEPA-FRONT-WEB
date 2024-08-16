@@ -69,7 +69,7 @@ router.beforeEach((to, from, next) => {
       (role === ERoles.MANAGER &&
         to.matched.some((route) => route.path === "/login"))
     )
-      next("/manager");
+      next({ name: "admin" });
     if (
       (role === ERoles.VISITOR &&
         to.matched.some((route) => route.path === "/musepa")) ||
@@ -78,9 +78,10 @@ router.beforeEach((to, from, next) => {
       (role === ERoles.VISITOR &&
         to.matched.some((route) => route.path === "/login"))
     )
-      next("/visitor");
+      next({ name: "public-musepa" });
     if (role && to.matched.some((route) => route.meta.requireAuth)) {
       const allowedRoles = to.meta.role;
+      console.log(allowedRoles);
       if (allowedRoles.includes(role)) {
         next();
         return;
