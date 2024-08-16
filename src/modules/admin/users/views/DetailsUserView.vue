@@ -440,8 +440,8 @@ export default Vue.extend({
           lastname: response.lastname,
           username: response.user.username,
           email: response.user.email,
+          password: response.user.password,
           id: response.id,
-          id_user: response.id_user,
         }
       } catch (error) {
         console.error(error);
