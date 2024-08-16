@@ -41,19 +41,29 @@ export default {
 
   async findEventById(eventId) {
     try {
-      const response = Promise.resolve({
-        data: { data: events.find((event) => event.id === eventId) },
-      });
+      const response = await axios.doGet(`/events/${eventId}`);
       return response.data.data;
     } catch (error) {
       return Promise.reject(error);
     }
   },
-
   async updateEvent(event) {
     try {
-      const response = Promise.resolve({ data: { data: event } });
-      return response.data.data;
+      const newPayload = {
+        id: event.id,
+        name: event.name,
+        description: event.description,
+        start_date: event.startDate,
+        end_date: event.endDate,
+        category: event.category,
+        pictures: event.picture,
+        id_museum: "1",
+      };
+
+      const response = await axios.doPut("/events", newPayload);
+
+      return response.data;
+
     } catch (error) {
       return Promise.reject(error);
     }
