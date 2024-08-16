@@ -1,6 +1,6 @@
 <template>
-    <div>
-        <loading-custom :isLoading="isLoading"/>
+  <div>
+    <loading-custom :isLoading="isLoading" />
 
     <!-- add iamge  -->
     <section>
@@ -30,13 +30,13 @@
               placeholder="Buscar usuario"
             ></b-form-input>
 
-                        <b-input-group-append>
-                            <b-button :disabled="!filter" @click="filter = ''">
-                                <b-icon icon="x-square"></b-icon>
-                            </b-button>
-                        </b-input-group-append>
-                    </b-input-group>
-                </b-form-group>
+            <b-input-group-append>
+              <b-button :disabled="!filter" @click="filter = ''">
+                <b-icon icon="x-square"></b-icon>
+              </b-button>
+            </b-input-group-append>
+          </b-input-group>
+        </b-form-group>
 
         <div>
           <b-button variant="" :to="{ name: 'user-save' }"
@@ -130,19 +130,15 @@
               size="sm"
               @click="deleteUser(row.item.id)"
               variant="danger"
+              class="mx-1"
             >
               <b-icon icon="trash"></b-icon>
-            </b-button>
-
-            <!-- change pwd -->
-            <b-button size="sm" variant="info" class="mx-1">
-              <b-icon icon="key"></b-icon>
             </b-button>
 
             <!-- buttton edit -->
             <b-button
               size="sm"
-              :to="{ name: 'user-detail', query: { email: row.item }  }"
+              :to="{ name: 'user-detail', query: { email: row.item } }"
               variant="primary"
             >
               <b-icon icon="pencil"></b-icon>
@@ -177,16 +173,16 @@ import SweetAlertCustom from "../../../../kernel/SweetAlertCustom";
 import usersController from "../services/controller/users.controller";
 
 export default Vue.extend({
-    name: "ListWorksView",
-    components: {
-        LoadingCustom: () =>
-            import("../../../../views/components/LoadingCustom.vue"),
-    },
-    data() {
-        return {
-            isLoading: false,
-            userList: [],
-            searchTerm: "",
+  name: "ListWorksView",
+  components: {
+    LoadingCustom: () =>
+      import("../../../../views/components/LoadingCustom.vue"),
+  },
+  data() {
+    return {
+      isLoading: false,
+      userList: [],
+      searchTerm: "",
 
       fields: [
         {
@@ -233,33 +229,20 @@ export default Vue.extend({
           return { text: f.label, value: f.key };
         });
     },
-    mounted() {
-        this.getUserList();
+    filteredWorks() {
+      if (this.searchTerm) {
+        return this.listWorks.filter((work) => {
+          return work.title
+            .toLowerCase()
+            .includes(this.searchTerm.toLowerCase());
+        });
+      }
+      return this.listWorks;
     },
-    computed: {
-        sortOptions() {
-            // Create an options list from our fields
-            return this.fields
-                .filter(f => f.sortable)
-                .map(f => {
-                    return {text: f.label, value: f.key}
-                })
-        },
-        filteredWorks() {
-            if (this.searchTerm) {
-                return this.listWorks.filter((work) => {
-                    return work.title
-                        .toLowerCase()
-                        .includes(this.searchTerm.toLowerCase());
-                });
-            }
-            return this.listWorks;
-        },
-        paginatedWorks() {
-            const start = (this.currentPage - 1) * this.perPage;
-            const end = start + this.perPage;
-            return this.filteredWorks.slice(start, end);
-        },
+    paginatedWorks() {
+      const start = (this.currentPage - 1) * this.perPage;
+      const end = start + this.perPage;
+      return this.filteredWorks.slice(start, end);
     },
   },
   methods: {
@@ -274,7 +257,7 @@ export default Vue.extend({
         this.isLoading = true;
         const response = await usersController.getUsers();
         this.userList = response;
-        this.totalRows = usersList.length;
+        this.totalRows = this.userList.length;
       } catch (error) {
         console.error("error list user", error);
       } finally {
@@ -299,32 +282,32 @@ export default Vue.extend({
         this.isLoading = false;
       }
     },
-  }
+  },
 });
 </script>
 
 <style scoped>
 .wallpaper {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    z-index: -1;
-    opacity: 0.5;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  opacity: 0.5;
 }
 
 h1 {
-    color: white;
-    text-align: center;
-    margin-top: 10rem;
-    font-size: 3rem;
+  color: white;
+  text-align: center;
+  margin-top: 10rem;
+  font-size: 3rem;
 }
 
 .btn-delete-event {
-    position: absolute;
-    top: 0;
-    right: 0;
-    z-index: 1;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 1;
 }
 </style>

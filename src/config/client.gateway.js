@@ -27,7 +27,7 @@ AxiosClient.interceptors.request.use(
       config.baseURL = baseUrls.events;
     } else if (config.url.includes("/auth")) {
       config.baseURL = baseUrls.auth;
-    } else if (config.url.includes("/managers")) {
+    } else if (config.url.includes("/managers") || config.url.includes("/managers/details")) {
       config.baseURL = baseUrls.managers;
     } else {
       config.baseURL = import.meta.env.VITE_APP_BASE_URL_AUTH; // baseURL por defecto

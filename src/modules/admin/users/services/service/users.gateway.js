@@ -10,7 +10,7 @@ export default {
       console.log("reponse visitors gateway", response);
       return response.data.data;
     } catch (error) {
-      throw error;
+      return error;
     }
   },
   async saveUser(payload) {
@@ -62,12 +62,13 @@ export default {
     }
   },
 
-  async updateEvent(event) {
+  async updateUser(user) {
     try {
-      const response = Promise.resolve({ data: { data: event } });
-      return response.data.data;
+      const response = await axios.doPut('/visitors', user);
+      if (response.data === null) return response;
+      return response.data;
     } catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   },
 };
