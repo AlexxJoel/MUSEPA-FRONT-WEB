@@ -56,14 +56,12 @@ AxiosClient.interceptors.response.use(
     }
   },
   async (error) => {
-    console.log("error interceptor response", error);
-
     if (!error.response || !error.response.status) {
 
       const loadingOverlay = document.querySelector('.vld-overlay.is-active.custom-loading-font.is-full-page');
       if (loadingOverlay) {
         loadingOverlay.classList.remove('is-active');
-      }	
+      }
 
       await SweetAlertCustom.ErrorServer();
       return Promise.reject(error);
@@ -71,6 +69,8 @@ AxiosClient.interceptors.response.use(
 
     const { status } = error.response;
     console.log("status", status);
+
+
     switch (status) {
       case 400:
       case "BAD_REQUEST":
@@ -108,67 +108,76 @@ AxiosClient.interceptors.response.use(
   }
 );
 
-function handle400Error(error) {
-  console.log("error 400", error);
-  const message = error.response.data.error;
-  let titleAlert = "";
-  let messageAlert = "";
-  console.log("message", message);
+function handle400Error(responseAxios) {
 
-  switch (message.trim()) {
-    // AUTH
-    case "Incorrect username or password.":
-      titleAlert = "Credenciales incorrectas";
-      messageAlert = "Usuario y/o contraseña erróneos";
-      break;
-    case "Password attempts exceeded":
-      titleAlert = "Intentos de contraseña excedidos";
-      messageAlert = "Has excedido el número de intentos de contraseña";
-      break;
-    // Create account
-    case "Invalid or missing 'username'":
-      titleAlert = "Usuario inválido";
-      messageAlert = "El usuario es inválido o está vacío";
-      break;
-    case "User does not exist.":
-      titleAlert = "Usuario no existe";
-      messageAlert = "El usuario no existe";
-      break;
+  const possibleErrorMessages = {
+    'User does not exist.': {
+      title: "Usuario no encontrado",
+      message: "El usuario no existe",
+    },
+    'Incorrect username or password.': {
+      title: "Credenciales incorrectas",
+      message: "Usuario y/o contraseña incorrectos",
+    },
   }
-  if (message !== "Review request")
-    Vue.swal({
-      title: titleAlert,
-      text: messageAlert,
-      icon: "warning",
-      confirmButtonText: "Aceptar",
-      confirmButtonColor: "#10B981",
-    });
+
+  
+  let titleAlert = "Error 400"
+  let messageAlert = "Si el problema persiste, contacte al administrador del sistema";
+
+  if (!responseAxios.response.error) {
+    const message = responseAxios.response.data.error;
+    console.log("message", message);
+
+    if (possibleErrorMessages[message]) {
+      titleAlert = possibleErrorMessages[message].title;
+      messageAlert = possibleErrorMessages[message].message;
+    }
+
+  }
+
+
+  Vue.swal({
+    title: titleAlert,
+    text: messageAlert,
+    icon: "warning",
+    confirmButtonText: "Aceptar",
+    confirmButtonColor: "#10B981",
+  });
 }
 
-function handle401Error(error) {
-  console.log("error res 401", error);
-  const message = error.response.data.message;
-  console.log("message 401", message);
+function handle401Error(responseAxios) {
+
+  if (!responseAxios.response)
+    return;
+  if (!responseAxios.response.data)
+    return;
+  if (!responseAxios.response.data.error)
+    return;
+
+  const handlePossibleErrorMessages = {
+    'Access denied. Please, change the temporary password.': 'Acceso denegado. Por favor, cambie la contraseña temporal.',
+  }
 
   let titleAlert = "";
   let messageAlert = "";
 
-  switch (message.trim()) {
-    // AUTH
-    case "The incoming token has expired":
-      titleAlert = "Sesión expirada";
-      messageAlert = "La sesión ha expirado";
-      localStorage.clear();
-      break;
+  const { error } = responseAxios.response.data;
+
+  if (handlePossibleErrorMessages[error]) {
+    console.error('401 ERROR', handlePossibleErrorMessages[error]);
+    return;
   }
-  if (message !== "EXPIRED_SESSION")
-    Vue.swal({
-      title: titleAlert,
-      text: messageAlert,
-      icon: "warning",
-      confirmButtonText: "Aceptar",
-      confirmButtonColor: "#10B981",
-    });
+  /* ------------------------------ execute swal ------------------------------ */
+  Vue.swal({
+    title: titleAlert,
+    text: messageAlert,
+    icon: "warning",
+    confirmButtonText: "Aceptar",
+    confirmButtonColor: "#10B981",
+  });
+
+
 }
 
 function handle404Error(error) {

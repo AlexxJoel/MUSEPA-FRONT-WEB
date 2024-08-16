@@ -1,6 +1,9 @@
 import { email } from "@vuelidate/validators";
 import axios from "../../../../config/client.gateway";
 import { generateRandomPassword } from "../../../../kernel/fucntions";
+import CustomError from '../../../../kernel/ErrorCustom';
+
+
 
 export default {
   async login(payload) {
@@ -9,16 +12,10 @@ export default {
         username: payload.username,
         password: payload.password,
       });
-      console.log("gateway", response);
       if (response.data === null) return response;
       return response.data;
     } catch (error) {
-      return error;
-      //   return {
-      //     code: error.status,
-      //     error: true,
-      //     message: error.message,
-      //   };
+      throw new CustomError(error.status, error.data.error);
     }
   },
   async signUp(payload) {
