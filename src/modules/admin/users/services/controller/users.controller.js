@@ -41,12 +41,12 @@ export default {
       return error;
     }
   },
-  async updateEvent(event) {
+  async updateUser(user) {
     try {
-      const data = await ApiUsers.updateEvent(event);
+      const data = await ApiUsers.updateUser(user);
       return data;
     } catch (error) {
-      return Promise.reject(error);
+      return error; 
     }
   },
 };

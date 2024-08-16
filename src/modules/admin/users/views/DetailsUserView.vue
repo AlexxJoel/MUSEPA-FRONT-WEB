@@ -273,7 +273,7 @@
             </b-row>
 
             <div>
-              <b-button variant="outline-secondary" block @click="saveUser">
+              <b-button variant="outline-secondary" block @click="updateUser">
                 Actualizar usuario
               </b-button>
             </div>
@@ -446,6 +446,40 @@ export default Vue.extend({
       } catch (error) {
         console.error(error);
       } finally {
+        this.isLoading = false;
+      }
+    },
+
+    async updateUser(){
+      try {
+        if(this.v$.user.invalid){
+          SweetAlertCustom.invalidForm();
+        }else {
+          const result = await SweetAlertCustom.questionMessage();
+          if(result.isConfirmed){
+            this.isLoading = true;
+            const response = await usersController.updateUser(this.user);
+            console.log("response update", response);
+            if(response.message === "User updated successfully."){
+              this.user = {
+                name: "",
+                surname: "",
+                lastname: "",
+                email: "",
+                username: "",
+                password: "",
+                confirmPassword: "",
+              };
+              this.v$user.$reset();
+              SweetAlertCustom.successMessage();
+              // TODO: refresh data in the same view not redirect to other view
+              await this.$router.replace({ name: "user-list" });
+            }
+          }
+        }
+      } catch (error) {
+        console.error(error);
+      }finally{
         this.isLoading = false;
       }
     },
