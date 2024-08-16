@@ -1,8 +1,6 @@
 hkjfhf
 <template>
   <div>
-    <loading-custom :isLoading="isLoading" />
-
     <!-- add iamge  -->
 
     <section>
@@ -27,14 +25,20 @@ hkjfhf
             placeholder="Buscar evento..."
             type="search"
             v-model="searchTerm"
+            :disabled="isLoading"
           ></b-form-input>
         </b-form-group>
       </div>
     </section>
 
     <section>
+
+      <div style="height: 50vh;"  v-if="isLoading">
+        <loading-custom :isLoading="isLoading" />
+      </div>
+
       <!-- Cards with image left and info right -->
-      <div class="px-5 mt-2">
+      <div class="px-5 mt-2" v-else>
         <b-row>
           <b-col
             cols="12"
@@ -95,7 +99,7 @@ hkjfhf
       </div>
     </section>
 
-    <section>
+    <section v-if="filteredEvents.length > 0">
       <div class="overflow-auto px-5 mt-2">
         <div class="text-center">
           <b-pagination
@@ -154,7 +158,6 @@ export default Vue.extend({
         this.isLoading = true;
         const response = await eventsController.getEvents();
         this.listEvents = response;
-        console.log("respuesta consumo", response);
       } catch (error) {
         console.error(error);
       } finally {

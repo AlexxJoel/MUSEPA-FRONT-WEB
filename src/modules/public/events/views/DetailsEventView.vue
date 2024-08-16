@@ -1,5 +1,11 @@
 <template>
   <div>
+
+
+      <loading-custom :isLoading="isLoading" :fullPage="true" />
+
+
+
     <b-row class="px-5 pt-3 m-0">
       <b-col cols="6">
         <!-- Card -->
@@ -10,27 +16,19 @@
           </div>
 
           <b-form ref="form">
+
+
             <b-row class="pb-3">
               <b-col cols="6">
-                <b-form-group
-                  label="Nombre del evento"
-                  label-for="name"
-                  label-class="font-italic"
-                  label-size="sm"
-                >
+                <b-form-group label="Nombre del evento" label-for="name" label-class="font-italic" label-size="sm">
                   <p class="font-weight-bold h5">{{ event.name }}</p>
                 </b-form-group>
               </b-col>
               <b-col cols="6">
-                <b-form-group
-                  label="Categoria"
-                  label-for="category"
-                  label-class="font-italic"
-                  label-size="sm"
-                >
+                <b-form-group label="Categoria" label-for="category" label-class="font-italic" label-size="sm">
                   <p class="font-weight-bold h5">
                     {{
-                     event.category
+                      event.category
                     }}
                   </p>
                 </b-form-group>
@@ -39,28 +37,18 @@
 
             <b-row>
               <b-col cols="6">
-                <b-form-group
-                  label="Fecha de incio"
-                  label-for="startDate"
-                  ref="startDate"
-                  label-class="font-italic"
-                  label-size="sm"
-                >
+                <b-form-group label="Fecha de incio" label-for="startDate" ref="startDate" label-class="font-italic"
+                  label-size="sm">
                   <p class="font-weight-bold h5">
-                    {{ formatDate(event.start_date) }}
+                    {{ (event.startDate) }}
                   </p>
                 </b-form-group>
               </b-col>
               <b-col cols="6">
-                <b-form-group
-                  label="Fecha de fin"
-                  label-for="endDate"
-                  ref="endDate"
-                  label-class="font-italic"
-                  label-size="sm"
-                >
+                <b-form-group label="Fecha de fin" label-for="endDate" ref="endDate" label-class="font-italic"
+                  label-size="sm">
                   <p class="font-weight-bold h5">
-                    {{ formatDate(event.end_date) }}
+                    {{ (event.endDate) }}
                   </p>
                 </b-form-group>
               </b-col>
@@ -68,12 +56,7 @@
 
             <b-row class="pb-3">
               <b-col cols="12">
-                <b-form-group
-                  label="Descripción"
-                  label-for="description"
-                  label-class="font-italic"
-                  label-size="sm"
-                >
+                <b-form-group label="Descripción" label-for="description" label-class="font-italic" label-size="sm">
                   <p class="font-weight-bold h5">
                     {{ event.description }}
                   </p>
@@ -81,41 +64,41 @@
               </b-col>
             </b-row>
 
-            <div>
+            <!-- <div>
               <b-button variant="outline-secondary" block>
                 Guardar evento
               </b-button>
-            </div>
+            </div> -->
           </b-form>
         </div>
       </b-col>
       <b-col cols="6">
-        <SectionDivider>
-          <template v-slot:title> Imagenes </template>
-        </SectionDivider>
 
-        <section class="p-4">
-          <VueSlickCarousel
-            ref="c1"
-            :asNavFor="$refs.c2"
-            v-bind="settingsCarousel"
-          >
-            <div v-for="(picture,index) in event.pictures" :key="index"  class="d-flex justify-content-center align-items-center">
-              <img :src="picture" alt="Imangen del evento" />
-            </div>
-          </VueSlickCarousel>
-        </section>
 
-        <section>
-          <VueSlickCarousel
-            ref="c2"
-            :asNavFor="$refs.c1"
-            :slidesToShow="2"
-            :dots="true"
-            v-bind="settingsCarousel"
-          >
-            <div v-for="(picture,index) in event.pictures" :key="index"><img :src="picture" height="100" /></div>
-          </VueSlickCarousel>
+        <div style="height: 50vh;" v-if="isLoading">
+          <loading-custom :isLoading="isLoading" :fullPage="false" :message="'Cargando imagenes...'" />
+        </div>
+
+
+        <section v-else>
+          <SectionDivider>
+            <template v-slot:title> Imagenes </template>
+          </SectionDivider>
+
+          <section class="p-4">
+            <VueSlickCarousel ref="c1" :asNavFor="$refs.c2" v-bind="settingsCarouselMain">
+              <div v-for="(picture, index) in event.pictures" :key="index"
+                class="d-flex justify-content-center align-items-center" style="width: 50%;">
+                <img :src="picture" alt="Imangen del evento" height="400" style="object-fit: cover" />
+              </div>
+            </VueSlickCarousel>
+          </section>
+
+          <section>
+            <VueSlickCarousel ref="c2" :asNavFor="$refs.c1" v-bind="settingsCarousel">
+              <div v-for="(picture, index) in event.pictures" :key="index"><img :src="picture" height="100" /></div>
+            </VueSlickCarousel>
+          </section>
         </section>
       </b-col>
     </b-row>
@@ -138,62 +121,27 @@ export default Vue.extend({
     VueSlickCarousel,
     vueDropzone: vue2Dropzone,
     SectionDivider: () => import("@/components/SectionDivider.vue"),
+    LoadingCustom: () => import("../../../../views/components/LoadingCustom.vue"),
   },
   data() {
     return {
       // status component
       isEditing: true,
+      isLoading: {
+        save: false,
+        images: true,
+      },
+
 
       // carousel
-      settingsCarousel: {
+      settingsCarouselMain: {
         focusOnSelect: true,
-        infinite: true,
-        speed: 500,
-        slidesToShow: 1,
-        slidesToScroll: 1,
       },
-
-      dropzoneOptions: {
-        url: "https://httpbin.org/post",
-        thumbnailWidth: 150,
-        maxFilesize: 0.5,
-        headers: { "My-Awesome-Header": "header value" },
-        acceptedFiles: "image/*",
-        addRemoveLinks: true,
-        dictDefaultMessage: "Arrastra tus imágenes aquí o haz clic para subir",
+      settingsCarousel: {
+        dots: true,
+        focusOnSelect: true,
+        slidesToShow: 2,
       },
-      dropZone: {
-        useCustomSlot: true,
-        duplicateCheck: true,
-        includeStyling: true,
-        options: {
-          url: "https://httpbin.org/post",
-          thumbnailWidth: 150,
-          maxFilesize: 4,
-          headers: { "My-Awesome-Header": "header value" },
-          clickable: true,
-          addRemoveLinks: true,
-          acceptedFiles: "image/*",
-        },
-        labels: {
-          removeFile: "Eliminar",
-          downloadFile: "Descargar",
-          size: "Tamaño",
-          files: "Archivos",
-          drop: "Haz clic aquí o arrastra y suelta los archivos",
-          or: "o",
-          browse: "Buscar",
-        },
-        icons: {
-          remove: "trash",
-          download: "download",
-          size: "file",
-          files: "file",
-          drop: "image",
-          browse: "image",
-        },
-      },
-      isLoading: false,
       listEvents: [],
       slide: 0,
       componentDragArea: {
@@ -210,15 +158,12 @@ export default Vue.extend({
       ],
       event: {
         id: 0,
-        name: "Fiesta de la primavera",
-        description: "Fiesta de la primavera en el parque central",
-        startDate: "2021-12-10",
-        endDate: "2021-10-11",
-        category: 4,
+        name: "Cargando...",
+        description: "Cargando...",
+        startDate: "Cargando...",
+        endDate: "Cargando...",
+        category: "Cargando...",
         pictures: [
-          "https://musepa-bucket.s3.us-east-2.amazonaws.com/images/0e392eb4-43eb-470c-b31b-25c1807e33b5.jpg",
-          "https://musepa-bucket.s3.us-east-2.amazonaws.com/images/0e392eb4-43eb-470c-b31b-25c1807e33b5.jpg",
-          "https://musepa-bucket.s3.us-east-2.amazonaws.com/images/0e392eb4-43eb-470c-b31b-25c1807e33b5.jpg",
         ],
       },
     };
@@ -235,7 +180,11 @@ export default Vue.extend({
         this.isLoading = true;
         this.event.id = this.$route.params.id;
         const response = await eventsController.findEventById(this.event.id);
-        this.event = response
+        this.event = {
+          ...response,
+          startDate: formatDate(response.start_date),
+          endDate: formatDate(response.end_date),
+        }
       } catch (error) {
         console.error(error);
       } finally {
@@ -259,7 +208,7 @@ export default Vue.extend({
         (p) => p.name !== file.name
       );
     },
-    addFile() {},
+    addFile() { },
     formatDate,
   },
 });

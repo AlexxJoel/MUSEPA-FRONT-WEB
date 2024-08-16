@@ -247,7 +247,6 @@ export default Vue.extend({
       try {
         this.isLoading = true;
         const decodedToken = jwtDecode(localStorage.getItem("token"));
-        console.log(decodedToken);
         const response = await profileController.findManagerByEmail({
           email: decodedToken.email,
         });
@@ -264,7 +263,6 @@ export default Vue.extend({
           password: response.user.password,
           username: response.user.username,
         }),
-          console.log("response", response);
         await this.findMuseumById(response.id_museum);
       } catch (error) {
         console.log(error);
@@ -276,13 +274,11 @@ export default Vue.extend({
       try {
         this.isLoading = true;
         const response = await profileController.findMuseumById(idMuseum);
-        console.log("response museum", response);
         this.museum = {
           ...response,
           tariffs: JSON.parse(response.tariffs),
           schedules: JSON.parse(response.schedules),
         };
-        console.log("museum", this.museum);
       } catch (error) {
         console.log(error);
       } finally {

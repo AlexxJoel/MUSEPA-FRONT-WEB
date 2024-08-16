@@ -8,7 +8,7 @@
   
       <section class="welcome mt-5">
         <div class="welcome-text">
-          <h1><strong>¡Bienvenido a MUSEPA!</strong></h1>
+          <h1 class="text-dark"><strong>¡Bienvenido a MUSEPA!</strong></h1>
           <p class="highlight-text"><strong>Te interesa visitar museos</strong></p>
           <p class="description">
             La plataforma definitiva para gestionar y disfrutar de la experiencia en los museos. Nuestra aplicación está diseñada para mejorar la manera en que interactúas con los museos, facilitando la administración y proporcionando a los visitantes una experiencia enriquecedora.
@@ -63,7 +63,7 @@
   
       <div class="parallax-container">
         <div class="parallax">
-          <img src="@/assets/image/MMAC.jpg" alt="Parallax Image">
+          <img src="https://musepa-bucket-v2.s3.us-west-1.amazonaws.com/assets/MMAC.jpg" alt="Parallax Image">
         </div>
       </div>
   
@@ -262,7 +262,7 @@
     height: 100%;
     object-fit: cover;
     object-position: center;
-    opacity: 0.7;
+
   }
   
   .ultima {

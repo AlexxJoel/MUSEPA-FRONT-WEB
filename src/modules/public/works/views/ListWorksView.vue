@@ -1,7 +1,6 @@
 <template>
   <div>
-    <loading-custom :isLoading="isLoading" />
-    <!-- add iamge  -->
+  
     <section>
       <div
         style="
@@ -25,14 +24,20 @@
             placeholder="Buscar obra..."
             type="search"
             v-model="searchTerm"
+            :disabled="isLoading"
           />
         </b-form-group>
       </div>
     </section>
 
     <section>
+
+      <div style="height: 50vh;"  v-if="isLoading">
+        <loading-custom :isLoading="isLoading" />
+      </div>
+
       <!-- Cards with image left and info right -->
-      <div class="px-5 mt-2">
+      <div class="px-5 mt-2" v-else>
         <b-row>
           <b-col
             cols="12"
@@ -107,7 +112,7 @@
       </div>
     </section>
 
-    <section>
+    <section v-if="filteredWorks.length > 0">
       <div class="overflow-auto px-5 mt-2">
         <div class="text-center">
           <b-pagination
