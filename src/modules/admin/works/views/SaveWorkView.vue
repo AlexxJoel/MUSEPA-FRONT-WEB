@@ -290,7 +290,8 @@ export default Vue.extend({
             artists: null,
             pictures: [],
           };
-          SweetAlertCustom.successMessage();
+          this.isLoading = false;
+          await SweetAlertCustom.successMessage();
           await this.$router.replace({ name: "works-list" });
         }
       } catch (error) {

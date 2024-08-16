@@ -1,7 +1,6 @@
 hkjfhf
 <template>
   <div>
-    <loading-custom :isLoading="isLoading" />
 
     <!-- add iamge  -->
 
@@ -41,10 +40,19 @@ hkjfhf
         </div>
       </div>
     </section>
+
+
+    
     <section>
+
+      <div style="height: 50vh;"  v-if="isLoading">
+        <loading-custom :isLoading="isLoading" />
+      </div>
+      <!-- Not content -->
+
       <!-- Cards with image left and info right -->
-      <div class="px-5 mt-2">
-        <b-row>
+      <div class="px-5 mt-2" v-else>
+        <b-row v-if="filteredEvents.length > 0">
           <b-col
             cols="12"
             md="4"
@@ -96,7 +104,7 @@ hkjfhf
                     <!-- button left see more icon -->
                     <div class="d-flex justify-content-between">
                       <b-button
-                        :to="{ name: 'work-detail', params: { id: event.id } }"
+                        :to="{ name: 'event-detail', params: { id: event.id } }"
                         variant="outline-secondary"
                         class="mt-3 btn-block"
                         size="sm"
@@ -111,10 +119,15 @@ hkjfhf
             </b-card>
           </b-col>
         </b-row>
+        <b-row v-else>
+          <b-col cols="12" class="text-center mb-4">
+            <h1 class="text-dark m-0 mt-5">No hay eventos</h1>
+          </b-col>
+        </b-row>
       </div>
     </section>
 
-    <section>
+    <section v-if="filteredEvents.length > 0">	
       <div class="overflow-auto px-5 mt-2">
         <div class="text-center">
           <b-pagination
