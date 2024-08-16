@@ -1,3 +1,5 @@
+import { props } from "vue2-dropzone";
+
 const rolesAllowed = ["manager"];
 export default [
   {
@@ -152,9 +154,10 @@ export default [
             },
           },
           {
-            path: "detail/:id",
+            path: "detail/",
             name: "user-detail",
             component: () => import("../modules/admin/users/views/DetailsUserView.vue"),
+            props: route => ({ email: route.query.email }),
             meta: {
               title: "Detalle del usuario",
               requireAuth: false,

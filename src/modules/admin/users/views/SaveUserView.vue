@@ -2,8 +2,6 @@
   <div>
     <loading-custom :isLoading="isLoading" />
 
-
-
     <b-row class="px-5 pt-3 m-0">
       <b-col cols="12">
         <!-- Card -->
@@ -19,123 +17,227 @@
                 </h3>
 
                 <b-row>
-
                   <b-col cols="12">
                     <b-form-group label="Nombre:*">
-                      <b-form-input id="name" placeholder="Nombre" type="text" required
-                        v-model.trim="v$.user.name.$model" trim :state="v$.user.name.$dirty ? !v$.user.name.$error : null
-                          " @blur="v$.user.name.$touch()">
+                      <b-form-input
+                        id="name"
+                        placeholder="Nombre"
+                        type="text"
+                        required
+                        v-model.trim="v$.user.name.$model"
+                        trim
+                        :state="
+                          v$.user.name.$dirty ? !v$.user.name.$error : null
+                        "
+                        @blur="v$.user.name.$touch()"
+                      >
                       </b-form-input>
-                      <b-form-invalid-feedback tooltip v-if="!v$.user.name.required.$response">{{
-                        errorMessagges.required
-                      }}</b-form-invalid-feedback>
-                      <b-form-invalid-feedback tooltip v-else-if="!v$.user.name.valid.$response">{{ errorMessagges.valid
-                        }}</b-form-invalid-feedback>
-                      <b-form-invalid-feedback tooltip v-else-if="!v$.user.name.notScript.$response">{{
-                        errorMessagges.noneScripts
-                      }}</b-form-invalid-feedback>
-                      <b-form-invalid-feedback tooltip v-else-if="!v$.user.name.minLength.$response">{{
-                        errorMessagges.minLength }}</b-form-invalid-feedback>
-                      <b-form-invalid-feedback tooltip v-else-if="!v$.user.name.maxLength.$response">{{
-                        errorMessagges.maxLength }}</b-form-invalid-feedback>
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-if="!v$.user.name.required.$response"
+                        >{{ errorMessagges.required }}</b-form-invalid-feedback
+                      >
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-else-if="!v$.user.name.valid.$response"
+                        >{{ errorMessagges.valid }}</b-form-invalid-feedback
+                      >
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-else-if="!v$.user.name.notScript.$response"
+                        >{{
+                          errorMessagges.noneScripts
+                        }}</b-form-invalid-feedback
+                      >
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-else-if="!v$.user.name.minLength.$response"
+                        >{{ errorMessagges.minLength }}</b-form-invalid-feedback
+                      >
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-else-if="!v$.user.name.maxLength.$response"
+                        >{{ errorMessagges.maxLength }}</b-form-invalid-feedback
+                      >
                     </b-form-group>
                   </b-col>
 
                   <b-col cols="12">
                     <b-form-group label="Primer apellido:*">
-                      <b-form-input id="lastname" placeholder="Primer apellido" type="text" required
-                        v-model.trim="v$.user.lastname.$model" trim :state="v$.user.lastname.$dirty
-                          ? !v$.user.lastname.$error
-                          : null
-                          " @blur="v$.user.lastname.$touch()">
+                      <b-form-input
+                        id="lastname"
+                        placeholder="Primer apellido"
+                        type="text"
+                        required
+                        v-model.trim="v$.user.lastname.$model"
+                        trim
+                        :state="
+                          v$.user.lastname.$dirty
+                            ? !v$.user.lastname.$error
+                            : null
+                        "
+                        @blur="v$.user.lastname.$touch()"
+                      >
                       </b-form-input>
-                      <b-form-invalid-feedback tooltip v-if="!v$.user.lastname.required.$response">{{
-                        errorMessagges.required }}</b-form-invalid-feedback>
-                      <b-form-invalid-feedback tooltip v-else-if="!v$.user.lastname.valid.$response">{{
-                        errorMessagges.valid }}</b-form-invalid-feedback>
-                      <b-form-invalid-feedback tooltip v-else-if="!v$.user.lastname.notScript.$response">{{
-                        errorMessagges.noneScripts
-                      }}</b-form-invalid-feedback>
-                      <b-form-invalid-feedback tooltip v-else-if="!v$.user.lastname.minLength.$response">{{
-                        errorMessagges.minLength }}</b-form-invalid-feedback>
-                      <b-form-invalid-feedback tooltip v-else-if="!v$.user.lastname.maxLength.$response">{{
-                        errorMessagges.maxLength }}</b-form-invalid-feedback>
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-if="!v$.user.lastname.required.$response"
+                        >{{ errorMessagges.required }}</b-form-invalid-feedback
+                      >
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-else-if="!v$.user.lastname.valid.$response"
+                        >{{ errorMessagges.valid }}</b-form-invalid-feedback
+                      >
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-else-if="!v$.user.lastname.notScript.$response"
+                        >{{
+                          errorMessagges.noneScripts
+                        }}</b-form-invalid-feedback
+                      >
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-else-if="!v$.user.lastname.minLength.$response"
+                        >{{ errorMessagges.minLength }}</b-form-invalid-feedback
+                      >
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-else-if="!v$.user.lastname.maxLength.$response"
+                        >{{ errorMessagges.maxLength }}</b-form-invalid-feedback
+                      >
                     </b-form-group>
                   </b-col>
 
                   <b-col cols="12">
                     <b-form-group label="Segundo apellido:*">
-                      <b-form-input id="surname" placeholder="Segundo apellido" type="text" required
-                        v-model.trim="v$.user.surname.$model" trim :state="v$.user.surname.$dirty
-                          ? !v$.user.surname.$error
-                          : null
-                          " @blur="v$.user.surname.$touch()">
+                      <b-form-input
+                        id="surname"
+                        placeholder="Segundo apellido"
+                        type="text"
+                        required
+                        v-model.trim="v$.user.surname.$model"
+                        trim
+                        :state="
+                          v$.user.surname.$dirty
+                            ? !v$.user.surname.$error
+                            : null
+                        "
+                        @blur="v$.user.surname.$touch()"
+                      >
                       </b-form-input>
-                      <b-form-invalid-feedback tooltip v-if="!v$.user.surname.required.$response">{{
-                        errorMessagges.required }}</b-form-invalid-feedback>
-                      <b-form-invalid-feedback tooltip v-else-if="!v$.user.surname.valid.$response">{{
-                        errorMessagges.valid }}</b-form-invalid-feedback>
-                      <b-form-invalid-feedback tooltip v-else-if="!v$.user.surname.notScript.$response">{{
-                        errorMessagges.noneScripts
-                      }}</b-form-invalid-feedback>
-                      <b-form-invalid-feedback tooltip v-else-if="!v$.user.surname.minLength.$response">{{
-                        errorMessagges.minLength }}</b-form-invalid-feedback>
-                      <b-form-invalid-feedback tooltip v-else-if="!v$.user.surname.maxLength.$response">{{
-                        errorMessagges.maxLength }}</b-form-invalid-feedback>
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-if="!v$.user.surname.required.$response"
+                        >{{ errorMessagges.required }}</b-form-invalid-feedback
+                      >
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-else-if="!v$.user.surname.valid.$response"
+                        >{{ errorMessagges.valid }}</b-form-invalid-feedback
+                      >
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-else-if="!v$.user.surname.notScript.$response"
+                        >{{
+                          errorMessagges.noneScripts
+                        }}</b-form-invalid-feedback
+                      >
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-else-if="!v$.user.surname.minLength.$response"
+                        >{{ errorMessagges.minLength }}</b-form-invalid-feedback
+                      >
+                      <b-form-invalid-feedback
+                        tooltip
+                        v-else-if="!v$.user.surname.maxLength.$response"
+                        >{{ errorMessagges.maxLength }}</b-form-invalid-feedback
+                      >
                     </b-form-group>
                   </b-col>
-
                 </b-row>
               </b-col>
 
-
               <b-col cols="6">
-
                 <h3>
                   <b-icon icon="lock" class="mr-2"></b-icon>
                   Datos de acceso
                 </h3>
 
-
                 <b-col cols="12">
                   <b-form-group label="Correo electrónico:*">
-                    <b-form-input id="email" placeholder="Correo electrónico" type="email" required
-                      v-model.trim="v$.user.email.$model" trim :state="v$.user.email.$dirty
-                        ? !v$.user.email.$error
-                        : null
-                        " @blur="v$.user.email.$touch()">
+                    <b-form-input
+                      id="email"
+                      placeholder="Correo electrónico"
+                      type="email"
+                      required
+                      v-model.trim="v$.user.email.$model"
+                      trim
+                      :state="
+                        v$.user.email.$dirty ? !v$.user.email.$error : null
+                      "
+                      @blur="v$.user.email.$touch()"
+                    >
                     </b-form-input>
-                    <b-form-invalid-feedback tooltip v-if="!v$.user.email.required.$response">{{ errorMessagges.required
-                      }}</b-form-invalid-feedback>
-                    <b-form-invalid-feedback tooltip v-else-if="!v$.user.email.email.$response">{{
-                      errorMessagges.invalidEmail
-                      }}</b-form-invalid-feedback>
+                    <b-form-invalid-feedback
+                      tooltip
+                      v-if="!v$.user.email.required.$response"
+                      >{{ errorMessagges.required }}</b-form-invalid-feedback
+                    >
+                    <b-form-invalid-feedback
+                      tooltip
+                      v-else-if="!v$.user.email.email.$response"
+                      >{{
+                        errorMessagges.invalidEmail
+                      }}</b-form-invalid-feedback
+                    >
                   </b-form-group>
                 </b-col>
 
                 <b-col cols="12">
                   <b-form-group label="Nombre de usuario:*">
-                    <b-form-input id="username" placeholder="Nombre de usuario" type="text" required
-                      v-model.trim="v$.user.username.$model" trim :state="v$.user.username.$dirty
-                        ? !v$.user.username.$error
-                        : null
-                        " @blur="v$.user.username.$touch()">
+                    <b-form-input
+                      id="username"
+                      placeholder="Nombre de usuario"
+                      type="text"
+                      required
+                      v-model.trim="v$.user.username.$model"
+                      trim
+                      :state="
+                        v$.user.username.$dirty
+                          ? !v$.user.username.$error
+                          : null
+                      "
+                      @blur="v$.user.username.$touch()"
+                    >
                     </b-form-input>
-                    <b-form-invalid-feedback tooltip v-if="!v$.user.username.required.$response">{{
-                      errorMessagges.required }}</b-form-invalid-feedback>
-                    <b-form-invalid-feedback tooltip v-else-if="!v$.user.username.valid.$response">{{
-                      errorMessagges.valid }}</b-form-invalid-feedback>
-                    <b-form-invalid-feedback tooltip v-else-if="!v$.user.username.notScript.$response">{{
-                      errorMessagges.noneScripts
-                      }}</b-form-invalid-feedback>
-                    <b-form-invalid-feedback tooltip v-else-if="!v$.user.username.minLength.$response">{{
-                      errorMessagges.minLength }}</b-form-invalid-feedback>
-                    <b-form-invalid-feedback tooltip v-else-if="!v$.user.username.maxLength.$response">{{
-                      errorMessagges.maxLength }}</b-form-invalid-feedback>
+                    <b-form-invalid-feedback
+                      tooltip
+                      v-if="!v$.user.username.required.$response"
+                      >{{ errorMessagges.required }}</b-form-invalid-feedback
+                    >
+                    <b-form-invalid-feedback
+                      tooltip
+                      v-else-if="!v$.user.username.valid.$response"
+                      >{{ errorMessagges.valid }}</b-form-invalid-feedback
+                    >
+                    <b-form-invalid-feedback
+                      tooltip
+                      v-else-if="!v$.user.username.notScript.$response"
+                      >{{ errorMessagges.noneScripts }}</b-form-invalid-feedback
+                    >
+                    <b-form-invalid-feedback
+                      tooltip
+                      v-else-if="!v$.user.username.minLength.$response"
+                      >{{ errorMessagges.minLength }}</b-form-invalid-feedback
+                    >
+                    <b-form-invalid-feedback
+                      tooltip
+                      v-else-if="!v$.user.username.maxLength.$response"
+                      >{{ errorMessagges.maxLength }}</b-form-invalid-feedback
+                    >
                   </b-form-group>
                 </b-col>
-
-
               </b-col>
             </b-row>
 
@@ -160,7 +262,7 @@ import "vue2-dropzone/dist/vue2Dropzone.min.css";
 import SweetAlertCustom from "../../../../kernel/SweetAlertCustom";
 import { generateRandomPassword } from "../../../../kernel/fucntions";
 
-import usersController from '../services/controller/users.controller';
+import usersController from "../services/controller/users.controller";
 
 export default Vue.extend({
   name: "SaveWorkView",
@@ -188,16 +290,16 @@ export default Vue.extend({
       },
 
       user: {
-        name: '',
-        surname: '',
-        lastname: '',
-        email: '',
-        username: '',
-        password: '',
+        name: "",
+        surname: "",
+        lastname: "",
+        email: "",
+        username: "",
+        password: "",
       },
     };
   },
-  mounted() { },
+  mounted() {},
   methods: {
     showPassword() {
       this.showPasswordState = !this.showPasswordState;
@@ -210,10 +312,10 @@ export default Vue.extend({
         } else {
           const result = await SweetAlertCustom.questionMessage();
           if (result.isConfirmed) {
+            console.log("Guardando usuario");
             this.isLoading = true;
 
-            this.user.password = generateRandomPassword();
-            const response = await authController.user(this.user);
+            const response = await usersController.saveUser(this.user);
             if (
               response.message ===
               "User created successfully, verification email sent."
@@ -225,8 +327,8 @@ export default Vue.extend({
                 surname: "",
                 email: "",
                 username: "",
-                password: "",
-                confirmPassword: "",
+                // password: "",
+                // confirmPassword: "",
               };
               this.v$.user.$reset();
               SweetAlertCustom.successMessage(
@@ -234,7 +336,7 @@ export default Vue.extend({
                 "Usuario creado exitosamente, se ha enviado un correo de verificación."
               );
               // Redirigir a la página de inicio de sesión
-              await this.$router.replace({ name: "user-list" });
+              await this.$router.replace({ name: "users-list" });
             }
           }
         }

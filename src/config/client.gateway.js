@@ -16,9 +16,8 @@ const baseUrls = {
 AxiosClient.interceptors.request.use(
   function (config) {
     const auth_token = localStorage.token;
-
     // Asigna el baseURL en función del endpoint
-    if (config.url.includes("/visitors")) {
+    if (config.url.includes("/visitors") || config.url.includes("visitors/details")) {
       config.baseURL = baseUrls.visitors;
     } else if (config.url.includes("/museums")) {
       config.baseURL = baseUrls.museums;
@@ -34,7 +33,9 @@ AxiosClient.interceptors.request.use(
       config.baseURL = import.meta.env.VITE_APP_BASE_URL_AUTH; // baseURL por defecto
     }
 
-    if (auth_token && (!config.url.includes("auth") || !config.url.includes("open"))
+    if (
+      auth_token &&
+      (!config.url.includes("auth") || !config.url.includes("open"))
     ) {
       config.headers.Authorization = `Bearer ${auth_token}`;
     }
@@ -57,8 +58,9 @@ AxiosClient.interceptors.response.use(
   },
   async (error) => {
     if (!error.response || !error.response.status) {
-
-      const loadingOverlay = document.querySelector('.vld-overlay.is-active.custom-loading-font.is-full-page');
+      const loadingOverlay = document.querySelector(
+        ".vld-overlay.is-active.custom-loading-font.is-full-page"
+      );
       if (loadingOverlay) {
         loadingOverlay.classList.remove('is-active');
       }

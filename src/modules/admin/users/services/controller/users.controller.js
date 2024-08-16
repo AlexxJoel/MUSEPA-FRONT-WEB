@@ -9,20 +9,20 @@ export default {
       throw error;
     }
   },
-  async saveUser(event) {
+  async saveUser(payload) {
     try {
-      const data = await ApiUsers.saveUser(event);
+      const data = await ApiUsers.saveUser(payload);
       return data;
     } catch (error) {
       return error;
     }
   },
-  async deleteEvent(eventId) {
+  async deleteUser(userId) {
     try {
-      const data = await ApiUsers.deleteEvent(eventId);
+      const data = await ApiUsers.deleteUser(userId);
       return data;
     } catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   },
   async findEventById(eventId) {
@@ -31,6 +31,14 @@ export default {
       return data;
     } catch (error) {
       return Promise.reject(error);
+    }
+  },
+  async findUserByEmail(userEmail) {
+    try {
+      const data = await ApiUsers.findUserByEmail(userEmail);
+      return data;
+    } catch (error) {
+      return error;
     }
   },
   async updateEvent(event) {
