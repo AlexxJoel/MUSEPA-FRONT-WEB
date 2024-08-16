@@ -218,8 +218,9 @@ export default Vue.extend({
     async getListEvents() {
       try {
         this.isLoading = true;
-        const response = await eventsController.getEvents();
-        this.listEvents = response;
+        this.event.id = this.$route.params.id;
+        const response = await eventsController.findEventById(this.event.id);
+        this.event = response;
       } catch (error) {
         console.error(error);
       } finally {
