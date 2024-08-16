@@ -1,6 +1,8 @@
 <template>
     <loading-overlay :active="isLoading" :color="color" :loader="loader" :class="className" :is-full-page="fullPage" :can-cancel="canCancel" :use-slot="useSlot" :bg-color="bgColor" :height="height" :width="width" :timeout="timeout">
-      <template v-slot:after><br />Cargando...</template>
+      <template v-slot:after><br />
+          {{ message }}
+      </template>
     </loading-overlay>
   </template>
   
@@ -9,6 +11,10 @@
   export default Vue.extend({
     name: "LoadingCustom",
     props: {
+      message: {
+        type: String,
+        default: "Cargando...",
+      },
       isLoading: {
         type: Boolean,
         default: false,

@@ -4,14 +4,14 @@
     <div class="vh-100">
       <b-form @submit.prevent="sigin" class="row w-100 h-100">
         <div class="col-7 p-0 h-100">
-          <b-img style="object-fit: cover; height: 100%; width: 100%" src="/src/assets/image/museum-mac-2.jpg" fluid
+          <b-img style="object-fit: cover; height: 100%; width: 100%" src="https://musepa-bucket-v2.s3.us-west-1.amazonaws.com/assets/museum-mac-2.jpg" fluid
             alt="Museum"></b-img>
         </div>
         <!-- lado derecho del login -->
         <div class="col-5 d-flex flex-column justify-content-center align-items-center">
           <!-- logo y nombre de la app -->
           <div class="text-center">
-            <b-img src="/src/assets/image/logo.png" fluid alt="LOGO-MUSEPA" width="100" class="mb-1"></b-img>
+            <img src="@/assets/image/Logo.png"  alt="LOGO-MUSEPA" width="100" class="mb-1 img-fluid"></img>
             <p class="musepa-font">MUSEPA</p>
           </div>
           <div class="w-75">
