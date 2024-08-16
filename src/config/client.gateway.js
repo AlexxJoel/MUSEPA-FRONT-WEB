@@ -121,9 +121,25 @@ function handle400Error(responseAxios) {
       title: "Credenciales incorrectas",
       message: "Usuario y/o contraseña incorrectos",
     },
+    'Invalid or missing \'name\'': {
+      title: "Datos inválidos",
+      message: "Nombre inválido",
+    },
+    'Invalid or missing \'description\'': {
+      title: "Datos inválidos",
+      message: "Descripción inválido",
+    },
+    'Invalid or missing \'title\'': {
+      title: "Datos inválidos",
+      message: "Título inválido",
+    },
+    'Invalid or missing \'technique\'': {
+      title: "Datos inválidos",
+      message: "Técnica inválida",
+    },
   }
 
-  
+
   let titleAlert = "Error 400"
   let messageAlert = "Si el problema persiste, contacte al administrador del sistema";
 
@@ -154,22 +170,39 @@ function handle401Error(responseAxios) {
     return;
   if (!responseAxios.response.data)
     return;
-  if (!responseAxios.response.data.error)
-    return;
 
   const handlePossibleErrorMessages = {
     'Access denied. Please, change the temporary password.': 'Acceso denegado. Por favor, cambie la contraseña temporal.',
   }
 
+  const possibleErrorMessages = {
+    'The incoming token has expired': {
+      title: "Token expirado",
+      message: "El token de acceso ha expirado",
+      toName: "login",
+    },
+  }
+
   let titleAlert = "";
   let messageAlert = "";
+  let toRedirect = null;
 
-  const { error } = responseAxios.response.data;
+
+
+  const error = responseAxios.response.data.error || responseAxios.response.data.message
 
   if (handlePossibleErrorMessages[error]) {
     console.error('401 ERROR', handlePossibleErrorMessages[error]);
     return;
   }
+
+
+  if (possibleErrorMessages[error]) {
+    titleAlert = possibleErrorMessages[error].title;
+    messageAlert = possibleErrorMessages[error].message;
+    toRedirect = possibleErrorMessages[error].toName;
+  }
+
   /* ------------------------------ execute swal ------------------------------ */
   Vue.swal({
     title: titleAlert,
@@ -179,6 +212,12 @@ function handle401Error(responseAxios) {
     confirmButtonColor: "#10B981",
   });
 
+  if (toRedirect) {
+    if (toRedirect === "Login") {
+      localStorage.clear();
+      router.push({ name: "Login" });
+    }
+  }
 
 }
 

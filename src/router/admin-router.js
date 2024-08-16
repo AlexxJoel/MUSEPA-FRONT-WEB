@@ -96,7 +96,7 @@ export default [
             component: () =>
               import("../modules/admin/works/views/DetailsWorkView.vue"),
             meta: {
-              title: "Detalle del Evento",
+              title: "Detalle de la obra",
               requireAuth: true,
               role: rolesAllowed,
             },

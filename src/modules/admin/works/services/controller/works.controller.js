@@ -33,9 +33,9 @@ export default {
       return error;
     }
   },
-  async updateEvent(event) {
+  async updateWork(work) {
     try {
-      const data = await ApiWorks.updateEvent(event);
+      const data = await ApiWorks.updateWork(work);
       return data;
     } catch (error) {
       return Promise.reject(error);
