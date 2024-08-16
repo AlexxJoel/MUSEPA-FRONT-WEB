@@ -16,13 +16,9 @@
         <b-collapse id="nav-collapse" is-nav>
           <b-navbar-nav>
             <!-- TODO Active the link when the route is the same as the current route -->
-            <b-nav-item
-              v-for="link in links"
-              :key="link.name"
-              :to="{ name: link.route }"
-            >
+            <b-nav-item v-for="link in links" :key="link.name" :to="{ name: link.route }">
               <b-icon :icon="link.icon" class="mr-2"></b-icon>
-              {{ link.name }} 
+              {{ link.name }}
             </b-nav-item>
 
           </b-navbar-nav>
@@ -36,7 +32,8 @@
                 <b-icon :icon="profile.icon" class="mr-2"></b-icon>
                 <em>{{ profile.name }}</em>
               </template>
-              <b-dropdown-item v-for="link in profile.links" :key="link.name" :to="{ name: link.route }">
+              <b-dropdown-item v-for="link in profile.links" :key="link.name" :to="{ name: link.route }"
+                @click="link.click?.()">
                 {{ link.name }}
               </b-dropdown-item>
             </b-nav-item-dropdown>
@@ -54,26 +51,37 @@
 <script>
 export default {
   name: "Navbar",
-data() {
+  data() {
     return {
       links: [
         { name: "Inicio", route: "admin-home", icon: "house-fill" },
         { name: "Eventos", route: "admin-events", icon: "calendar-fill" },
         { name: "Obras", route: "admin-works", icon: "grid-fill" },
         { name: "Usuarios", route: "admin-users", icon: "people-fill" },
-        
-        
+
+
       ],
       profile: {
         name: "Administrador",
         icon: "person-circle",
         links: [
           { name: "Perfil", route: "admin-profile" },
-          { name: "Cerrar sesión", route: "admin-logout" },
+          { name: "Cerrar sesión", click: this.closeSession },
         ],
       }
-      
+
     };
+  },
+  methods: {
+    closeSession() {
+      localStorage.clear();
+
+      this.$nextTick(() => {
+        if (this.$route.name !== 'login') {
+          this.$router.replace({ name: 'login' });
+        }
+      });
+    },
   },
 }
 </script>

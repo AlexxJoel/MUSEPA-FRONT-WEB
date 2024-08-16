@@ -40,6 +40,16 @@ const router = new VueRouter({
             requireAuth: false,
           },
         },
+        {
+          path: "/change-temporary-password",
+          props: true,
+          name: "change-temporary-password",
+          component: () => import("../modules/auth/views/ChangeTemporaryView.vue"),
+          meta: {
+            title: "Cambiar contraseña temporal",
+            requireAuth: false,
+          },
+        },
         ...publicRoute,
         ...adminRouter,
       ]
