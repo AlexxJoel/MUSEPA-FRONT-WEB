@@ -1,0 +1,22 @@
+version: 1
+frontend:
+    phases:
+        preBuild:
+            commands:
+                - npm ci --cache .npm --prefer-offline
+        build:
+            commands:
+                - VITE_APP_BASE_URL_VISITORS=${VITE_APP_BASE_URL_VISITORS}
+                - VITE_APP_BASE_URL_MUSEUMS=${VITE_APP_BASE_URL_MUSEUMS}
+                - VITE_APP_BASE_URL_WORKS=${VITE_APP_BASE_URL_WORKS}
+                - VITE_APP_BASE_URL_EVENTS=${VITE_APP_BASE_URL_EVENTS}
+                - VITE_APP_BASE_URL_AUTH=${VITE_APP_BASE_URL_AUTH}
+                - VITE_APP_BASE_URL_MANAGERS=${VITE_APP_BASE_URL_MANAGERS}
+                - npm run build
+    artifacts:
+        baseDirectory: dist
+        files:
+            - "**/*"
+    cache:
+        paths:
+            - .npm/**/*
