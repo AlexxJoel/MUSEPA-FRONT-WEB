@@ -1,6 +1,7 @@
 <template>
   <div>
-    <loading-custom :isLoading="isLoading" />
+    <loading-custom :isLoading="isLoading" :fullPage="true" />
+
     <b-row class="px-5 pt-3 m-0">
       <b-col cols="6">
         <!-- Card -->
@@ -13,22 +14,12 @@
           <b-form ref="form">
             <b-row class="pb-3">
               <b-col cols="6">
-                <b-form-group
-                  label="Titulo de la obra"
-                  label-for="title"
-                  label-class="font-italic"
-                  label-size="sm"
-                >
+                <b-form-group label="Titulo de la obra" label-for="title" label-class="font-italic" label-size="sm">
                   <p class="font-weight-bold h5">{{ work.title }}</p>
                 </b-form-group>
               </b-col>
               <b-col cols="6">
-                <b-form-group
-                  label="Técnica"
-                  label-for="category"
-                  label-class="font-italic"
-                  label-size="sm"
-                >
+                <b-form-group label="Técnica" label-for="category" label-class="font-italic" label-size="sm">
                   <p class="font-weight-bold h5">{{ work.technique }}</p>
                 </b-form-group>
               </b-col>
@@ -36,28 +27,18 @@
 
             <b-row>
               <b-col cols="6">
-                <b-form-group
-                  label="Fecha de creación"
-                  label-for="start_date"
-                  ref="start_date"
-                  label-class="font-italic"
-                  label-size="sm"
-                >
+                <b-form-group label="Fecha de creación" label-for="start_date" ref="start_date"
+                  label-class="font-italic" label-size="sm">
                   <p class="font-weight-bold h5">
-                    {{ formatDate(work.creation_date) }}
+                    {{ work.creation_date }}
                   </p>
                 </b-form-group>
               </b-col>
               <b-col cols="6">
-                <b-form-group
-                  label="Artistas"
-                  label-for="artists"
-                  ref="artists"
-                  label-class="font-italic"
-                  label-size="sm"
-                >
+                <b-form-group label="Artistas" label-for="artists" ref="artists" label-class="font-italic"
+                  label-size="sm">
                   <p class="font-weight-bold h5">
-                    {{ work.artists ? work.artists.join(", ") : "" }}
+                    {{ work.artists.length > 0 ? work.artists.join(", ") : "Cargando..." }}
                   </p>
                 </b-form-group>
               </b-col>
@@ -65,68 +46,57 @@
 
             <b-row class="pb-3">
               <b-col cols="12">
-                <b-form-group
-                  label="Descripción"
-                  label-for="description"
-                  label-class="font-italic"
-                  label-size="sm"
-                >
+                <b-form-group label="Descripción" label-for="description" label-class="font-italic" label-size="sm">
                   <p class="font-weight-bold h5">{{ work.description }}</p>
                 </b-form-group>
               </b-col>
             </b-row>
 
-            <div>
+           <!--  <div>
               <b-button variant="outline-secondary" block>
                 Guardar obra
               </b-button>
-            </div>
+            </div> -->
           </b-form>
         </div>
       </b-col>
       <b-col cols="6">
-        <SectionDivider>
-          <template v-slot:title> Imagenes </template>
-        </SectionDivider>
 
-        <section class="p-4">
-          <VueSlickCarousel
-            ref="c1"
-            :asNavFor="$refs.c2"
-            v-bind="settingsCarousel"
-          >
-            <div class="d-flex justify-content-center align-items-center">
-              <img src="https://picsum.photos/300/300" />
-            </div>
 
-            <div class="d-flex justify-content-center align-items-center">
-              <img src="https://picsum.photos/300/300" />
-            </div>
+        <div style="height: 50vh;" v-if="isLoading">
+          <loading-custom :isLoading="isLoading" :fullPage="false" :message="'Cargando imagenes...'" />
+        </div>
 
-            <div class="d-flex justify-content-center align-items-center">
-              <img src="https://picsum.photos/300/300" />
-            </div>
-          </VueSlickCarousel>
+
+
+        <section v-else>
+          <SectionDivider>
+            <template v-slot:title> Imagenes </template>
+          </SectionDivider>
+
+          <section class="p-4">
+            <VueSlickCarousel ref="c1" :asNavFor="$refs.c2" v-bind="settingsCarousel">
+              <div v-for="(image, index) in work.pictures" :key="index" >
+                <div class="d-flex justify-content-center">
+                  <img :src="image" height="300" />
+                </div>
+              </div>
+              <div v-if="work.pictures.length === 0"></div>
+            </VueSlickCarousel>
+          </section>
+
+          <section>
+            <VueSlickCarousel ref="c2" :asNavFor="$refs.c1" :slidesToShow="2" :dots="true" v-bind="settingsCarousel">
+              <div v-for="(image, index) in work.pictures" :key="index">
+                <img :src="image" height="100" />
+              </div>
+              <div v-if="work.pictures.length === 0"></div>
+            </VueSlickCarousel>
+          </section>
+
         </section>
 
-        <section>
-          <VueSlickCarousel
-            ref="c2"
-            :asNavFor="$refs.c1"
-            :slidesToShow="2"
-            :dots="true"
-            v-bind="settingsCarousel"
-          >
-            <div v-for="(image, index) in work.pictures" :key="index">
-              <img :src="image" height="100" />
-            </div>
-            <div v-if="work.pictures.length === 0"></div>
 
-            <!-- <div><img src="https://picsum.photos/300/300" height="100" /></div> -->
-            <!-- <div><img src="https://picsum.photos/300/300" height="100" /></div>
-            <div><img src="https://picsum.photos/300/300" height="100" /></div> -->
-          </VueSlickCarousel>
-        </section>
       </b-col>
     </b-row>
   </div>
@@ -179,11 +149,12 @@ export default Vue.extend({
         { value: 4, text: "Fiesta" },
       ],
       work: {
-        name: "",
+        title: "Cargando...",
         category: 0,
-        description: "",
-        startDate: "",
-        endDate: "",
+        technique: "Cargando...",
+        creation_date: "'Cargando...",
+        description: "'Cargando...",
+        artists: [],
         pictures: [],
       },
     };
@@ -210,8 +181,11 @@ export default Vue.extend({
         const response = await worksController.findWorkById(
           this.$route.params.id
         );
-        console.log(response);
-        this.work = response;
+    
+        this.work = {
+          ...response,
+          creation_date: formatDate(response.creation_date),
+        };
       } catch (error) {
         console.log(error);
       } finally {

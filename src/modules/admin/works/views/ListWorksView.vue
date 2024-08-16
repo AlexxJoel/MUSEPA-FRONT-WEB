@@ -1,18 +1,14 @@
 <template>
   <div>
-    <loading-custom :isLoading="isLoading" />
 
     <!-- add iamge  -->
     <section>
-      <div
-        style="
+      <div style="
           background-image: url('https://images.unsplash.com/photo-1514905552197-0610a4d8fd73?q=80&w=1470&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
           height: 25vh;
           background-size: cover;
           background-position: center;
-        "
-        class="d-flex justify-content-center align-items-center"
-      >
+        " class="d-flex justify-content-center align-items-center">
         <!-- center text in the middle of the screen -->
         <h1 class="p-0 m-0 font-weight-bold">Lista de Obras</h1>
       </div>
@@ -33,51 +29,40 @@
           </b-input-group>
         </b-form-group>
         <div>
-          <b-button variant="" :to="{ name: 'work-save' }"
-            >Agregar obra &nbsp;
+          <b-button variant="" :to="{ name: 'work-save' }">Agregar obra &nbsp;
             <b-icon icon="plus-square"></b-icon>
           </b-button>
         </div>
       </div>
     </section>
 
+
+
+
     <section>
+
+      <div style="height: 50vh;"  v-if="isLoading">
+        <loading-custom :isLoading="isLoading" />
+      </div>
       <!-- Cards with image left and info right -->
-      <div class="px-5 mt-2">
-        <b-row>
-          <b-col
-            cols="12"
-            md="4"
-            v-for="work in paginatedWorks"
-            :key="work.id"
-            class="mb-4"
-          >
+      <div class="px-5 mt-2" v-else>
+        <b-row v-if="filteredWorks.length > 0">
+          <b-col cols="12" md="4" v-for="work in paginatedWorks" :key="work.id" class="mb-4">
             <b-card no-body class="overflow-hidden h-100">
               <!-- delete  -->
 
               <div>
-                <b-button
-                  @click="deleteWork(work.id)"
-                  variant="outline-danger"
-                  class="btn-delete-event"
-                  size="sm"
-                >
+                <b-button @click="deleteWork(work.id)" variant="outline-danger" class="btn-delete-event" size="sm">
                   <b-icon icon="trash"></b-icon>
                 </b-button>
               </div>
 
               <b-row no-gutters class="h-100">
                 <b-col lg="6">
-                  <b-card-img
-                    :src="
-                      work.pictures
-                        ? work.pictures[0]
-                        : 'https://images.unsplash.com/photo-1574514120529-364d014b9a0a?q=80&w=1335&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                    "
-                    alt="Image"
-                    class="rounded-0"
-                    style="height: 100%; object-fit: cover"
-                  ></b-card-img>
+                  <b-card-img :src="work.pictures[0]
+                    ? work.pictures[0]
+                    : 'https://images.unsplash.com/photo-1574514120529-364d014b9a0a?q=80&w=1335&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                    " alt="Image" class="rounded-0" style="height: 100%; object-fit: cover"></b-card-img>
                 </b-col>
                 <b-col lg="6">
                   <b-card-body>
@@ -86,15 +71,12 @@
                     <b-card-text>
                       <div>
                         <p>{{ work.description }}</p>
-                        <span class="font-weight-bold text-secondary"
-                          >Artistas:
+                        <span class="font-weight-bold text-secondary">Artistas:
                         </span>
                         <p>{{ work.artists.join(", ") }}</p>
                         <b-icon icon="calendar" class="mr-2"></b-icon>
                         <p>
-                          <span class="font-weight-bold text-secondary"
-                            >Fecha de creación:</span
-                          >
+                          <span class="font-weight-bold text-secondary">Fecha de creación:</span>
                           {{ formatDate(work.creation_date) }}
                         </p>
                       </div>
@@ -109,12 +91,8 @@
 
                     <!-- button left see more icon -->
                     <div>
-                      <b-button
-                      :to="{ name: 'work-detail', params: { id: work.id } }"
-                        variant="outline-secondary"
-                        class="mt-3 btn-block"
-                        size="sm"
-                      >
+                      <b-button :to="{ name: 'work-detail', params: { id: work.id } }" variant="outline-secondary"
+                        class="mt-3 btn-block" size="sm">
                         Ver más
                         <b-icon icon="box-arrow-up-right" class="mr-2"></b-icon>
                       </b-button>
@@ -125,18 +103,19 @@
             </b-card>
           </b-col>
         </b-row>
+        <b-row v-else>
+          <b-col cols="12" class="text-center mb-4">
+            <h1 class="text-dark m-0 mt-5">No hay eventos</h1>
+          </b-col>
+        </b-row>
       </div>
     </section>
 
-    <section>
+    <section v-if="filteredWorks.length > 0">
       <div class="overflow-auto px-5 mt-2">
         <div class="text-center">
-          <b-pagination
-            v-model="currentPage"
-            :total-rows="filteredWorks.length"
-            :per-page="perPage"
-            align="center"
-          ></b-pagination>
+          <b-pagination v-model="currentPage" :total-rows="filteredWorks.length" :per-page="perPage"
+            align="center"></b-pagination>
         </div>
       </div>
     </section>
@@ -148,9 +127,12 @@ import worksController from "../services/controller/works.controller";
 import { formatDate } from "../../../../kernel/moment";
 import SweetAlertCustom from "../../../../kernel/SweetAlertCustom";
 
+
+
 export default Vue.extend({
   name: "ListWorksView",
   components: {
+  
     LoadingCustom: () =>
       import("../../../../views/components/LoadingCustom.vue"),
   },

@@ -144,6 +144,7 @@
           :use-custom-slot="dropZone.useCustomSlot"
           :include-styling="dropZone.includeStyling"
           @vdropzone-file-added="validateFile"
+          @vdropzone-removed-file="handleRemoveFile"
         >
           <slot>
             <div class="drag-area">
@@ -257,7 +258,6 @@ export default Vue.extend({
     };
   },
   mounted() {
-    this.getListEvents();
   },
   methods: {
     async saveEvent() {
@@ -269,7 +269,6 @@ export default Vue.extend({
 
         this.isLoading = true;
         const response = await eventsController.saveEvent(this.event);
-        console.log(response);
         if (response.message === "Event created successfully") {
           this.v$.event.$reset();
           this.event = {
@@ -316,8 +315,11 @@ export default Vue.extend({
       }
 
       // Agregar el archivo a la lista de subidos
-      console.log(file);
       this.event.pictures.push(file);
+    },
+
+    handleRemoveFile(file) {
+      this.event.pictures = this.event.pictures.filter((p) => p.name !== file.name);
     },
 
     formatDate,

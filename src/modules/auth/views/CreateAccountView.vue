@@ -9,14 +9,13 @@
           <div
             class="text-center h-100 d-flex justify-content-center align-items-center"
           >
-            <b-img
-              src="/src/assets/image/LogoConNombre.png"
-              fluid
+            <img
+              src="@/assets/image/LogoConNombre.png"
               alt="LOGO-MUSEPA"
               width="280"
-              class="mb-1"
+              class="mb-1 img-fluid"
               style="object-fit: contain"
-            ></b-img>
+            ></img>
           </div>
         </div>
 
@@ -537,7 +536,7 @@ export default Vue.extend({
 <style scoped>
 .background-image {
   position: relative;
-  background-image: url("/src/assets/image/museum-mac-2.jpg");
+  background-image: url("@/assets/image/museum-mac-2.jpg");
   background-size: cover;
   background-position: center;
   min-height: 100vh;

@@ -56,12 +56,23 @@ export default {
     }
   },
 
-  async updateEvent(event) {
+  async updateWork(work) {
     try {
-      const response = Promise.resolve({ data: { data: event } });
-      return response.data.data;
+      const newPayload = {
+        id: work.id,
+        title: work.title,
+        description: work.description,
+        creation_date: work.creationDate,
+        technique: work.technique,
+        artists: work.artists.split(","),
+        id_museum: 1,
+        pictures: work.pictures
+      };
+      const response = await axios.doPut("/works", newPayload);
+
+      return response.data;
     } catch (error) {
-      return Promise.reject(error);
+      return error;
     }
   },
 };

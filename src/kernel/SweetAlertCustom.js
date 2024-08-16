@@ -30,12 +30,13 @@ class SweetAlertCustom {
     });
   }
 
-  static successMessage(title = "Éxito", text = "Acción realizada") {
-    Swal.fire({
+  static async successMessage(title = "Éxito", text = "Acción realizada") {
+    return Swal.fire({
       title: title,
       text: text,
       icon: "success",
-      confirmButtonText: "Aceptar",
+      timer: 3000,
+      showConfirmButton: false,
       confirmButtonColor: "#10B981",
     });
   }

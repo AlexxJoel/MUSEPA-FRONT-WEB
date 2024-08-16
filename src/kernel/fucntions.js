@@ -24,3 +24,38 @@ export const generateRandomPassword = (length = 12) => {
     .sort(() => Math.random() - 0.5)
     .join("");
 };
+
+
+
+// to base64
+
+export const toBase64 = (file) => {
+  return new Promise((resolve, reject) => {
+    if (!(file instanceof Blob)) {
+      reject(new Error('Invalid input: Expected a Blob or File object.'));
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(new Error(`FileReader error: ${error.message}`));
+  });
+};
+
+// url to blob
+export const urlToBase64 = async (url) => {
+  try {
+    const response = await fetch(url);
+    if (!response.ok) {
+      throw new Error(`Error fetching the image: ${response.statusText}`);
+    }
+
+    const blob = await response.blob();
+    return await toBase64(blob);
+  } catch (error) {
+    console.error('Error converting URL to Base64:', error);
+    throw error;
+  }
+};
