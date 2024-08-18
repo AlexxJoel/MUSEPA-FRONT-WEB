@@ -149,7 +149,7 @@ export default Vue.extend({
           await this.$router.replace({ name: "admin" });
           return true;
         } else if (decodedToken["cognito:groups"][0] === ERoles.VISITOR) {
-          await this.$router.replace("/visitor");
+          await this.$router.replace({ name: "visitor-profile" });
           return true;
         }
       }
@@ -188,8 +188,6 @@ export default Vue.extend({
   &:hover {
     transform: scale(1.3);
   }
-
-
 }
 
 

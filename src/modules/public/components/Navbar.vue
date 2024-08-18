@@ -63,6 +63,7 @@ export default {
         { name: "Inicio", route: "landing", icon: "house-fill" },
         { name: "Eventos", route: "public-events", icon: "calendar-fill" },
         { name: "Obras", route: "public-works", icon: "grid-fill" },
+        { name: "Museo" , route: "public-museum", icon: "book-fill" }
 
       ],
       profile: {

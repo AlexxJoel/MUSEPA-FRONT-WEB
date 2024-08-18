@@ -33,7 +33,8 @@
                 <em>{{ profile.name }}</em>
               </template>
               <b-dropdown-item v-for="link in profile.links" :key="link.name" :to="{ name: link.route }"
-                @click="link.click?.()">
+                @click="link.click?.()"
+              >
                 {{ link.name }}
               </b-dropdown-item>
             </b-nav-item-dropdown>
@@ -53,25 +54,26 @@ export default {
   name: "Navbar",
   data() {
     return {
+      isLogged: false,
       links: [
-        { name: "Inicio", route: "admin-home", icon: "house-fill" },
-        { name: "Eventos", route: "admin-events", icon: "calendar-fill" },
-        { name: "Obras", route: "admin-works", icon: "grid-fill" },
-        { name: "Usuarios", route: "admin-users", icon: "people-fill" },
+        { name: "Inicio", route: "landing", icon: "house-fill" },
+        { name: "Eventos", route: "public-events", icon: "calendar-fill" },
+        { name: "Obras", route: "public-works", icon: "grid-fill" },
+        { name: "Museo" , route: "public-museum", icon: "book-fill" }
 
 
       ],
       profile: {
-        name: "Administrador",
+        name: "Visitante",
         icon: "person-circle",
         links: [
-          { name: "Perfil", route: "admin-profile" },
+          { name: "Perfil", route: "visitor-profile" },
           { name: "Cerrar sesión", click: this.closeSession },
         ],
-      }
-
+      },
     };
   },
+
   methods: {
     closeSession() {
       this.$emit("closeSession");

@@ -1,3 +1,5 @@
+import { jwtDecode } from 'jwt-decode';
+
 export const generateRandomPassword = (length = 12) => {
   const lowerCase = "abcdefghijklmnopqrstuvwxyz";
   const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -59,3 +61,11 @@ export const urlToBase64 = async (url) => {
     throw error;
   }
 };
+
+
+// getEmailFromToken 
+export const getEmailFromAuth = () => {
+  const decoded = jwtDecode(localStorage.token);
+  return decoded.email;
+};
+

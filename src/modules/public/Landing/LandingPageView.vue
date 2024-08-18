@@ -89,7 +89,7 @@
     </div>
   </template>
   
-  <style>
+  <style scoped>
   .landing-page {
     font-family: Arial, sans-serif;
     color: #333;
@@ -256,7 +256,7 @@
     background-attachment: fixed;
     background-size: cover;
     background-position: center;
-    z-index: -1;
+    z-index: 1;
   }
   
   .parallax img {

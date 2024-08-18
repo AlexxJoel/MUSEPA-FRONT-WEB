@@ -1,5 +1,10 @@
 <template>
   <section class="background-image overflow-hidden">
+
+    <div variant="link" class="position-absolute mx-4 mt-2 link-landing" @click="$router.replace({ name: 'landing' })">
+      <b-icon-arrow-left-circle font-scale="2"></b-icon-arrow-left-circle>
+    </div>
+
     <loading-custom :isLoading="isLoading" />
     <div class="overlay"></div>
     <div class="container px-4 py-5 px-md-5 text-lg-start my-5">
@@ -50,8 +55,8 @@
                     <b-form-group>
                       <b-form-input id="surname" placeholder="Primer apellido" type="text" required
                         v-model.trim="v$.signUp.surname.$model" trim :state="v$.signUp.surname.$dirty
-                            ? !v$.signUp.surname.$error
-                            : null
+                          ? !v$.signUp.surname.$error
+                          : null
                           " @blur="v$.signUp.surname.$touch()">
                       </b-form-input>
                       <b-form-invalid-feedback tooltip v-if="!v$.signUp.surname.required.$response">{{
@@ -72,8 +77,8 @@
                     <b-form-group>
                       <b-form-input id="lastName" placeholder="Segundo apellido" type="text" required
                         v-model.trim="v$.signUp.lastName.$model" trim :state="v$.signUp.lastName.$dirty
-                            ? !v$.signUp.lastName.$error
-                            : null
+                          ? !v$.signUp.lastName.$error
+                          : null
                           " @blur="v$.signUp.lastName.$touch()">
                       </b-form-input>
                       <b-form-invalid-feedback tooltip v-if="!v$.signUp.lastName.required.$response">{{
@@ -94,8 +99,8 @@
                     <b-form-group>
                       <b-form-input id="email" placeholder="Correo electrónico" type="email" required
                         v-model.trim="v$.signUp.email.$model" trim :state="v$.signUp.email.$dirty
-                            ? !v$.signUp.email.$error
-                            : null
+                          ? !v$.signUp.email.$error
+                          : null
                           " @blur="v$.signUp.email.$touch()">
                       </b-form-input>
                       <b-form-invalid-feedback tooltip v-if="!v$.signUp.email.required.$response">{{
@@ -110,8 +115,8 @@
                     <b-form-group>
                       <b-form-input id="username" placeholder="Nombre de usuario" type="text" required
                         v-model.trim="v$.signUp.username.$model" trim :state="v$.signUp.username.$dirty
-                            ? !v$.signUp.username.$error
-                            : null
+                          ? !v$.signUp.username.$error
+                          : null
                           " @blur="v$.signUp.username.$touch()">
                       </b-form-input>
                       <b-form-invalid-feedback tooltip v-if="!v$.signUp.username.required.$response">{{
@@ -448,9 +453,7 @@ export default Vue.extend({
   height: 100%;
 }
 
-.col-lg-6 {
-
-}
+.col-lg-6 {}
 
 .b-card {
   height: 75%;
@@ -467,5 +470,17 @@ export default Vue.extend({
   /* Permite que el formulario ocupe el espacio restante */
   overflow-y: auto;
   /* Agrega scroll interno solo cuando sea necesario */
+}
+
+.link-landing {
+  top: 1rem;
+  left: 1rem;
+  cursor: pointer;
+  z-index: 2;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.3);
+  }
 }
 </style>

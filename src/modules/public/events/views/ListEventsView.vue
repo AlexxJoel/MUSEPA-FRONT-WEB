@@ -98,9 +98,6 @@
           </b-row>
         </div>
 
-
-
-
       </b-skeleton-wrapper>
     </section>
 
