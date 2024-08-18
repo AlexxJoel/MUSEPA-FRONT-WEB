@@ -81,11 +81,13 @@ router.beforeEach((to, from, next) => {
       next({ name: "login" });
     }
 
+    
+
     const redirectAdminComponents = [
       "login",
       "create-account",
       "change-temporary-password",
-      "public-musepa",
+      "public-musepa",  
     ];
 
     const redirectVisitorComponents = [
@@ -97,8 +99,7 @@ router.beforeEach((to, from, next) => {
 
     const listToNames = to.matched.map((route) => route.name);
 
-
-    if (role === ERoles.ADMIN && redirectAdminComponents.find((route) => listToNames.includes(route))) {
+    if (role === ERoles.MANAGER && redirectAdminComponents.find((route) => listToNames.includes(route))) {
       next({ name: "admin" });
     }
 

@@ -35,7 +35,7 @@ class SweetAlertCustom {
       title: title,
       text: text,
       icon: "success",
-      timer: 3000,
+      timer: 1500,
       showConfirmButton: false,
       confirmButtonColor: "#10B981",
     });

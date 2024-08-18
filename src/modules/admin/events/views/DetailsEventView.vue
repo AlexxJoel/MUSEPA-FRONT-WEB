@@ -286,15 +286,19 @@ export default Vue.extend({
           startDate: formatDateBack(this.event.startDate),
           endDate: formatDateBack(this.event.endDate),
         });
+
+
       } catch (error) {
         console.log(error);
       } finally {
         this.isLoading = false;
       }
 
-      if (response && response.message === 'event updated successfully') {
+      if (response && response.message === 'Event updated successfully') {
         await SweetAlertCustom.successMessage();
-        await this.$router.replace({ name: "event-list" });
+        await this.$router.push({ name: "events-list" });
+      }else{
+        SweetAlertCustom.errorMessage();
       }
 
     },

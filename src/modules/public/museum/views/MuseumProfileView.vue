@@ -18,7 +18,7 @@
     <div class="px-5 mt-2">
       <h1 class="my-3">
         <b-icon icon="building" class="mr-2"></b-icon>
-        {{ museum.name }}
+        {{ museum.name ? museum.name : "Museo" }}
       </h1>
 
       <b-card class="mx-5">

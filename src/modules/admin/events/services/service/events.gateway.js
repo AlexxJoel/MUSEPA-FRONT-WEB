@@ -56,7 +56,7 @@ export default {
         start_date: event.startDate,
         end_date: event.endDate,
         category: event.category,
-        pictures: event.picture,
+        pictures: event.pictures,
         id_museum: "1",
       };
 
