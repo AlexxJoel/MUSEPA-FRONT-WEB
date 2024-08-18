@@ -21,7 +21,7 @@
       },
       fullPage: {
         type: Boolean,
-        default: false,
+        default: true,
       },
       canCancel: {
         type: Boolean,

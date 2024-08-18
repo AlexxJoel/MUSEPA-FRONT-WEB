@@ -18,4 +18,13 @@ export default {
       return error;
     }
   },
+  async changePasswordTemporary(payload) {
+    try {
+      const data = await ApiService.changePasswordTemporary(payload);
+      return data;
+    } catch (error) {
+      console.log("error controller", error);
+      return error;
+    }
+  },
 };

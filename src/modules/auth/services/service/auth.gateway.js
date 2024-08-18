@@ -37,4 +37,30 @@ export default {
       return error;
     }
   },
+
+
+  /**
+   * Change password temporary
+   * @param {object} payload {username: string, temporaryPassword: string, newPassword: string}
+   * @returns any
+   */
+
+  async changePasswordTemporary(payload) {
+    try {
+
+      const response = await axios.doPost("/auth/set_password", {
+        username: payload.username,
+        temporary_password: payload.temporaryPassword,
+        new_password: payload.newPassword,
+      });
+
+      if (response.data === null) return response;
+
+      return response.data;
+    } catch (error) {
+      console.log(error);
+      return error;
+    }
+  }
+
 };
