@@ -1,34 +1,25 @@
 <template>
   <div>
-    <loading-custom :isLoading="isLoading" />
 
     <!-- add iamge  -->
     <section>
-      <div
-        style="
+      <div style="
           background-image: url('https://images.unsplash.com/photo-1644329771977-0a8c6e3928ae?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1yZWxhdGVkfDF8fHxlbnwwfHx8fHw%3D');
           height: 10vh;
           background-size: cover;
           background-position: center;
-        "
-        class="d-flex justify-content-center align-items-center"
-      >
+        " class="d-flex justify-content-center align-items-center">
         <!-- center text in the middle of the screen -->
         <h1 class="p-0 m-0 font-weight-bold">Lista de usuarios</h1>
       </div>
     </section>
 
     <!--     search and add button -->
-    <section>
+    <section ref="section1">
       <div class="d-flex justify-content-between px-5 mt-3">
         <b-form-group class="w-50">
           <b-input-group>
-            <b-form-input
-              id="filter-input"
-              v-model="filter"
-              type="search"
-              placeholder="Buscar usuario"
-            ></b-form-input>
+            <b-form-input id="filter-input" v-model="filter" type="search" placeholder="Buscar usuario"></b-form-input>
 
             <b-input-group-append>
               <b-button :disabled="!filter" @click="filter = ''">
@@ -39,8 +30,7 @@
         </b-form-group>
 
         <div>
-          <b-button variant="" :to="{ name: 'user-save' }"
-            >Agregar usuario &nbsp;
+          <b-button variant="" :to="{ name: 'user-save' }">Agregar usuario &nbsp;
             <b-icon icon="plus-square"></b-icon>
           </b-button>
         </div>
@@ -48,51 +38,28 @@
     </section>
 
     <!--     sort and show -->
-    <section>
+    <section ref="section2">
       <div class="d-flex justify-content-between px-5">
         <b-form-group class="w-50" v-slot="{ ariaDescribedby }">
           <b-input-group size="sm">
-            <b-form-select
-              id="sort-by-select"
-              v-model="sortBy"
-              :options="sortOptions"
-              :aria-describedby="ariaDescribedby"
-              class="w-75"
-            >
+            <b-form-select id="sort-by-select" v-model="sortBy" :options="sortOptions"
+              :aria-describedby="ariaDescribedby" class="w-75">
               <template #first>
                 <option value="">-- Ninguno --</option>
               </template>
             </b-form-select>
 
-            <b-form-select
-              v-model="sortDesc"
-              :disabled="!sortBy"
-              :aria-describedby="ariaDescribedby"
-              size="sm"
-              class="w-25"
-            >
+            <b-form-select v-model="sortDesc" :disabled="!sortBy" :aria-describedby="ariaDescribedby" size="sm"
+              class="w-25">
               <option :value="false">Asc</option>
               <option :value="true">Desc</option>
             </b-form-select>
           </b-input-group>
         </b-form-group>
         <div>
-          <b-form-group
-            label="Mostrar"
-            label-for="per-page-select"
-            label-cols-sm="6"
-            label-cols-md="4"
-            label-cols-lg="3"
-            label-align-sm="right"
-            label-size="sm"
-            class="mb-0"
-          >
-            <b-form-select
-              id="per-page-select"
-              v-model="perPage"
-              :options="pageOptions"
-              size="sm"
-            ></b-form-select>
+          <b-form-group label="Mostrar" label-for="per-page-select" label-cols-sm="6" label-cols-md="4"
+            label-cols-lg="3" label-align-sm="right" label-size="sm" class="mb-0">
+            <b-form-select id="per-page-select" v-model="perPage" :options="pageOptions" size="sm"></b-form-select>
           </b-form-group>
         </div>
       </div>
@@ -100,66 +67,50 @@
 
     <!--     table -->
     <section>
-      <div class="px-5 mt-2">
-        <b-table
-          :items="userList"
-          :fields="fields"
-          :current-page="currentPage"
-          :per-page="perPage"
-          :filter="filter"
-          :filter-included-fields="filterOn"
-          :sort-by.sync="sortBy"
-          :sort-desc.sync="sortDesc"
-          :sort-direction="sortDirection"
-          stacked="md"
-          show-empty
-          small
-          @filtered="onFiltered"
-        >
-          <template #cell(name)="row">
-            {{ row.item.name }} {{ row.item.surname }} {{ row.item.lastname }}
-          </template>
 
-          <template #cell(actions)="row">
-            <!--             <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
+
+
+      <div class="px-5 mt-2">
+        <b-skeleton-wrapper :loading="isLoading">
+          <template #loading>
+            <b-skeleton-table></b-skeleton-table>
+          </template>
+          <b-table :items="userList" :fields="fields" :current-page="currentPage" :per-page="perPage" :filter="filter"
+            :filter-included-fields="filterOn" :sort-by.sync="sortBy" :sort-desc.sync="sortDesc"
+            :sort-direction="sortDirection" stacked="md" show-empty small @filtered="onFiltered">
+            <template #cell(name)="row">
+              {{ row.item.name }} {{ row.item.surname }} {{ row.item.lastname }}
+            </template>
+
+            <template #cell(actions)="row">
+              <!--             <b-button size="sm" @click="info(row.item, row.index, $event.target)" class="mr-1">
               Info modal
             </b-button> -->
 
-            <!-- buttton delete -->
-            <b-button
-              size="sm"
-              @click="deleteUser(row.item.id)"
-              variant="danger"
-              class="mx-1"
-            >
-              <b-icon icon="trash"></b-icon>
-            </b-button>
+              <!-- buttton delete -->
+              <b-button size="sm" @click="deleteUser(row.item.id)" variant="danger" class="mx-1">
+                <b-icon icon="trash"></b-icon>
+              </b-button>
 
-            <!-- buttton edit -->
-            <b-button
-              size="sm"
-              :to="{ name: 'user-detail', query: { email: row.item } }"
-              variant="primary"
-            >
-              <b-icon icon="pencil"></b-icon>
-            </b-button>
-          </template>
-        </b-table>
+              <!-- buttton edit -->
+              <b-button size="sm" :to="{ name: 'user-detail', query: { email: row.item } }" variant="primary">
+                <b-icon icon="pencil"></b-icon>
+              </b-button>
+            </template>
+          </b-table>
+
+        </b-skeleton-wrapper>
+
       </div>
+
     </section>
 
     <!--     pagination -->
-    <section>
+    <section v-if="totalRows > perPage">
       <div class="overflow-auto px-5 mt-2">
         <div class="text-center">
-          <b-pagination
-            v-model="currentPage"
-            :total-rows="totalRows"
-            :per-page="perPage"
-            size="sm"
-            align="center"
-            class="my-0"
-          ></b-pagination>
+          <b-pagination v-model="currentPage" :total-rows="totalRows" :per-page="perPage" size="sm" align="center"
+            class="my-0"></b-pagination>
         </div>
       </div>
     </section>
@@ -219,6 +170,13 @@ export default Vue.extend({
   },
   mounted() {
     this.getUserList();
+    this.disabledInput();
+
+  },
+  watch: {
+    isLoading() {
+      this.disabledInput();
+    },
   },
   computed: {
     sortOptions() {
@@ -281,6 +239,20 @@ export default Vue.extend({
       } finally {
         this.isLoading = false;
       }
+    },
+    disabledInput() {
+      const section1 = this.$refs.section1;
+      const section2 = this.$refs.section2;
+
+      const inputs = [
+        ...section1.querySelectorAll("input"),
+        ...section2.querySelectorAll("input"),
+        ...section2.querySelectorAll("select"),
+      ];
+    
+      inputs.forEach((input) => {
+        input.disabled = this.isLoading;
+      });
     },
   },
 });

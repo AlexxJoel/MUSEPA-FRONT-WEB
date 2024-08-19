@@ -1,3 +1,5 @@
+import { jwtDecode } from 'jwt-decode';
+
 export const generateRandomPassword = (length = 12) => {
   const lowerCase = "abcdefghijklmnopqrstuvwxyz";
   const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -59,3 +61,41 @@ export const urlToBase64 = async (url) => {
     throw error;
   }
 };
+
+
+// getEmailFromToken 
+export const getEmailFromAuth = () => {
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.log('No token found in local storage');
+      return null;
+    }
+
+    const { email } = jwtDecode(token);
+    return email;
+  } catch (error) {
+    console.info('Error getting email from token:');
+    return null; 
+  }
+
+};
+
+// getIdFromAuth
+export const getIdFromAuth = () => localStorage.getItem('visitorId') || null;
+
+export const getRecordFavoritesFromLocalStorage = () => {
+  try {
+    const favorites = localStorage.getItem('favorites');
+    if (!favorites) {
+      console.log('No favorites found in local storage');
+      return [];
+    }
+
+    return favorites;
+  } catch (error) {
+    console.info('Error getting favorites from local storage:');
+    return [];
+  }
+}
+

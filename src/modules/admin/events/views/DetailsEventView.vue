@@ -153,7 +153,7 @@
 <script>
 import Vue from "vue";
 import eventsController from "../services/controller/events.controller";
-import { formatDate } from '../../../../kernel/moment';
+import { formatDate, formatDateBack } from '../../../../kernel/moment';
 import vue2Dropzone from 'vue2-dropzone'
 import 'vue2-dropzone/dist/vue2Dropzone.min.css'
 import { useVuelidate } from "@vuelidate/core";
@@ -259,6 +259,9 @@ export default Vue.extend({
       }
     },
     async updateEvent() {
+
+
+      console.log("updateEvent");
       this.v$.event.$touch();
       if (this.v$.event.$error) {
         SweetAlertCustom.invalidForm();
@@ -280,18 +283,22 @@ export default Vue.extend({
           id: this.$route.params.id,
           ...this.event,
           pictures: imagesBase64,
-          start_date: this.event.startDate,
-          end_date: this.event.endDate,
+          startDate: formatDateBack(this.event.startDate),
+          endDate: formatDateBack(this.event.endDate),
         });
+
+
       } catch (error) {
         console.log(error);
       } finally {
         this.isLoading = false;
       }
 
-      if (response && response.message === 'event updated successfully') {
+      if (response && response.message === 'Event updated successfully') {
         await SweetAlertCustom.successMessage();
-        await this.$router.replace({ name: "event-list" });
+        await this.$router.push({ name: "events-list" });
+      }else{
+        SweetAlertCustom.errorMessage();
       }
 
     },

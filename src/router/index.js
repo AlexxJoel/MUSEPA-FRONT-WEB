@@ -4,6 +4,7 @@ import {jwtDecode} from "jwt-decode";
 import publicRoute from "./public-router";
 import { ERoles } from '../kernel/types';
 import adminRouter from './admin-router';
+import visitorRouter from './visitor-router';
 
 Vue.use(VueRouter);
 const DEFAULT_TITLE = "MUSEPA";
@@ -51,6 +52,7 @@ const router = new VueRouter({
           },
         },
         ...publicRoute,
+        ...visitorRouter,
         ...adminRouter,
       ]
     },
@@ -69,34 +71,51 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   if (localStorage.token) {
     const rl = jwtDecode(localStorage.token);
+
     const roles = rl["cognito:groups"];
     const role = roles[0];
-    if (
-      (role === ERoles.MANAGER &&
-        to.matched.some((route) => route.path === "/musepa")) ||
-      (role === ERoles.MANAGER &&
-        to.matched.some((route) => route.path === "/landing")) ||
-      (role === ERoles.MANAGER &&
-        to.matched.some((route) => route.path === "/login"))
-    )
+
+    console.log(role);
+
+    if(!role) {
+      next({ name: "login" });
+    }
+
+    
+
+    const redirectAdminComponents = [
+      "login",
+      "create-account",
+      "change-temporary-password",
+      "public-musepa",  
+    ];
+
+    const redirectVisitorComponents = [
+      "login",
+      "create-account",
+      "change-temporary-password",
+      "admin",
+    ];
+
+    const listToNames = to.matched.map((route) => route.name);
+
+    if (role === ERoles.MANAGER && redirectAdminComponents.find((route) => listToNames.includes(route))) {
       next({ name: "admin" });
-    if (
-      (role === ERoles.VISITOR &&
-        to.matched.some((route) => route.path === "/musepa")) ||
-      (role === ERoles.VISITOR &&
-        to.matched.some((route) => route.path === "/landing")) ||
-      (role === ERoles.VISITOR &&
-        to.matched.some((route) => route.path === "/login"))
-    )
+    }
+
+
+    if (role === ERoles.VISITOR && redirectVisitorComponents.find((route) => listToNames.includes(route))) {
       next({ name: "public-musepa" });
+    }
+
+
     if (role && to.matched.some((route) => route.meta.requireAuth)) {
       const allowedRoles = to.meta.role;
-      console.log(allowedRoles);
       if (allowedRoles.includes(role)) {
         next();
         return;
       }
-      next("/login");
+      next({ name: "login" });
       return;
     }
     next();
@@ -106,7 +125,7 @@ router.beforeEach((to, from, next) => {
     next();
     return;
   }
-  next("/login");
+  next({ name: "login" });
 });
 
 router.afterEach((to, from) => {

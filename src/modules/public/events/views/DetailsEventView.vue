@@ -2,7 +2,7 @@
   <div>
 
 
-      <loading-custom :isLoading="isLoading" :fullPage="true" />
+    <loading-custom :isLoading="isLoading.saveFavorite" :fullPage="true" />
 
 
 
@@ -10,96 +10,169 @@
       <b-col cols="6">
         <!-- Card -->
 
-        <div class="p-4">
+        <div class="p-4" style="height: fit-content">
           <div class="d-flex justify-content-between mb-2">
             <h2>Información del evento</h2>
           </div>
 
-          <b-form ref="form">
+
+          <b-skeleton-wrapper :loading="isLoading.getDetailsEvent">
+            <template #loading>
+              <b-row class="pb-4">
+                <b-col cols="6">
+                  <p class="font-italic b-1" size="sm">Nombre del evento</p>
+                  <b-skeleton height="30px"></b-skeleton>
+                </b-col>
+                <b-col cols="6">
+                  <p class="font-italic b-1" size="sm">Categoria</p>
+                  <b-skeleton height="30px"></b-skeleton>
+                </b-col>
+              </b-row>
+
+              <b-row class="pb-3">
+                <b-col cols="6">
+                  <p class="font-italic b-1" size="sm">Fecha de incio</p>
+                  <b-skeleton height="30px"></b-skeleton>
+                </b-col>
+                <b-col cols="6">
+                  <p class="font-italic b-1" size="sm">Fecha de fin</p>
+                  <b-skeleton height="30px"></b-skeleton>
+                </b-col>
+              </b-row>
+
+              <b-row class="pb-3">
+                <b-col cols="12">
+                  <p class="font-italic b-1" size="sm">Descripción</p>
+                  <b-skeleton height="30px"></b-skeleton>
+                </b-col>
+              </b-row>
 
 
-            <b-row class="pb-3">
-              <b-col cols="6">
-                <b-form-group label="Nombre del evento" label-for="name" label-class="font-italic" label-size="sm">
-                  <p class="font-weight-bold h5">{{ event.name }}</p>
-                </b-form-group>
-              </b-col>
-              <b-col cols="6">
-                <b-form-group label="Categoria" label-for="category" label-class="font-italic" label-size="sm">
-                  <p class="font-weight-bold h5">
-                    {{
-                      event.category
-                    }}
-                  </p>
-                </b-form-group>
-              </b-col>
-            </b-row>
+              <b-skeleton type="button" width="100%" height="50px"></b-skeleton>
+            </template>
 
-            <b-row>
-              <b-col cols="6">
-                <b-form-group label="Fecha de incio" label-for="startDate" ref="startDate" label-class="font-italic"
-                  label-size="sm">
-                  <p class="font-weight-bold h5">
-                    {{ (event.startDate) }}
-                  </p>
-                </b-form-group>
-              </b-col>
-              <b-col cols="6">
-                <b-form-group label="Fecha de fin" label-for="endDate" ref="endDate" label-class="font-italic"
-                  label-size="sm">
-                  <p class="font-weight-bold h5">
-                    {{ (event.endDate) }}
-                  </p>
-                </b-form-group>
-              </b-col>
-            </b-row>
+            <b-form ref="form">
+              <b-row class="pb-3">
+                <b-col cols="6">
+                  <b-form-group label="Nombre del evento" label-for="name" label-class="font-italic" label-size="sm">
+                    <p class="font-weight-bold h5">{{ event.name }}</p>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="6">
+                  <b-form-group label="Categoria" label-for="category" label-class="font-italic" label-size="sm">
+                    <p class="font-weight-bold h5">
+                      {{
+                        event.category
+                      }}
+                    </p>
+                  </b-form-group>
+                </b-col>
+              </b-row>
 
-            <b-row class="pb-3">
-              <b-col cols="12">
-                <b-form-group label="Descripción" label-for="description" label-class="font-italic" label-size="sm">
-                  <p class="font-weight-bold h5">
-                    {{ event.description }}
-                  </p>
-                </b-form-group>
-              </b-col>
-            </b-row>
+              <b-row>
+                <b-col cols="6">
+                  <b-form-group label="Fecha de incio" label-for="startDate" ref="startDate" label-class="font-italic"
+                    label-size="sm">
+                    <p class="font-weight-bold h5">
+                      {{ (event.startDate) }}
+                    </p>
+                  </b-form-group>
+                </b-col>
+                <b-col cols="6">
+                  <b-form-group label="Fecha de fin" label-for="endDate" ref="endDate" label-class="font-italic"
+                    label-size="sm">
+                    <p class="font-weight-bold h5">
+                      {{ (event.endDate) }}
+                    </p>
+                  </b-form-group>
+                </b-col>
+              </b-row>
 
-            <!-- <div>
-              <b-button variant="outline-secondary" block>
-                Guardar evento
-              </b-button>
-            </div> -->
-          </b-form>
+              <b-row class="pb-3">
+                <b-col cols="12">
+                  <b-form-group label="Descripción" label-for="description" label-class="font-italic" label-size="sm">
+                    <p class="font-weight-bold h5">
+                      {{ event.description }}
+                    </p>
+                  </b-form-group>
+                </b-col>
+              </b-row>
+
+              <div>
+                <div v-if="isSaved" class="bg-danger text-white p-2 rounded mb-3 text-center">
+                  <b-icon icon="heart-fill" class="mr-2"></b-icon>
+                  Marcado como favorito
+                </div>
+                <b-button v-else @click="savedRecord" variant="outline-secondary" block>
+                  <b-icon icon="heart" class="mr-2"></b-icon>
+                  Marcar como favorito
+                </b-button>
+              </div>
+            </b-form>
+
+          </b-skeleton-wrapper>
         </div>
       </b-col>
       <b-col cols="6">
 
 
-        <div style="height: 50vh;" v-if="isLoading">
-          <loading-custom :isLoading="isLoading" :fullPage="false" :message="'Cargando imagenes...'" />
-        </div>
+        <SectionDivider>
+          <template v-slot:title> Imagenes </template>
+        </SectionDivider>
 
+        <section>
 
-        <section v-else>
-          <SectionDivider>
-            <template v-slot:title> Imagenes </template>
-          </SectionDivider>
+          <b-skeleton-wrapper :loading="isLoading.getDetailsEvent">
+            <template #loading>
 
-          <section class="p-4">
-            <VueSlickCarousel ref="c1" :asNavFor="$refs.c2" v-bind="settingsCarouselMain">
-              <div v-for="(picture, index) in event.pictures" :key="index"
-                class="d-flex justify-content-center align-items-center" style="width: 50%;">
-                <img :src="picture" alt="Imangen del evento" height="400" style="object-fit: cover" />
+              <div class="px-4 pb-3">
+                <b-row>
+                  <b-col cols="12">
+                    <b-skeleton-img></b-skeleton-img>
+                  </b-col>
+                </b-row>
               </div>
-            </VueSlickCarousel>
-          </section>
 
-          <section>
-            <VueSlickCarousel ref="c2" :asNavFor="$refs.c1" v-bind="settingsCarousel">
-              <div v-for="(picture, index) in event.pictures" :key="index"><img :src="picture" height="100" /></div>
-            </VueSlickCarousel>
-          </section>
+              <div class="px-4">
+                <b-row>
+                  <b-col v-for="index in 3" :key="index" cols="4">
+                    <b-skeleton-img></b-skeleton-img>
+                  </b-col>
+                </b-row>
+              </div>
+            </template>
+
+            <b-card no-body v-if="event.pictures.length === 0" style="height: 50vh">
+              <div class="d-flex  align-items-center text-center" style="height: 100%; width: 100%;">
+                <h3>Upps! Al parecer no se encontraron imagenes disponibles</h3>
+              </div>
+            </b-card>
+
+            <div v-else>
+              <section class="px-4 pb-3">
+                <VueSlickCarousel ref="c1" :asNavFor="$refs.c2" :focusOnSelect="true">
+                  <div v-for="(picture, index) in event.pictures" :key="index"
+                    class="d-flex justify-content-center align-items-center" style="width: 100%;">
+                    <img :src="picture" alt="Imagen del evento" style="object-fit: contain; width: 100%;"
+                      height="300" />
+                  </div>
+                </VueSlickCarousel>
+              </section>
+
+              <section>
+                <VueSlickCarousel ref="c2" :asNavFor="$refs.c1" :slidesToShow="2" :focusOnSelect="true">
+                  <div v-for="(picture, index) in event.pictures" :key="index">
+                    <img :src="picture" alt="Imagen en miniatura" height="100"
+                      style="width: 100%; object-fit: cover;" />
+                  </div>
+                </VueSlickCarousel>
+              </section>
+            </div>
+
+          </b-skeleton-wrapper>
+
         </section>
+
       </b-col>
     </b-row>
   </div>
@@ -114,6 +187,9 @@ import VueSlickCarousel from "vue-slick-carousel";
 import "vue-slick-carousel/dist/vue-slick-carousel.css";
 // optional style for arrows & dots
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
+import { getEmailFromAuth, getIdFromAuth, getRecordFavoritesFromLocalStorage } from '../../../../kernel/fucntions';
+import SweetAlertCustom from '../../../../kernel/SweetAlertCustom';
+import profileController from '../../../visitor/profile/services/controller/profile.controller';
 
 export default Vue.extend({
   name: "SaveEventView",
@@ -125,22 +201,12 @@ export default Vue.extend({
   },
   data() {
     return {
+      isSaved: false,
       // status component
       isEditing: true,
       isLoading: {
-        save: false,
-        images: true,
-      },
-
-
-      // carousel
-      settingsCarouselMain: {
-        focusOnSelect: true,
-      },
-      settingsCarousel: {
-        dots: true,
-        focusOnSelect: true,
-        slidesToShow: 2,
+        getDetailsEvent: false,
+        saveFavorite: false,
       },
       listEvents: [],
       slide: 0,
@@ -169,15 +235,14 @@ export default Vue.extend({
     };
   },
   mounted() {
-    this.getDeatilEvent();
-
+    this.getDetailsEvent();
     this.addFile();
   },
   watch: {},
   methods: {
-    async getDeatilEvent() {
+    async getDetailsEvent() {
       try {
-        this.isLoading = true;
+        this.isLoading.getDetailsEvent = true;
         this.event.id = this.$route.params.id;
         const response = await eventsController.findEventById(this.event.id);
         this.event = {
@@ -185,10 +250,48 @@ export default Vue.extend({
           startDate: formatDate(response.start_date),
           endDate: formatDate(response.end_date),
         }
+
+        if (getRecordFavoritesFromLocalStorage().includes(this.event.id)) {
+          this.isSaved = true;
+        }
+
       } catch (error) {
         console.error(error);
       } finally {
-        this.isLoading = false;
+        this.isLoading.getDetailsEvent = false;
+      }
+    },
+    async savedRecord() {
+      try {
+
+        if (getIdFromAuth() === null) {
+          SweetAlertCustom.infoMessage('Oops! No has iniciado sesión', 'Al parecer te ha gustado el evento, pero debes iniciar sesión para poder guardarlo en tus favoritos', 4000);
+          return;
+        }
+
+        this.isLoading.saveFavorite = true;
+
+        const favorites = getRecordFavoritesFromLocalStorage().split(',') || [];
+        favorites.push(this.event.id);
+        localStorage.setItem('favorites', favorites);
+
+        const response = await profileController.updateVisitorFavorites({
+          id: getIdFromAuth(),
+          favorites: favorites,
+        });
+
+        if (response && response.message === 'Favorites updated successfully') {
+          this.isSaved = true;
+          SweetAlertCustom.successMessage('¡Listo!', 'El evento ha sido guardado en tus favoritos');
+        } else {
+          SweetAlertCustom.errorMessage('¡Ups!', 'Algo salió mal, por favor intenta de nuevo');
+        }
+
+
+      } catch (error) {
+        console.error(error);
+      } finally {
+        this.isLoading.saveFavorite = false;
       }
     },
     validateFile(file) {
@@ -214,7 +317,7 @@ export default Vue.extend({
 });
 </script>
 
-<style>
+<style scoped>
 .wallpaper {
   position: fixed;
   top: 0;
@@ -225,15 +328,8 @@ export default Vue.extend({
   opacity: 0.5;
 }
 
-h1 {
-  color: white;
-  text-align: center;
-  margin-top: 10rem;
-  font-size: 3rem;
-}
-
 .card {
-  background-color: #f2f2f2;
+  background-color: #00000003;
 }
 
 .drag-area {

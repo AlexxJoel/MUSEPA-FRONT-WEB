@@ -77,7 +77,9 @@
             <p class="ultima-description">
               Para crear una cuenta debes de dar clic en el botón siguiente:
             </p>
-            <button class="create-account">Crear cuenta</button>
+            <b-button :to="{ name: 'create-account' }" 
+              size="lg" class="create-account"
+            >Crear cuenta</b-button>
           </div>
           <div class="ultima-image-container">
             <img src="@/assets/image/escultura.png" alt="ultima Image 2" class="ultima-image" />
@@ -87,7 +89,7 @@
     </div>
   </template>
   
-  <style>
+  <style scoped>
   .landing-page {
     font-family: Arial, sans-serif;
     color: #333;
@@ -254,7 +256,7 @@
     background-attachment: fixed;
     background-size: cover;
     background-position: center;
-    z-index: -1;
+    z-index: 1;
   }
   
   .parallax img {

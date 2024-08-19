@@ -4,6 +4,16 @@
     <div class="vh-100">
       <b-form @submit.prevent="sigin" class="row w-100 h-100">
         <div class="col-7 p-0 h-100">
+
+          <!-- Arrow to back -->
+          <div
+            variant="link"
+            class="position-absolute mx-4 mt-2 link-landing"
+            @click="$router.replace({ name: 'landing' })"
+          >
+
+            <b-icon-arrow-left-circle font-scale="2"></b-icon-arrow-left-circle>
+          </div>
           <b-img style="object-fit: cover; height: 100%; width: 100%" src="https://musepa-bucket-v2.s3.us-west-1.amazonaws.com/assets/museum-mac-2.jpg" fluid
             alt="Museum"></b-img>
         </div>
@@ -51,11 +61,12 @@
           </div>
           <div class="w-100 d-flex justify-content-center mt-3">
             <b-col cols="12" sm="6">
-              <b-button block class="custom-button" type="submit" :disabled="v$.signin.$invalid" variant="primary">
+              <b-button block class="custom-button" type="submit" :disabled="v$.signin.$invalid" variant="">
                 Iniciar sesión
               </b-button>
               <div class="text-center mt-2 mb-0">
-                <b-link :to="{ name: 'create-account' }">Crear cuenta</b-link>
+                <b-link  class="text-muted"
+                 :to="{ name: 'create-account' }">Crear cuenta</b-link>
               </div>
             </b-col>
           </div>
@@ -112,7 +123,6 @@ export default Vue.extend({
             }
             console.log("response para error", response.status);
             if (!response.status) {
-              console.log("entro", response);
               localStorage.setItem("token", response.id_token);
               localStorage.setItem("refreshToken", response.refresh_token);
               localStorage.setItem("accessToken", response.access_token);
@@ -123,6 +133,8 @@ export default Vue.extend({
         }
       } catch (error) {
         if (error.message === 'Access denied. Please, change the temporary password.') {
+          localStorage.setItem("username", this.signin.username);
+          localStorage.setItem("tempPassword", this.signin.password);
           this.$router.push({ name: "change-temporary-password" });
         }
       } finally {
@@ -137,7 +149,7 @@ export default Vue.extend({
           await this.$router.replace({ name: "admin" });
           return true;
         } else if (decodedToken["cognito:groups"][0] === ERoles.VISITOR) {
-          await this.$router.replace("/visitor");
+          await this.$router.replace({ name: "visitor-profile" });
           return true;
         }
       }
@@ -166,4 +178,17 @@ export default Vue.extend({
 .img-fluid {
   object-fit: cover;
 }
+.link-landing {
+  top: 1rem;
+  left: 1rem;
+  cursor: pointer;
+  z-index: 1;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.3);
+  }
+}
+
+
 </style>

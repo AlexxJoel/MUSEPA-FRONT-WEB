@@ -34,6 +34,8 @@ export default {
     }
   },
   async updateEvent(event) {
+
+    console.log(event, "event");
     try {
       const data = await ApiEvents.updateEvent(event);
       return data;

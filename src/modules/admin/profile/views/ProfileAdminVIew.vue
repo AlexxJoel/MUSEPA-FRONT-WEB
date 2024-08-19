@@ -1,17 +1,13 @@
 <template>
   <div>
-    <loading-custom :isLoading="isLoading" />
 
     <section>
-      <div
-        style="
+      <div style="
           background-image: url('https://images.unsplash.com/photo-1632749695402-660ab0b1cbb8?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D');
           height: 25vh;
           background-size: cover;
           background-position: center;
-        "
-        class="d-flex justify-content-center align-items-center"
-      >
+        " class="d-flex justify-content-center align-items-center">
         <!-- center text in the middle of the screen -->
         <h1 class="p-0 m-0 font-weight-bold text-white">Perfil</h1>
       </div>
@@ -20,121 +16,125 @@
     <div class="px-5 mt-2">
       <h1 class="my-3">
         <b-icon icon="building" class="mr-2"></b-icon>
-        {{ museum.name }}
+        {{ museum.name ? museum.name : 'Museo' }}
       </h1>
 
       <b-card class="mx-5">
         <b-tabs fill>
           <b-tab title="Datos generales" active>
-            <div>
-              <p class="font-italic mt-3 m-0">Lugar:</p>
-              <p class="p-0 font-weight-bold">
-                {{ museum.location }}
-              </p>
 
-              <p class="font-italic mt-3 m-0">Número telefónico:</p>
-              <p class="p-0 font-weight-bold">
-                {{ museum.contact_number }}
-              </p>
+            <b-skeleton-wrapper :loading="isLoading">
+              <template #loading>
+                <div>
+                  <p class="font-italic mt-3 m-0">Lugar:</p>
+                  <b-skeleton height="30px" width="50%" class="rounded-0"></b-skeleton>
 
-              <p class="font-italic mt-3 m-0">Correo electrónico:</p>
-              <p class="p-0 font-weight-bold">
-                {{ museum.contact_email }}
-              </p>
-            </div>
+                  <p class="font-italic mt-3 m-0">Número telefónico:</p>
+                  <b-skeleton height="30px" width="50%" class="rounded-0"></b-skeleton>
+
+                  <p class="font-italic mt-3 m-0">Correo electrónico:</p>
+                  <b-skeleton height="30px" width="50%" class="rounded-0"></b-skeleton>
+
+                </div>
+              </template>
+
+              <div>
+                <p class="font-italic mt-3 m-0">Lugar:</p>
+                <p class="p-0 h4 font-weight-bold">
+                  {{ museum.location }}
+                </p>
+
+                <p class="font-italic mt-3 m-0">Número telefónico:</p>
+                <p class="p-0 h4 font-weight-bold">
+                  {{ museum.contactNumber }}
+                </p>
+
+                <p class="font-italic mt-3 m-0">Correo electrónico:</p>
+                <p class="p-0 h4 font-weight-bold">
+                  {{ museum.contactEmail }}
+                </p>
+              </div>
+            </b-skeleton-wrapper>
           </b-tab>
-          <b-tab title="Tarifas">
+          <b-tab title="Tarifas"  :disabled="isLoading">
             <div>
-              <b-table
-                striped
-                hover
-                :items="
-                  Object.entries(this.museum.tariffs).map(([name, price]) => ({
-                    name,
-                    price,
-                  }))
-                "
-                :fields="fieldsTariffs"
-              >
+              <b-table striped hover :items="Object.entries(this.museum.tariffs).map(([name, price]) => ({
+                name,
+                price,
+              }))
+                " :fields="fieldsTariffs">
                 <template v-slot:cell(price)="data">
                   $ {{ data.item.price }}
                 </template>
               </b-table>
             </div>
           </b-tab>
-          <b-tab title="Horarios">
+          <b-tab title="Horarios" :disabled="isLoading">
             <div>
-              <b-table
-                striped
-                hover
-                :items="
-                  Object.entries(this.museum.schedules).map(
-                    ([day, schedule]) => ({
-                      day,
-                      schedule,
-                    })
-                  )
-                "
-                :fields="fieldsSchedules"
-              >
+              <b-table striped hover :items="Object.entries(this.museum.schedules).map(
+                ([day, schedule]) => ({
+                  day,
+                  schedule,
+                })
+              )
+                " :fields="fieldsSchedules">
                 <template v-slot:cell(horario)="data">
                   {{ data.item.schedule }}
                 </template>
               </b-table>
             </div>
           </b-tab>
-          <b-tab title="Administrador">
+          <b-tab title="Administrador" :disabled="isLoading">
             <b-row>
               <b-col sm="12" md="6">
                 <div>
                   <p class="font-italic mt-3 m-0">Nombre:</p>
-                  <p class="p-0 font-weight-bold">
+                  <p class="p-0 font-weight-bold h4">
                     {{ `${admin.name} ${admin.lastname} ${admin.surname}` }}
                   </p>
 
                   <p class="font-italic mt-3 m-0">Correo electrónico:</p>
-                  <p class="p-0 font-weight-bold">
-                    {{ admin.email }}
+                  <p class="p-0 font-weight-bold h4">
+                    {{ admin.user.email }}
                   </p>
 
                   <p class="font-italic mt-3 m-0">Número telefónico:</p>
-                  <p class="p-0 font-weight-bold">
-                    {{ admin.phone_number }}
+                  <p class="p-0 font-weight-bold h4">
+                    {{ admin.phoneNumber }}
                   </p>
-                </div></b-col
-              >
+                </div>
+              </b-col>
               <b-col sm="12" md="6">
                 <div>
                   <p class="font-italic mt-3 m-0">Dirección:</p>
-                  <p class="p-0 font-weight-bold">
+                  <p class="p-0 font-weight-bold h4">
                     {{ admin.address }}
                   </p>
 
                   <p class="font-italic mt-3 m-0">Fecha de nacimiento:</p>
-                  <p class="p-0 font-weight-bold">
+                  <p class="p-0 font-weight-bold h4">
                     {{ admin.birthdate }}
                   </p>
 
                   <p class="font-italic mt-3 m-0">Nombre de usuario:</p>
-                  <p class="p-0 font-weight-bold">
-                    {{ admin.username }}
+                  <p class="p-0 font-weight-bold h4">
+                    {{ admin.user.username }}
                   </p>
-                </div></b-col
-              >
+                </div>
+              </b-col>
             </b-row>
           </b-tab>
         </b-tabs>
 
         <div class="mt-4 d-flex justify-content-end">
-          <b-button
-            variant="primary"
+          <!--     <b-button
+            variant=""
             class="mr-2"
             @click="$bvModal.show('modal-change-pwd')"
             >Cambiar contraseña</b-button
-          >
-          <b-button variant="primary" :to="{ name: 'admin-edit-profile' }">
-            Actualizar información</b-button
-          >
+          > -->
+          <b-button variant="" :to="{ name: 'admin-edit-profile' }">
+            Actualizar información</b-button>
         </div>
       </b-card>
     </div>
@@ -143,30 +143,15 @@
     <b-modal id="modal-change-pwd" title="Cambiar contraseña" hide-footer>
       <b-form @submit="changePwd">
         <b-form-group label="Contraseña actual:" label-for="currentPwd">
-          <b-form-input
-            id="currentPwd"
-            v-model="changePwd.currentPwd"
-            type="password"
-            required
-          ></b-form-input>
+          <b-form-input id="currentPwd" v-model="changePwd.currentPwd" type="password" required></b-form-input>
         </b-form-group>
 
         <b-form-group label="Nueva contraseña:" label-for="newPwd">
-          <b-form-input
-            id="newPwd"
-            v-model="changePwd.newPwd"
-            type="password"
-            required
-          ></b-form-input>
+          <b-form-input id="newPwd" v-model="changePwd.newPwd" type="password" required></b-form-input>
         </b-form-group>
 
         <b-form-group label="Confirmar contraseña:" label-for="confirmPwd">
-          <b-form-input
-            id="confirmPwd"
-            v-model="changePwd.confirmPwd"
-            type="password"
-            required
-          ></b-form-input>
+          <b-form-input id="confirmPwd" v-model="changePwd.confirmPwd" type="password" required></b-form-input>
         </b-form-group>
 
         <b-button type="submit" variant="" block>Cambiar contraseña</b-button>
@@ -177,8 +162,8 @@
 
 <script>
 import Vue from "vue";
-import { jwtDecode } from "jwt-decode";
 import profileController from "../services/controller/profile.controller";
+import { getEmailFromAuth } from '../../../../kernel/fucntions';
 
 export default Vue.extend({
   name: "MuseoInfo",
@@ -197,93 +182,70 @@ export default Vue.extend({
         { key: "schedule", label: "Horario" },
       ],
       museum: {
-        name: "Museo de Arte Moderno",
-        address:
-          "Paseo de la Reforma 51, Bosque de Chapultepec, 11580 Ciudad de México, CDMX",
-        phone: "+52 55 8647 5470",
-        email: "musepa@example.com",
-        tariffs: [
-          { name: "General", price: 50 },
-          { name: "Estudiantes", price: 25 },
-          { name: "Maestros", price: 25 },
-          { name: "INAPAM", price: 25 },
-        ],
-        schedules: [
-          { day: "Lunes", open: "10:00", close: "18:00" },
-          { day: "Martes", open: "10:00", close: "18:00" },
-          { day: "Miércoles", open: "10:00", close: "18:00" },
-          { day: "Jueves", open: "10:00", close: "18:00" },
-          { day: "Viernes", open: "10:00", close: "18:00" },
-          { day: "Sábado", open: "10:00", close: "18:00" },
-          { day: "Domingo", open: "10:00", close: "18:00" },
-        ],
+        id: 0,
+        name: "",
+        location: '',
+        contactEmail: '',
+        contactNumber: '',
+        tariffs: {
+          Adulto: 0,
+          Estudiante: 0,
+          Niño: 0,
+        },
+        schedules: {},
       },
       admin: {
-        address: "",
-        birthdate: "",
-        id: "",
-        id_museum: "",
+        id: 0,
         name: "",
         lastname: "",
         surname: "",
-        phone_number: "",
-        email: "",
-        password: "",
-        username: "",
-      },
-      changePwd: {
-        currentPwd: "",
-        newPwd: "",
-        confirmPwd: "",
+        phoneNumber: "",
+        address: "",
+        birthdate: "",
+        idUser: 0,
+        idMuseum: 1,
+        user: {
+          id: 0,
+          email: "",
+          password: "",
+          username: "",
+          idRole: 0,
+        },
       },
       isLoading: false,
     };
   },
   mounted() {
     this.findManagerByEmail();
+    this.findMuseumById();
   },
   methods: {
     async findManagerByEmail() {
       try {
         this.isLoading = true;
-        const decodedToken = jwtDecode(localStorage.getItem("token"));
         const response = await profileController.findManagerByEmail({
-          email: decodedToken.email,
+          email: getEmailFromAuth()
         });
-        (this.admin = {
-          address: response.address,
-          birthdate: response.birthdate,
-          id: response.id,
-          id_museum: response.id_museum,
-          name: response.name,
-          lastname: response.lastname,
-          surname: response.surname,
-          phone_number: response.phone_number,
-          email: response.user.email,
-          password: response.user.password,
-          username: response.user.username,
-        }),
-        await this.findMuseumById(response.id_museum);
+        this.admin = response;
       } catch (error) {
         console.log(error);
       } finally {
         this.isLoading = false;
       }
     },
-    async findMuseumById(idMuseum) {
+    async findMuseumById() {
       try {
         this.isLoading = true;
-        const response = await profileController.findMuseumById(idMuseum);
-        this.museum = {
-          ...response,
-          tariffs: JSON.parse(response.tariffs),
-          schedules: JSON.parse(response.schedules),
-        };
+        const response = await profileController.findMuseumById(1);
+        this.museum = response;
       } catch (error) {
         console.log(error);
       } finally {
         this.isLoading = false;
       }
+    },
+    changePwd() {
+      console.log(this.changePwd);
     },
   },
 });
