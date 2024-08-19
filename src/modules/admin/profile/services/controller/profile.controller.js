@@ -9,6 +9,14 @@ export default {
       return error;
     }
   },
+  async updateManager(manager) {
+    try {
+      const data = await ProfileApi.updateManager(manager);
+      return data;
+    } catch (error) {
+      return error;
+    }
+  },
   async findMuseumById(museumId) {
     try {
       const data = await ProfileApi.findMuseumById(museumId);
@@ -17,4 +25,12 @@ export default {
       return error;
     }
   },
+  async updateMuseum(museum) {
+    try {
+      const data = await ProfileApi.updateMuseum(museum);
+      return data;
+    } catch (error) {
+      return error;
+    }
+  }
 };

@@ -156,6 +156,13 @@ export default {
         this.isLoading.general = true;
         const response = await profileController.findVisitorByEmail(getEmailFromAuth());
         this.visitor = response;
+        if (this.visitor.favorites.length > 0) {
+          localStorage.setItem("favorites", this.visitor.favorites);
+        }
+
+        if(this.visitor.id){
+          localStorage.setItem("visitorId", this.visitor.id);
+        }
       } catch (error) {
         console.log(error);
       } finally {

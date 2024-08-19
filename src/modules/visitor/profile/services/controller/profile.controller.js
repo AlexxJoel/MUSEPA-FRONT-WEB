@@ -9,4 +9,13 @@ export default {
       return error;
     }
   },
+
+  async updateVisitorFavorites(visitor) {
+    try {
+      const data = await ProfileApi.updateVisitorFavorites(visitor);
+      return data;
+    } catch (error) {
+      return error;
+    }
+  },
 };

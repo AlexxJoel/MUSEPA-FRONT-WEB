@@ -52,11 +52,17 @@
               </b-col>
             </b-row>
 
-           <!--  <div>
-              <b-button variant="outline-secondary" block>
-                Guardar obra
-              </b-button>
-            </div> -->
+            <div>
+                <div v-if="isSaved" class="bg-danger text-white p-2 rounded mb-3 text-center">
+                  <b-icon icon="heart-fill" class="mr-2"></b-icon>
+                  Marcado como favorito
+                </div>
+                <b-button v-else @click="savedRecord" variant="outline-secondary" block>
+                  <b-icon icon="heart" class="mr-2"></b-icon>
+                  Marcar como favorito
+                </b-button>
+              </div>
+
           </b-form>
         </div>
       </b-col>
@@ -109,6 +115,9 @@ import VueSlickCarousel from "vue-slick-carousel";
 import "vue-slick-carousel/dist/vue-slick-carousel.css";
 // optional style for arrows & dots
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
+import { getIdFromAuth, getRecordFavoritesFromLocalStorage } from '../../../../kernel/fucntions';
+import profileController from '../../../visitor/profile/services/controller/profile.controller';
+import SweetAlertCustom from '../../../../kernel/SweetAlertCustom';
 
 export default Vue.extend({
   name: "SaveEventView",
@@ -122,6 +131,7 @@ export default Vue.extend({
     return {
       // status component
       isEditing: true,
+      isSaved: false,
 
       // carousel
       settingsCarousel: {
@@ -164,17 +174,6 @@ export default Vue.extend({
   },
   methods: {
     formatDate,
-    async getListEvents() {
-      try {
-        this.isLoading = true;
-        const response = await eventsController.getEvents();
-        this.listEvents = response;
-      } catch (error) {
-        console.error(error);
-      } finally {
-        this.isLoading = false;
-      }
-    },
     async findWorkById() {
       try {
         this.isLoading = true;
@@ -186,8 +185,46 @@ export default Vue.extend({
           ...response,
           creation_date: formatDate(response.creation_date),
         };
+
+        if (getRecordFavoritesFromLocalStorage().includes(this.work.id)) {
+          this.isSaved = true;
+        }
+
       } catch (error) {
         console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async savedRecord() {
+      try {
+
+        if (getIdFromAuth() === null) {
+          SweetAlertCustom.infoMessage('Oops! No has iniciado sesión', 'Al parecer te ha gustado la obra, pero debes iniciar sesión para poder guardarlo en tus favoritos', 4000);
+          return;
+        }
+
+        this.isLoading = true;
+
+        const favorites = getRecordFavoritesFromLocalStorage().split(',') || [];
+        favorites.push(this.work.id);
+        localStorage.setItem('favorites', favorites);
+
+        const response = await profileController  .updateVisitorFavorites({
+          id: getIdFromAuth(),
+          favorites: favorites,
+        });
+
+        if (response && response.message === 'Favorites updated successfully') {
+          this.isSaved = true;
+          SweetAlertCustom.successMessage('¡Listo!', 'La obra ha sido guardado en tus favoritos');
+        } else {
+          SweetAlertCustom.errorMessage('¡Ups!', 'Algo salió mal, por favor intenta de nuevo');
+        }
+
+
+      } catch (error) {
+        console.error(error);
       } finally {
         this.isLoading = false;
       }
@@ -196,7 +233,7 @@ export default Vue.extend({
 });
 </script>
 
-<style>
+<style scoped>
 .wallpaper {
   position: fixed;
   top: 0;

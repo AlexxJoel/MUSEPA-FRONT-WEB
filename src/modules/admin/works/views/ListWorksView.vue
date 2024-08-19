@@ -41,74 +41,96 @@
 
     <section>
 
-      <div style="height: 50vh;"  v-if="isLoading">
-        <loading-custom :isLoading="isLoading" />
-      </div>
-      <!-- Cards with image left and info right -->
-      <div class="px-5 mt-2" v-else>
-        <b-row v-if="filteredWorks.length > 0">
-          <b-col cols="12" md="4" v-for="work in paginatedWorks" :key="work.id" class="mb-4">
-            <b-card no-body class="overflow-hidden h-100">
-              <!-- delete  -->
+      <b-skeleton-wrapper :loading="isLoading">
+        <template #loading>
+          <div class="px-5 mt-2">
+            <b-row style="height: 50vh">
+              <b-col cols="12" md="4" v-for="index in 6" :key="index" class="mb-4">
+                <b-card no-body class="overflow-hidden h-100">
+                  <b-row no-gutters class="h-100">
+                    <b-col lg="6">
+                      <b-skeleton height="100%" width="100%" class="rounded-0"></b-skeleton>
+                    </b-col>
+                    <b-col lg="6">
+                      <b-card-body>
+                        <b-skeleton height="100%" width="100%" class="rounded-0"></b-skeleton>
+                      </b-card-body>
+                    </b-col>
+                  </b-row>
+                </b-card>
+              </b-col>
+            </b-row>
+          </div>
+        </template>
 
-              <div>
-                <b-button @click="deleteWork(work.id)" variant="outline-danger" class="btn-delete-event" size="sm">
-                  <b-icon icon="trash"></b-icon>
-                </b-button>
-              </div>
+        <!-- Cards with image left and info right -->
+        <div class="px-5 mt-2">
+          <b-row v-if="filteredWorks.length > 0">
+            <b-col cols="12" md="4" v-for="work in paginatedWorks" :key="work.id" class="mb-4">
+              <b-card no-body class="overflow-hidden h-100">
+                <!-- delete  -->
 
-              <b-row no-gutters class="h-100">
-                <b-col lg="6">
-                  <b-card-img :src="work.pictures[0]
-                    ? work.pictures[0]
-                    : 'https://images.unsplash.com/photo-1574514120529-364d014b9a0a?q=80&w=1335&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
-                    " alt="Image" class="rounded-0" style="height: 100%; object-fit: cover"></b-card-img>
-                </b-col>
-                <b-col lg="6">
-                  <b-card-body>
-                    <h6 class="font-weight-bold">{{ work.title }}</h6>
+                <div>
+                  <b-button @click="deleteWork(work.id)" variant="outline-danger" class="btn-delete-event" size="sm">
+                    <b-icon icon="trash"></b-icon>
+                  </b-button>
+                </div>
 
-                    <b-card-text>
+                <b-row no-gutters class="h-100">
+                  <b-col lg="6">
+                    <b-card-img :src="work.pictures[0]
+                      ? work.pictures[0]
+                      : 'https://images.unsplash.com/photo-1574514120529-364d014b9a0a?q=80&w=1335&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
+                      " alt="Image" class="rounded-0" style="height: 100%; object-fit: cover"></b-card-img>
+                  </b-col>
+                  <b-col lg="6">
+                    <b-card-body>
+                      <h6 class="font-weight-bold">{{ work.title }}</h6>
+
+                      <b-card-text>
+                        <div>
+                          <p>{{ work.description }}</p>
+                          <span class="font-weight-bold text-secondary">Artistas:
+                          </span>
+                          <p>{{ work.artists.join(", ") }}</p>
+                          <b-icon icon="calendar" class="mr-2"></b-icon>
+                          <p>
+                            <span class="font-weight-bold text-secondary">Fecha de creación:</span>
+                            {{ formatDate(work.creation_date) }}
+                          </p>
+                        </div>
+
+                        <!-- category badge -->
+                      </b-card-text>
+
+                      <!-- TODO: limit the text to the content -->
+                      <b-badge variant="secondary" class="mt-1 px-3">
+                        <span>{{ work.technique }}</span>
+                      </b-badge>
+
+                      <!-- button left see more icon -->
                       <div>
-                        <p>{{ work.description }}</p>
-                        <span class="font-weight-bold text-secondary">Artistas:
-                        </span>
-                        <p>{{ work.artists.join(", ") }}</p>
-                        <b-icon icon="calendar" class="mr-2"></b-icon>
-                        <p>
-                          <span class="font-weight-bold text-secondary">Fecha de creación:</span>
-                          {{ formatDate(work.creation_date) }}
-                        </p>
+                        <b-button :to="{ name: 'work-detail', params: { id: work.id } }" variant="outline-secondary"
+                          class="mt-3 btn-block" size="sm">
+                          Ver más
+                          <b-icon icon="box-arrow-up-right" class="mr-2"></b-icon>
+                        </b-button>
                       </div>
+                    </b-card-body>
+                  </b-col>
+                </b-row>
+              </b-card>
+            </b-col>
+          </b-row>
+          <b-row v-else>
+            <b-col cols="12" class="text-center mb-4">
+              <h1 class="text-dark m-0 mt-5">No hay eventos</h1>
+            </b-col>
+          </b-row>
+        </div>
+      </b-skeleton-wrapper>
 
-                      <!-- category badge -->
-                    </b-card-text>
 
-                    <!-- TODO: limit the text to the content -->
-                    <b-badge variant="secondary" class="mt-1 px-3">
-                      <span>{{ work.technique }}</span>
-                    </b-badge>
-
-                    <!-- button left see more icon -->
-                    <div>
-                      <b-button :to="{ name: 'work-detail', params: { id: work.id } }" variant="outline-secondary"
-                        class="mt-3 btn-block" size="sm">
-                        Ver más
-                        <b-icon icon="box-arrow-up-right" class="mr-2"></b-icon>
-                      </b-button>
-                    </div>
-                  </b-card-body>
-                </b-col>
-              </b-row>
-            </b-card>
-          </b-col>
-        </b-row>
-        <b-row v-else>
-          <b-col cols="12" class="text-center mb-4">
-            <h1 class="text-dark m-0 mt-5">No hay eventos</h1>
-          </b-col>
-        </b-row>
-      </div>
     </section>
 
     <section v-if="filteredWorks.length > 0">
@@ -132,7 +154,7 @@ import SweetAlertCustom from "../../../../kernel/SweetAlertCustom";
 export default Vue.extend({
   name: "ListWorksView",
   components: {
-  
+
     LoadingCustom: () =>
       import("../../../../views/components/LoadingCustom.vue"),
   },

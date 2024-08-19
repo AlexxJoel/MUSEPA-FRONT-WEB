@@ -2,7 +2,7 @@
   <div>
 
 
-      <loading-custom :isLoading="isLoading.saveFavorite" :fullPage="true" />
+    <loading-custom :isLoading="isLoading.saveFavorite" :fullPage="true" />
 
 
 
@@ -20,29 +20,29 @@
             <template #loading>
               <b-row class="pb-4">
                 <b-col cols="6">
-                  <b-label class="font-italicm b-1" size="sm">Nombre del evento</b-label>
+                  <p class="font-italic b-1" size="sm">Nombre del evento</p>
                   <b-skeleton height="30px"></b-skeleton>
                 </b-col>
                 <b-col cols="6">
-                  <b-label class="font-italicm b-1" size="sm">Categoria</b-label>
+                  <p class="font-italic b-1" size="sm">Categoria</p>
                   <b-skeleton height="30px"></b-skeleton>
                 </b-col>
               </b-row>
 
               <b-row class="pb-3">
                 <b-col cols="6">
-                  <b-label class="font-italicm b-1" size="sm">Fecha de incio</b-label>
+                  <p class="font-italic b-1" size="sm">Fecha de incio</p>
                   <b-skeleton height="30px"></b-skeleton>
                 </b-col>
                 <b-col cols="6">
-                  <b-label class="font-italicm b-1" size="sm">Fecha de fin</b-label>
+                  <p class="font-italic b-1" size="sm">Fecha de fin</p>
                   <b-skeleton height="30px"></b-skeleton>
                 </b-col>
               </b-row>
 
               <b-row class="pb-3">
                 <b-col cols="12">
-                  <b-label class="font-italicm b-1" size="sm">Descripción</b-label>
+                  <p class="font-italic b-1" size="sm">Descripción</p>
                   <b-skeleton height="30px"></b-skeleton>
                 </b-col>
               </b-row>
@@ -99,16 +99,13 @@
               </b-row>
 
               <div>
-                <div  v-if="isSaved" 
-                class="bg-danger text-white p-2 rounded mb-3 text-center">
-                  <b-icon icon="heart-fill" class="mr-2"></b-icon> 
+                <div v-if="isSaved" class="bg-danger text-white p-2 rounded mb-3 text-center">
+                  <b-icon icon="heart-fill" class="mr-2"></b-icon>
                   Marcado como favorito
                 </div>
-                <b-button v-else 
-                @click="savedRecord"
-                variant="outline-secondary" block>
-                  <b-icon icon="heart" class="mr-2"></b-icon> 
-                  Marcar como favorito  
+                <b-button v-else @click="savedRecord" variant="outline-secondary" block>
+                  <b-icon icon="heart" class="mr-2"></b-icon>
+                  Marcar como favorito
                 </b-button>
               </div>
             </b-form>
@@ -190,6 +187,9 @@ import VueSlickCarousel from "vue-slick-carousel";
 import "vue-slick-carousel/dist/vue-slick-carousel.css";
 // optional style for arrows & dots
 import "vue-slick-carousel/dist/vue-slick-carousel-theme.css";
+import { getEmailFromAuth, getIdFromAuth, getRecordFavoritesFromLocalStorage } from '../../../../kernel/fucntions';
+import SweetAlertCustom from '../../../../kernel/SweetAlertCustom';
+import profileController from '../../../visitor/profile/services/controller/profile.controller';
 
 export default Vue.extend({
   name: "SaveEventView",
@@ -236,7 +236,6 @@ export default Vue.extend({
   },
   mounted() {
     this.getDetailsEvent();
-
     this.addFile();
   },
   watch: {},
@@ -251,6 +250,11 @@ export default Vue.extend({
           startDate: formatDate(response.start_date),
           endDate: formatDate(response.end_date),
         }
+
+        if (getRecordFavoritesFromLocalStorage().includes(this.event.id)) {
+          this.isSaved = true;
+        }
+
       } catch (error) {
         console.error(error);
       } finally {
@@ -259,15 +263,34 @@ export default Vue.extend({
     },
     async savedRecord() {
       try {
+
+        if (getIdFromAuth() === null) {
+          SweetAlertCustom.infoMessage('Oops! No has iniciado sesión', 'Al parecer te ha gustado el evento, pero debes iniciar sesión para poder guardarlo en tus favoritos', 4000);
+          return;
+        }
+
         this.isLoading.saveFavorite = true;
-        this.isSaved = true;
-        // const response = await eventsController.saveEvent(this.event);
-        // this.event = response;
+
+        const favorites = getRecordFavoritesFromLocalStorage().split(',') || [];
+        favorites.push(this.event.id);
+        localStorage.setItem('favorites', favorites);
+
+        const response = await profileController.updateVisitorFavorites({
+          id: getIdFromAuth(),
+          favorites: favorites,
+        });
+
+        if (response && response.message === 'Favorites updated successfully') {
+          this.isSaved = true;
+          SweetAlertCustom.successMessage('¡Listo!', 'El evento ha sido guardado en tus favoritos');
+        } else {
+          SweetAlertCustom.errorMessage('¡Ups!', 'Algo salió mal, por favor intenta de nuevo');
+        }
 
 
       } catch (error) {
         console.error(error);
-      }finally {
+      } finally {
         this.isLoading.saveFavorite = false;
       }
     },
@@ -294,7 +317,7 @@ export default Vue.extend({
 });
 </script>
 
-<style>
+<style scoped>
 .wallpaper {
   position: fixed;
   top: 0;

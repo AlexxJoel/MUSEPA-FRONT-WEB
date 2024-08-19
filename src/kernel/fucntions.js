@@ -65,7 +65,37 @@ export const urlToBase64 = async (url) => {
 
 // getEmailFromToken 
 export const getEmailFromAuth = () => {
-  const decoded = jwtDecode(localStorage.token);
-  return decoded.email;
+  try {
+    const token = localStorage.getItem('token');
+    if (!token) {
+      console.log('No token found in local storage');
+      return null;
+    }
+
+    const { email } = jwtDecode(token);
+    return email;
+  } catch (error) {
+    console.info('Error getting email from token:');
+    return null; 
+  }
+
 };
+
+// getIdFromAuth
+export const getIdFromAuth = () => localStorage.getItem('visitorId') || null;
+
+export const getRecordFavoritesFromLocalStorage = () => {
+  try {
+    const favorites = localStorage.getItem('favorites');
+    if (!favorites) {
+      console.log('No favorites found in local storage');
+      return [];
+    }
+
+    return favorites;
+  } catch (error) {
+    console.info('Error getting favorites from local storage:');
+    return [];
+  }
+}
 

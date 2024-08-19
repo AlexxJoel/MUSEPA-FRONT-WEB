@@ -36,4 +36,29 @@ export default {
       return error;
     }
   },
+
+
+
+  /**
+   * update favorites records of visitor
+   * @param {any} visitor {
+    "id": string, 
+    "favorites": array<string>
+    }
+
+   * @returns  any
+   */
+
+  async updateVisitorFavorites(visitor) {
+    try {
+      const response = await axios.doPut("/visitors/4/favorite", {
+        id: visitor.id + "",
+        favorites: visitor.favorites,
+      });
+
+      return response.data;
+    } catch (error) {
+      return error;
+    }
+  }
 };
