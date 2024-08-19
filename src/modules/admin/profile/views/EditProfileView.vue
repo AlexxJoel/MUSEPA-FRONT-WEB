@@ -147,7 +147,7 @@
           </div>
         </div>
         <div class="d-flex justify-content-end">
-          <b-button type="submit" variant="">Guardar cambios</b-button>
+          <b-button type="submit" variant="" @click="updateMuseum">Guardar cambios</b-button>
         </div>
       </b-form>
     </section>
@@ -179,7 +179,7 @@
         </b-form-group>
 
         <div class="d-flex justify-content-end">
-          <b-button type="submit" variant="">Guardar cambios</b-button>
+          <b-button type="submit" variant="" @click="updateMuseum">Guardar cambios</b-button>
         </div>
       </b-form>
     </section>
@@ -190,6 +190,7 @@
 import Vue from "vue";
 import { jwtDecode } from "jwt-decode";
 import profileController from "../services/controller/profile.controller";
+import SweetAlertCustom from "../../../../kernel/SweetAlertCustom";
 
 export default Vue.extend({
   name: "EditProfileView",
@@ -280,6 +281,26 @@ export default Vue.extend({
           schedules: JSON.parse(response.schedules),
         };
         console.log("museum aquiiiii", this.museum);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        this.isLoading = false;
+      }
+    },
+    async updateMuseum() {
+      try {
+        this.isLoading = true;
+        const newPayload = {...this.museum, tariffs: JSON.stringify(this.museum.tariffs), schedules: JSON.stringify(this.museum.schedules)};
+        const response = await profileController.updateMuseum(newPayload);
+        if(response.message === "Museum updated successfully") {
+          this.v$.museum.$reset();
+          this.museum = {
+
+          }
+        }
+        console.log("response", response);
+        await SweetAlertCustom.successMessage();
+        await this.$router.push({ name: "admin-profile" });
       } catch (error) {
         console.log(error);
       } finally {

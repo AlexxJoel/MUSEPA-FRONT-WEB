@@ -17,4 +17,12 @@ export default {
       return error;
     }
   },
+  async updateMuseum(museum) {
+    try {
+      const data = await ProfileApi.updateMuseum(museum);
+      return data;
+    } catch (error) {
+      return error;
+    }
+  },
 };

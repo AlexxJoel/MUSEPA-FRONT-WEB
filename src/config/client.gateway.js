@@ -17,7 +17,10 @@ AxiosClient.interceptors.request.use(
   function (config) {
     const auth_token = localStorage.token;
     // Asigna el baseURL en función del endpoint
-    if (config.url.includes("/visitors") || config.url.includes("visitors/details")) {
+    if (
+      config.url.includes("/visitors") ||
+      config.url.includes("visitors/details")
+    ) {
       config.baseURL = baseUrls.visitors;
     } else if (config.url.includes("/museums")) {
       config.baseURL = baseUrls.museums;
@@ -27,7 +30,10 @@ AxiosClient.interceptors.request.use(
       config.baseURL = baseUrls.events;
     } else if (config.url.includes("/auth")) {
       config.baseURL = baseUrls.auth;
-    } else if (config.url.includes("/managers") || config.url.includes("/managers/details")) {
+    } else if (
+      config.url.includes("/managers") ||
+      config.url.includes("/managers/details")
+    ) {
       config.baseURL = baseUrls.managers;
     } else {
       config.baseURL = import.meta.env.VITE_APP_BASE_URL_AUTH; // baseURL por defecto
@@ -62,7 +68,7 @@ AxiosClient.interceptors.response.use(
         ".vld-overlay.is-active.custom-loading-font.is-full-page"
       );
       if (loadingOverlay) {
-        loadingOverlay.classList.remove('is-active');
+        loadingOverlay.classList.remove("is-active");
       }
 
       await SweetAlertCustom.ErrorServer();
@@ -71,7 +77,6 @@ AxiosClient.interceptors.response.use(
 
     const { status } = error.response;
     console.log("status", status);
-
 
     switch (status) {
       case 400:
@@ -105,43 +110,45 @@ AxiosClient.interceptors.response.use(
       case 'duplicate key value violates unique constraint "users_email_key"\nDETAIL:  Key (email)=(maycon@gmail.com) already exists.\n':
         Vue.swal("Error", "El correo ya se encuentra registrado", "warning");
         break;
+      case "Invalid or missing 'location'":
+        Vue.swal("Error", "Ubicación inválida", "warning");
+        break;
     }
     return Promise.reject(error.response);
   }
 );
 
 function handle400Error(responseAxios) {
-
   const possibleErrorMessages = {
-    'User does not exist.': {
+    "User does not exist.": {
       title: "Usuario no encontrado",
       message: "El usuario no existe",
     },
-    'Incorrect username or password.': {
+    "Incorrect username or password.": {
       title: "Credenciales incorrectas",
       message: "Usuario y/o contraseña incorrectos",
     },
-    'Invalid or missing \'name\'': {
+    "Invalid or missing 'name'": {
       title: "Datos inválidos",
       message: "Nombre inválido",
     },
-    'Invalid or missing \'description\'': {
+    "Invalid or missing 'description'": {
       title: "Datos inválidos",
       message: "Descripción inválido",
     },
-    'Invalid or missing \'title\'': {
+    "Invalid or missing 'title'": {
       title: "Datos inválidos",
       message: "Título inválido",
     },
-    'Invalid or missing \'technique\'': {
+    "Invalid or missing 'technique'": {
       title: "Datos inválidos",
       message: "Técnica inválida",
     },
-  }
+  };
 
-
-  let titleAlert = "Error 400"
-  let messageAlert = "Si el problema persiste, contacte al administrador del sistema";
+  let titleAlert = "Error 400";
+  let messageAlert =
+    "Si el problema persiste, contacte al administrador del sistema";
 
   if (!responseAxios.response.error) {
     const message = responseAxios.response.data.error;
@@ -151,9 +158,7 @@ function handle400Error(responseAxios) {
       titleAlert = possibleErrorMessages[message].title;
       messageAlert = possibleErrorMessages[message].message;
     }
-
   }
-
 
   Vue.swal({
     title: titleAlert,
@@ -165,37 +170,33 @@ function handle400Error(responseAxios) {
 }
 
 function handle401Error(responseAxios) {
-
-  if (!responseAxios.response)
-    return;
-  if (!responseAxios.response.data)
-    return;
+  if (!responseAxios.response) return;
+  if (!responseAxios.response.data) return;
 
   const handlePossibleErrorMessages = {
-    'Access denied. Please, change the temporary password.': 'Acceso denegado. Por favor, cambie la contraseña temporal.',
-  }
+    "Access denied. Please, change the temporary password.":
+      "Acceso denegado. Por favor, cambie la contraseña temporal.",
+  };
 
   const possibleErrorMessages = {
-    'The incoming token has expired': {
+    "The incoming token has expired": {
       title: "Token expirado",
       message: "El token de acceso ha expirado",
       toName: "login",
     },
-  }
+  };
 
   let titleAlert = "";
   let messageAlert = "";
   let toRedirect = null;
 
-
-
-  const error = responseAxios.response.data.error || responseAxios.response.data.message
+  const error =
+    responseAxios.response.data.error || responseAxios.response.data.message;
 
   if (handlePossibleErrorMessages[error]) {
-    console.error('401 ERROR', handlePossibleErrorMessages[error]);
+    console.error("401 ERROR", handlePossibleErrorMessages[error]);
     return;
   }
-
 
   if (possibleErrorMessages[error]) {
     titleAlert = possibleErrorMessages[error].title;
@@ -218,7 +219,6 @@ function handle401Error(responseAxios) {
       router.push({ name: "Login" });
     }
   }
-
 }
 
 function handle404Error(error) {

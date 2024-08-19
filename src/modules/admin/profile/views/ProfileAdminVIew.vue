@@ -126,12 +126,12 @@
         </b-tabs>
 
         <div class="mt-4 d-flex justify-content-end">
-          <b-button
+          <!-- <b-button
             variant="primary"
             class="mr-2"
             @click="$bvModal.show('modal-change-pwd')"
             >Cambiar contraseña</b-button
-          >
+          > -->
           <b-button variant="primary" :to="{ name: 'admin-edit-profile' }">
             Actualizar información</b-button
           >

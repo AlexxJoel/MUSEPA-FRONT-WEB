@@ -17,4 +17,12 @@ export default {
       return error;
     }
   },
+  async updateMuseum(museum) {
+    try {
+      const response = await axios.doPut(`/museums`, museum);
+      return response.data.data;
+    } catch (error) {
+      return error;
+    }
+  },
 };
